@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trial emails — Grain</title>
+<link rel="icon" href="assets/grain-logo.png">
+<link rel="stylesheet" href="app.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+
+<style>
+html, body { height: 100%; margin: 0; }
+.em-stage {
+  min-height: 100vh; box-sizing: border-box;
+  background: #ECEBE7; padding: 48px 24px;
+  display: flex; justify-content: center; align-items: flex-start;
+}
+
+/* Inbox frame */
+.em-frame { width: 600px; max-width: 100%; }
+.em-meta { display: flex; gap: 12px; align-items: center; padding: 4px 4px 16px; }
+.em-meta__avatar { width: 40px; height: 40px; border-radius: 50%; color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.em-meta__lines { min-width: 0; }
+.em-meta__row1 { display: flex; align-items: baseline; gap: 6px; }
+.em-meta__from { font-weight: 600; font-size: 14px; color: var(--fg-1); }
+.em-meta__addr { font-size: 12px; color: var(--fg-6); }
+.em-meta__subject { font-size: 13px; color: var(--fg-4); margin-top: 1px; }
+
+/* Email card */
+.em-card { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 30px rgba(16,40,30,.08); }
+.em-card__head { padding: 22px 40px; border-bottom: 1px solid var(--border); }
+.em-logo { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--fg-1); }
+.em-logo__mark { width: 26px; height: 26px; border-radius: 7px; background: #16A35F; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; }
+.em-card__inner { padding: 34px 40px 8px; }
+.em-card__foot { padding: 20px 40px 26px; border-top: 1px solid var(--border); margin-top: 28px; }
+.em-card__foot p { margin: 0 0 4px; font-size: 11.5px; color: var(--fg-6); line-height: 1.5; }
+.em-card__foot a { color: var(--fg-5); text-decoration: underline; }
+
+.em-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+.em-icon i { width: 24px; height: 24px; }
+.em-icon--warm { background: #FFF1E6; color: #C2410C; }
+.em-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #16A35F; margin-bottom: 12px; }
+.em-eyebrow i { width: 14px; height: 14px; }
+.em-h1 { font-family: var(--font-display); font-size: 25px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 16px; color: var(--fg-1); }
+.em-p { font-size: 15px; line-height: 1.6; color: var(--fg-3); margin: 0 0 14px; }
+.em-p strong { color: var(--fg-1); font-weight: 600; }
+
+.em-callout { display: flex; gap: 12px; align-items: flex-start; background: var(--bg-1); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 20px 0 24px; }
+.em-callout__icon { width: 32px; height: 32px; border-radius: 8px; background: #E6F7EE; color: #0B6F3F; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.em-callout__icon i { width: 16px; height: 16px; }
+.em-callout__title { font-size: 13.5px; font-weight: 600; color: var(--fg-1); }
+.em-callout__sub { font-size: 12.5px; color: var(--fg-5); line-height: 1.45; margin-top: 2px; }
+
+.em-mtg { display: flex; gap: 12px; align-items: center; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin: 20px 0 24px; }
+.em-mtg__thumb { width: 48px; height: 34px; border-radius: 7px; background: var(--bg-2); color: var(--fg-4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.em-mtg__thumb i { width: 18px; height: 18px; }
+.em-mtg__title { font-size: 14px; font-weight: 600; color: var(--fg-1); }
+.em-mtg__meta { font-size: 12.5px; color: var(--fg-5); margin-top: 2px; }
+
+.em-btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 22px; border-radius: 10px; font-size: 15px; font-weight: 600; text-decoration: none; margin: 6px 0 4px; }
+.em-btn--dark { background: #111; color: #fff; }
+.em-secondary { font-size: 13.5px; color: var(--fg-4); margin: 14px 0 0; }
+.em-secondary a { color: var(--fg-2); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.em-secondary strong { color: var(--fg-1); }
+.em-fineprint { font-size: 12px; color: var(--fg-6); line-height: 1.5; margin: 18px 0 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="EmailMocks.jsx"></script>
+
+<script type="text/babel">
+const DEFAULTS = /*EDITMODE-BEGIN*/{
+  "email": "trial-ended",
+  "graceDays": 30,
+  "daysLeft": 8
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setT] = useTweaks(DEFAULTS);
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+  return (
+    <>
+      <EmailMocks email={t.email} graceDays={t.graceDays} daysLeft={t.daysLeft} />
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Email">
+          <TweakRadio
+            label="Which email"
+            value={t.email}
+            onChange={(v) => setT('email', v)}
+            options={[
+              { value: 'trial-ended', label: 'Trial ended (H7)' },
+              { value: 'teammate', label: 'Teammate (H9)' },
+            ]}
+          />
+          {t.email === 'trial-ended' && (
+            <TweakSelect
+              label="Grace days"
+              value={t.graceDays}
+              onChange={(v) => setT('graceDays', Number(v))}
+              options={[{ value: 30, label: '30 days' }, { value: 7, label: '7 days' }, { value: 3, label: '3 days' }]}
+            />
+          )}
+          {t.email === 'teammate' && (
+            <TweakSelect
+              label="Days left"
+              value={t.daysLeft}
+              onChange={(v) => setT('daysLeft', Number(v))}
+              options={[{ value: 14, label: '14 days' }, { value: 8, label: '8 days' }, { value: 3, label: '3 days' }]}
+            />
+          )}
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My Meetings — Settings Reorg</title>
+<link rel="icon" href="/projects/a149191c-6a9a-4ef7-91e2-af51ef13d640/assets/grain-logo.png">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="settings.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="Primitives.jsx"></script>
+<script type="text/babel" src="ShareSettings.jsx"></script>
+<script type="text/babel" src="Sidebar.jsx"></script>
+<script type="text/babel" src="FallbackNotification.jsx"></script>
+<script type="text/babel" src="MyMeetingsNew.jsx"></script>
+<script type="text/babel" src="MyMeetingsOld.jsx"></script>
+
+<script type="text/babel">
+const DEFAULTS = /*EDITMODE-BEGIN*/{
+  "view": "after",
+  "showDiff": true,
+  "onTrial": false,
+  "simpleShare": true,
+  "density": "comfortable",
+  "showStrap": true,
+  "wrapInMacChrome": true,
+  "trialOver": false,
+  "persona": "joiner",
+  "hasMeetings": true
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setT] = useTweaks(DEFAULTS);
+
+  // Body classes from tweaks
+  React.useEffect(() => {
+    document.body.classList.toggle('hide-diff', !t.showDiff);
+    document.body.classList.toggle('density-compact', t.density === 'compact');
+  }, [t.showDiff, t.density]);
+
+  // Lucide draws on every render — required because new icons mount as state changes.
+  React.useEffect(() => {
+    if (window.lucide) window.lucide.createIcons();
+  });
+
+  const body = t.view === 'before'
+    ? <MyMeetingsOld />
+    : <MyMeetingsNew showDiff={t.showDiff} onTrial={t.onTrial} simpleShare={t.simpleShare} />;
+
+  const inner = (
+    <div className="gr-app" style={{ height: '100%', minHeight: 0 }}>
+      <Sidebar active="my-meetings" onNav={() => {}} />
+      <main className="gr-main">
+        <div key={t.view} data-screen-label={t.view === 'after' ? 'After — grouped by function' : 'Before — grouped by capture method'}>
+          {body}
+        </div>
+      </main>
+    </div>
+  );
+
+  return (
+    <>
+      {t.wrapInMacChrome ? (
+        <div className="mac-shell">
+          <div className="mac-shell__window">
+            <div className="mac-titlebar">
+              <div className="mac-traffic"><span /><span /><span /></div>
+              <div className="mac-titlebar__title">Settings — Grain</div>
+            </div>
+            <div className="mac-body">{inner}</div>
+          </div>
+        </div>
+      ) : (
+        <div style={{ minHeight: '100vh' }}>{inner}</div>
+      )}
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="View">
+          <TweakRadio
+            label="Layout"
+            value={t.view}
+            onChange={(v) => setT('view', v)}
+            options={[
+              { value: 'before', label: 'Before' },
+              { value: 'after', label: 'After' },
+            ]}
+          />
+          <TweakToggle
+            label="Diff flags"
+            value={t.showDiff}
+            onChange={(v) => setT('showDiff', v)}
+          />
+          <TweakToggle
+            label="On organization trial"
+            value={t.onTrial}
+            onChange={(v) => setT('onTrial', v)}
+          />
+          <TweakToggle
+            label="Simple share settings"
+            value={t.simpleShare}
+            onChange={(v) => setT('simpleShare', v)}
+          />
+          <TweakToggle
+            label="Review banner"
+            value={t.showStrap}
+            onChange={(v) => setT('showStrap', v)}
+          />
+        </TweakSection>
+        <TweakSection label="Presentation">
+          <TweakRadio
+            label="Density"
+            value={t.density}
+            onChange={(v) => setT('density', v)}
+            options={[
+              { value: 'comfortable', label: 'Cozy' },
+              { value: 'compact', label: 'Compact' },
+            ]}
+          />
+          <TweakToggle
+            label="Mac chrome"
+            value={t.wrapInMacChrome}
+            onChange={(v) => setT('wrapInMacChrome', v)}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

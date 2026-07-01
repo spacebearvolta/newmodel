@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get started — Grain</title>
+<link rel="icon" href="assets/grain-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="orgflows-shell.css">
+<link rel="stylesheet" href="onboarding/onboarding.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.454.0/dist/umd/lucide.min.js"></script>
+
+<style>
+html, body, #root { height: 100%; }
+body { margin: 0; }
+/* Mac chrome — mirrors Meetings.html / the Settings pages. */
+.mac-shell { min-height: 100vh; height: 100vh; display: flex; flex-direction: column; background: linear-gradient(180deg, #2A6BB8 0%, #2960A8 30%, #1E5396 100%); padding: 24px; box-sizing: border-box; }
+.mac-shell__window { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.2); flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.mac-titlebar { background: #F5F5F5; border-bottom: 1px solid var(--border); padding: 10px 14px; display: flex; align-items: center; gap: 8px; position: relative; }
+.mac-traffic { display: flex; gap: 6px; }
+.mac-traffic span { width: 12px; height: 12px; border-radius: 50%; display: block; }
+.mac-traffic span:nth-child(1) { background: #FF5F57; }
+.mac-traffic span:nth-child(2) { background: #FEBC2E; }
+.mac-traffic span:nth-child(3) { background: #28C840; }
+.mac-titlebar__title { position: absolute; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 500; color: var(--fg-4); }
+.mac-body { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.mac-body > .ob-host { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.ob-host > .ob-stage { flex: 1; min-height: 0; }
+.ob-novchrome { height: 100vh; display: flex; flex-direction: column; }
+.ob-novchrome > .ob-host { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="OrgShell.jsx"></script>
+<script type="text/babel" src="FlowCreator.jsx"></script>
+<script type="text/babel" src="onboarding/OnboardingScreens.jsx"></script>
+
+<script type="text/babel">
+const ONB_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "wrapInMacChrome": true,
+  "persona": "creator",
+  "mcpSetup": true,
+  "hasMeetings": true,
+  "emptyDomain": false,
+  "mcpFirstMeetingBanner": false,
+  "trialOver": true,
+  "paidOrgOnDomain": false,
+  "trialDays": 1,
+  "joinerInOrg": false
+}/*EDITMODE-END*/;
+
+function finishOnboarding({ org, orgName }) {
+  try {
+    localStorage.setItem('grain.onboarded', '1');
+    // One-shot flag: the app home consumes this and resets flow tweaks
+    // (creator persona, trial not over) so a fresh sign-up never lands on a
+    // stale state like an expired trial.
+    localStorage.setItem('grain.freshFromOnboarding', '1');
+    if (org) {
+      localStorage.setItem('grain.orgCreated', '1');
+      localStorage.setItem('grain.orgName', orgName || 'Acme');
+    } else {
+      localStorage.removeItem('grain.orgCreated');
+      localStorage.removeItem('grain.orgName');
+    }
+  } catch (e) { /* ignore */ }
+  window.location.href = 'Meetings.html';
+}
+
+/* Full-screen workspace setup — reuses the real creation steps
+   (NameStep → Creating → Invite → Success) outside of a modal. */
+function WorkspaceSetup({ onCancel, emptyDomain = false }) {
+  const [sub, setSub] = React.useState('name');
+  const [orgName, setOrgName] = React.useState(() => orgNameFromDomain(CREATOR_USER.domain));
+  const [selected, setSelected] = React.useState(new Set());
+  // Gmail / personal-domain creators have no same-domain peers to suggest.
+  const invitePeers = emptyDomain ? [] : CREATOR_DOMAIN_PEERS;
+
+  const toCreating = () => {
+    setSub('creating');
+    setTimeout(() => setSub('invite'), 1500);
+  };
+  const toggle = (email) => setSelected((prev) => {
+    const next = new Set(prev);
+    next.has(email) ? next.delete(email) : next.add(email);
+    return next;
+  });
+
+  const size = sub === 'invite' ? 'lg' : 'md';
+
+  let step;
+  if (sub === 'name') {
+    step = <NameStep orgName={orgName} onName={setOrgName} onClose={onCancel} onNext={toCreating} />;
+  } else if (sub === 'creating') {
+    step = <CreatingStep orgName={orgName} choice={null} />;
+  } else if (sub === 'invite') {
+    step = <CreatorInviteStep
+      orgName={orgName}
+      peers={invitePeers}
+      selected={selected}
+      onToggle={toggle}
+      onSelectAll={() => setSelected(new Set(invitePeers.map((p) => p.email)))}
+      onClear={() => setSelected(new Set())}
+      onSkip={() => setSub('done')}
+      onNext={() => setSub('done')}
+      onClose={onCancel} />;
+  } else {
+    step = <SuccessStep
+      orgName={orgName}
+      choice={null}
+      meetingCount={0}
+      invitedCount={selected.size}
+      onDone={() => finishOnboarding({ org: true, orgName })} />;
+  }
+
+  return (
+    <div className="ob-stage ob-stage--neutral">
+      <div className="ob-scroll">
+        <div className={`ob-setup`}>
+          <div className={`modal modal--${size}`}>{step}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [t, setT] = useTweaks(ONB_DEFAULTS);
+  const [screen, setScreen] = React.useState('welcome');
+
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
+  let view;
+  if (screen === 'welcome')      view = <ObWelcome onContinue={() => setScreen('survey')} />;
+  else if (screen === 'survey')  view = <ObSurvey onNext={() => setScreen('permissions')} />;
+  else if (screen === 'permissions') view = <ObPermissions onNext={() => setScreen('autocapture')} />;
+  else if (screen === 'autocapture') view = <ObAutoCapture onNext={() => setScreen(t.mcpSetup ? 'claude' : 'use')} />;
+  else if (screen === 'claude') view = <ObClaude onConnected={() => setScreen('use')} onSkip={() => setScreen('use')} />;
+  else if (screen === 'use')     view = <ObUseSelect onSelect={(c) => c === 'team' ? setScreen('trial') : finishOnboarding({ org: false })} />;
+  else if (screen === 'trial')   view = <ObTrial onStart={() => setScreen('setup')} onSelf={() => finishOnboarding({ org: false })} />;
+  else                            view = <WorkspaceSetup onCancel={() => setScreen('trial')} emptyDomain={t.emptyDomain} />;
+
+  const label = {
+    welcome: 'Welcome', survey: 'Personalize', permissions: 'Permissions',
+    autocapture: 'Auto-capture', claude: 'Connect Claude', use: 'Personal or team', trial: 'Start trial', setup: 'Create workspace',
+  }[screen];
+
+  return (
+    <>
+      {t.wrapInMacChrome ? (
+        <div className="mac-shell">
+          <div className="mac-shell__window">
+            <div className="mac-titlebar">
+              <div className="mac-traffic"><span /><span /><span /></div>
+              <div className="mac-titlebar__title">Grain</div>
+            </div>
+            <div className="mac-body">
+              <div className="ob-host" data-screen-label={`Onboarding — ${label}`}>{view}</div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="ob-novchrome">
+          <div className="ob-host" data-screen-label={`Onboarding — ${label}`}>{view}</div>
+        </div>
+      )}
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Connectors">
+          <TweakToggle label="MCP setup screen" value={t.mcpSetup} onChange={(v) => setT('mcpSetup', v)} />
+        </TweakSection>
+        <TweakSection label="Workspace setup">
+          <TweakToggle label="No teammates to suggest (Gmail)" value={t.emptyDomain} onChange={(v) => setT('emptyDomain', v)} />
+        </TweakSection>
+        <TweakSection label="Presentation">
+          <TweakButton label="Skip onboarding → Meetings" onClick={() => { try { sessionStorage.setItem('grain.enteredApp', '1'); } catch (e) {} window.location.href = 'Meetings.html'; }} />
+          <TweakToggle label="Mac chrome" value={t.wrapInMacChrome} onChange={(v) => setT('wrapInMacChrome', v)} />
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

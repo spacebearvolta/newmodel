@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  // Onboarding-first guard: every fresh open of the prototype starts at the
+  // "Welcome to Grain" onboarding screen. Two loads are allowed straight into
+  // the app home: the hand-off right after finishing onboarding (one-shot
+  // grain.freshFromOnboarding flag), and an explicit ?app / #app request so
+  // reviewers can reach the Meetings Tweaks panel without replaying onboarding.
+  try {
+    const wantsApp = location.search.indexOf('app') !== -1 || location.hash.indexOf('app') !== -1;
+    const fresh = localStorage.getItem('grain.freshFromOnboarding') === '1';
+    const skip = localStorage.getItem('grain.skipOnboarding') === '1';
+    // Once the app has been entered this tab-session, host-triggered reloads
+    // (e.g. saving a tweak) must not bounce the reviewer back to onboarding.
+    const entered = sessionStorage.getItem('grain.enteredApp') === '1';
+    if (!wantsApp && !fresh && !skip && !entered) { location.replace('Onboarding.html'); }
+  } catch (e) {}
+</script>
+<title>Grain — Meetings</title>
+<link rel="icon" href="assets/grain-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="orgflows-shell.css">
+<link rel="stylesheet" href="meetings-surface.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+/* macOS chrome around the prototype — mirrors the Settings pages so the
+   whole stitched experience shares one window frame. */
+html, body, #root { height: 100%; }
+body { margin: 0; }
+.mac-shell {
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #2A6BB8 0%, #2960A8 30%, #1E5396 100%);
+  padding: 24px;
+}
+.mac-shell__window {
+  background: var(--bg-card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.2);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.mac-titlebar {
+  background: #F5F5F5;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.mac-traffic { display: flex; gap: 6px; }
+.mac-traffic span { width: 12px; height: 12px; border-radius: 50%; display: block; }
+.mac-traffic span:nth-child(1) { background: #FF5F57; }
+.mac-traffic span:nth-child(2) { background: #FEBC2E; }
+.mac-traffic span:nth-child(3) { background: #28C840; }
+.mac-titlebar__title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fg-4);
+}
+.mac-body { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+/* The org-flows shell root (.app) is min-height:100vh on its own; inside the
+   Mac window it should instead fill the window body and let the canvas scroll. */
+.mac-body > .app { flex: 1; min-height: 0; height: 100%; }
+.mac-body > .app > .canvas { overflow-y: auto; }
+/* Without the Mac chrome the app root itself pins to the viewport, so the
+   sidebar stays put and the canvas scrolls internally. */
+#root > .app { height: 100vh; min-height: 0; }
+#root > .app > .canvas { overflow-y: auto; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="OrgShell.jsx"></script>
+<script type="text/babel" src="MeetingsSurface.jsx"></script>
+<script type="text/babel" src="UpgradeModal.jsx"></script>
+<script type="text/babel" src="TrialCountdown.jsx"></script>
+<script type="text/babel" src="TrialHooks.jsx"></script>
+<script type="text/babel" src="FlowCreator.jsx"></script>
+<script type="text/babel" src="FlowJoiner.jsx"></script>
+<script type="text/babel" src="HookGallery.jsx"></script>
+
+<script type="text/babel">
+const DEFAULTS = /*EDITMODE-BEGIN*/{
+  "persona": "creator",
+  "joinerInOrg": false,
+  "trialDays": 5,
+  "trialOver": false,
+  "hasMeetings": true,
+  "wrapInMacChrome": true,
+  "paidOrgOnDomain": true,
+  "emptyDomain": true,
+  "mcpFirstMeetingBanner": false,
+  "graceDays": 30,
+  "teammateNudge": true,
+  "skipOnboarding": false,
+  "density": "comfortable",
+  "mcpSetup": false
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setT] = useTweaks(DEFAULTS);
+  const [galleryOpen, setGalleryOpen] = React.useState(false);
+
+  // Arriving fresh from onboarding ("personal use" or workspace setup) must
+  // never land on a stale flow tweak like an expired trial — a brand-new
+  // account starts as a creator with the trial state cleared. Onboarding sets
+  // a one-shot flag; consume it and reset the flow tweaks.
+  React.useEffect(() => {
+    try {
+      if (localStorage.getItem('grain.freshFromOnboarding') === '1') {
+        localStorage.removeItem('grain.freshFromOnboarding');
+        // Just-finished setup: no meetings captured yet and no first-meeting
+        // banner until a reviewer opts into one of those states.
+        setT({ persona: 'creator', trialOver: false, hasMeetings: false, mcpFirstMeetingBanner: false });
+      }
+    } catch (e) {/* ignore */}
+  }, []);
+
+  // "Skip onboarding on load" tweak — persist so the pre-React head guard on
+  // the next load sends the user straight to Meetings instead of Onboarding.
+  React.useEffect(() => {
+    try { localStorage.setItem('grain.skipOnboarding', t.skipOnboarding ? '1' : '0'); } catch (e) {/* ignore */}
+  }, [t.skipOnboarding]);
+
+  // Mark the app as entered for this tab-session so saving a tweak (which can
+  // trigger a preview reload) doesn't bounce the reviewer through onboarding.
+  React.useEffect(() => {
+    try { sessionStorage.setItem('grain.enteredApp', '1'); } catch (e) {/* ignore */}
+  }, []);
+
+  // Workspace-switcher "Settings" → the Settings area (existing prototype files).
+  const goSettings = () => { window.location.href = 'My Meetings Settings Reorg.html'; };
+
+  const flow = t.persona === 'creator'
+    ? <StartTrialApp key="creator" onSettings={goSettings} trialDays={t.trialDays} hasMeetings={t.hasMeetings} trialOver={t.trialOver} paidOrgOnDomain={t.paidOrgOnDomain} showClaudeBanner={t.mcpFirstMeetingBanner} emptyDomain={t.emptyDomain} graceDays={t.graceDays} teammateNudge={t.teammateNudge} />
+    : <JoinOrgApp    key="joiner"  onSettings={goSettings} hasMeetings={t.hasMeetings} inOrg={t.joinerInOrg} />;
+
+  return (
+    <>
+      {t.wrapInMacChrome ? (
+        <div className="mac-shell">
+          <div className="mac-shell__window">
+            <div className="mac-titlebar">
+              <div className="mac-traffic"><span /><span /><span /></div>
+              <div className="mac-titlebar__title">Grain</div>
+            </div>
+            <div className="mac-body">{flow}</div>
+          </div>
+        </div>
+      ) : flow}
+
+      <HookGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} />
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Review">
+          <TweakButton label="▶  Hook gallery" onClick={() => setGalleryOpen(true)} />
+        </TweakSection>
+        <TweakSection label="Flow">
+          <TweakRadio
+            label="Persona"
+            value={t.persona}
+            onChange={(v) => setT('persona', v)}
+            options={[
+              { value: 'creator', label: 'Creator' },
+              { value: 'joiner',  label: 'Joiner' },
+            ]}
+          />
+          {t.persona === 'joiner' && (
+            <TweakToggle
+              label="Part of org"
+              value={t.joinerInOrg}
+              onChange={(v) => setT('joinerInOrg', v)}
+            />
+          )}
+          {t.persona === 'creator' && (
+            <>
+              <TweakSelect
+                label="Trial: days left"
+                value={t.trialDays}
+                onChange={(v) => setT('trialDays', Number(v))}
+                options={[
+                  { value: 14, label: 'Start (14 days)' },
+                  { value: 8,  label: '8 days left' },
+                  { value: 5,  label: '5 days left' },
+                  { value: 3,  label: '3 days left' },
+                  { value: 1,  label: '1 day left' },
+                ]}
+              />
+              <TweakToggle
+                label="Trial over (org inactive)"
+                value={t.trialOver}
+                onChange={(v) => setT('trialOver', v)}
+              />
+              {t.trialOver && (
+                <TweakSelect
+                  label="Grace: days left (H7)"
+                  value={t.graceDays}
+                  onChange={(v) => setT('graceDays', Number(v))}
+                  options={[
+                    { value: 30, label: '30 days saved' },
+                    { value: 7,  label: '7 days · deletion countdown' },
+                    { value: 3,  label: '3 days left' },
+                    { value: 1,  label: '1 day left' },
+                  ]}
+                />
+              )}
+              <TweakToggle
+                label="Teammate joined nudge (H9)"
+                value={t.teammateNudge}
+                onChange={(v) => setT('teammateNudge', v)}
+              />
+              <TweakToggle
+                label="Paid org already on domain"
+                value={t.paidOrgOnDomain}
+                onChange={(v) => setT('paidOrgOnDomain', v)}
+              />
+              <TweakToggle
+                label="No teammates to suggest (Gmail)"
+                value={t.emptyDomain}
+                onChange={(v) => setT('emptyDomain', v)}
+              />
+            </>
+          )}
+          <TweakToggle
+            label="Existing personal meetings"
+            value={t.hasMeetings}
+            onChange={(v) => setT(v ? { hasMeetings: true, mcpFirstMeetingBanner: false } : { hasMeetings: false })}
+          />
+        </TweakSection>
+        <TweakSection label="Connectors">
+          <TweakToggle
+            label="MCP 1st meeting banner"
+            value={t.mcpFirstMeetingBanner}
+            onChange={(v) => setT(v ? { mcpFirstMeetingBanner: true, hasMeetings: false } : { mcpFirstMeetingBanner: false })}
+          />
+        </TweakSection>
+        <TweakSection label="Presentation">
+          <TweakToggle
+            label="Skip onboarding on load"
+            value={t.skipOnboarding}
+            onChange={(v) => setT('skipOnboarding', v)}
+          />
+          <TweakToggle
+            label="Mac chrome"
+            value={t.wrapInMacChrome}
+            onChange={(v) => setT('wrapInMacChrome', v)}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

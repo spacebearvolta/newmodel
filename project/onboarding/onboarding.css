@@ -1,0 +1,226 @@
+/* ──────────────────────────────────────────────────────────────
+   First-run onboarding — Grain
+   Namespaced `ob-`. Relies on orgflows-shell.css for design tokens
+   (--fg-*, --green-*, --border, --font-*) and the reused workspace
+   creation step internals (.modal__*, .field, .btn--*).
+   ────────────────────────────────────────────────────────────── */
+
+.ob-root { height: 100%; min-height: 0; }
+
+/* Stage: fills the (optionally mac-chrome'd) viewport, scrolls if tall. */
+.ob-stage {
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--bg-app, #FCFBF8);
+  font-family: var(--font-sans);
+  color: var(--fg-1);
+}
+.ob-stage--welcome {
+  background:
+    radial-gradient(1100px 620px at 50% -8%, #E9FBF1 0%, rgba(233,251,241,0) 60%),
+    radial-gradient(900px 600px at 100% 100%, #EAF7FF 0%, rgba(234,247,255,0) 55%),
+    #FCFEFD;
+}
+.ob-stage--neutral { background: #F8F8F6; }
+
+.ob-scroll {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px 96px;
+  position: relative;
+}
+
+/* Brand lockup */
+.ob-brand { display: inline-flex; align-items: center; gap: 10px; }
+.ob-brand__mark { width: 30px; height: 30px; border-radius: 8px; display: block; }
+.ob-brand__word { font-family: var(--font-display); font-weight: 700; font-size: 26px; letter-spacing: -0.02em; color: var(--fg-1); }
+.ob-brand--sm .ob-brand__mark { width: 26px; height: 26px; }
+.ob-brand--sm .ob-brand__word { font-size: 22px; }
+
+/* ── Welcome (auth) ─────────────────────────────────────────── */
+.ob-auth {
+  width: 100%;
+  max-width: 452px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 24px 60px rgba(16,40,30,.10);
+  padding: 44px 40px 32px;
+  text-align: center;
+}
+.ob-auth__mark { width: 40px; height: 40px; border-radius: 11px; margin: 0 auto 22px; display: block; }
+.ob-auth__title { font-family: var(--font-display); font-weight: 700; font-size: 27px; letter-spacing: -0.02em; margin: 0 0 10px; }
+.ob-auth__sub { font-size: 14.5px; line-height: 1.5; color: var(--fg-5); margin: 0 auto 26px; max-width: 320px; }
+.ob-auth__btns { display: flex; flex-direction: column; gap: 10px; }
+.ob-oauth {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  height: 46px; border: 1px solid var(--border-strong, #D4D4D4); border-radius: 10px;
+  background: #fff; color: var(--fg-1); font: 600 14px/1 var(--font-sans); cursor: pointer;
+  transition: background var(--dur-fast, 120ms), border-color var(--dur-fast, 120ms), transform var(--dur-fast, 120ms);
+}
+.ob-oauth:hover { background: #FAFAFA; border-color: #BDBDBD; }
+.ob-oauth:active { transform: scale(.99); }
+.ob-oauth--ghost { border-color: var(--border); color: var(--fg-4); font-weight: 500; }
+.ob-oauth__g { width: 18px; height: 18px; }
+.ob-ms { display: grid; grid-template-columns: 8px 8px; grid-template-rows: 8px 8px; gap: 2px; }
+.ob-ms i { display: block; width: 8px; height: 8px; }
+.ob-ms i:nth-child(1){ background:#F25022 } .ob-ms i:nth-child(2){ background:#7FBA00 }
+.ob-ms i:nth-child(3){ background:#00A4EF } .ob-ms i:nth-child(4){ background:#FFB900 }
+.ob-auth__legal { font-size: 12.5px; color: var(--fg-5); margin-top: 22px; }
+.ob-auth__legal a { color: var(--green-600, #0F8A4F); }
+.ob-foot-note {
+  position: absolute; bottom: 26px; left: 0; right: 0; text-align: center;
+  font-size: 12.5px; color: var(--fg-5); display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.ob-foot-note svg { width: 14px; height: 14px; }
+.ob-foot-note a { color: var(--fg-4); text-decoration: underline; }
+
+/* ── Generic centered panel (survey/permissions/autocapture) ─── */
+.ob-panel { width: 100%; max-width: 560px; display: flex; flex-direction: column; align-items: center; }
+.ob-panel__brand { margin-bottom: 26px; }
+.ob-panel__title { font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1.15; letter-spacing: -0.02em; text-align: center; margin: 0 0 8px; text-wrap: balance; }
+.ob-panel__sub { font-size: 15px; color: var(--fg-5); text-align: center; margin: 0 0 30px; max-width: 440px; line-height: 1.5; text-wrap: pretty; }
+
+/* primary action */
+.ob-btn {
+  width: 100%; height: 50px; border: 0; border-radius: 12px;
+  background: var(--green-500, #16A35F); color: #fff;
+  font: 600 15px/1 var(--font-sans); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background var(--dur-fast,120ms), transform var(--dur-fast,120ms);
+}
+.ob-btn:hover { background: var(--green-600, #0F8A4F); }
+.ob-btn:active { transform: scale(.99); }
+.ob-btn:disabled { background: #EDEDEA; color: var(--fg-6); cursor: not-allowed; }
+.ob-link-btn { background: none; border: 0; color: var(--fg-5); font: 500 14px/1 var(--font-sans); cursor: pointer; padding: 10px; }
+.ob-link-btn:hover { color: var(--fg-2); text-decoration: underline; }
+
+/* ── Survey ─────────────────────────────────────────────────── */
+.ob-form { width: 100%; display: flex; flex-direction: column; gap: 20px; }
+.ob-q__label { font-size: 14px; font-weight: 600; color: var(--fg-2); margin-bottom: 8px; display: block; }
+.ob-q__req { color: #E5484D; margin-left: 2px; }
+.ob-select {
+  position: relative; width: 100%; height: 44px;
+  border: 1px solid var(--border-strong, #D4D4D4); border-radius: 10px; background: #fff;
+  display: flex; align-items: center; padding: 0 14px; cursor: pointer;
+  font-size: 14px; color: var(--fg-1);
+  transition: border-color var(--dur-fast,120ms), box-shadow var(--dur-fast,120ms);
+}
+.ob-select:hover { border-color: #BDBDBD; }
+.ob-select.is-placeholder { color: var(--fg-6); }
+.ob-select svg { width: 16px; height: 16px; color: var(--fg-5); margin-left: auto; }
+.ob-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ob-chip {
+  height: 38px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--border-strong, #D4D4D4);
+  background: #fff; color: var(--fg-2); font: 500 13.5px/1 var(--font-sans); cursor: pointer;
+  transition: all var(--dur-fast,120ms);
+}
+.ob-chip:hover { border-color: #BDBDBD; background: #FAFAFA; }
+.ob-chip.is-on { background: var(--fg-1); border-color: var(--fg-1); color: #fff; }
+.ob-form__foot { margin-top: 30px; width: 100%; }
+
+/* ── Permissions / Auto-capture rows ────────────────────────── */
+.ob-rows { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.ob-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px; border-radius: 14px; background: #F4F4F1; border: 1px solid transparent;
+}
+.ob-row__icon {
+  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.ob-row__icon svg { width: 19px; height: 19px; }
+.ob-row__icon--dark { background: #2A2A2E; color: #fff; }
+.ob-row__icon--green { background: var(--green-500, #16A35F); color: #fff; }
+.ob-row__text { flex: 1; min-width: 0; }
+.ob-row__title { font-size: 14.5px; font-weight: 600; color: var(--fg-1); }
+.ob-row__sub { font-size: 12.5px; color: var(--fg-5); margin-top: 2px; }
+.ob-done {
+  display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 13px;
+  border-radius: 8px; background: #fff; border: 1px solid var(--border); color: var(--fg-4);
+  font: 500 12.5px/1 var(--font-sans);
+}
+.ob-done svg { width: 14px; height: 14px; color: var(--green-500, #16A35F); }
+
+/* toggle (auto-capture) */
+.ob-toggle { position: relative; width: 44px; height: 26px; border: 0; border-radius: 999px; background: #D4D4D4; cursor: pointer; flex-shrink: 0; transition: background var(--dur-std,180ms); padding: 0; }
+.ob-toggle.is-on { background: var(--green-500, #16A35F); }
+.ob-toggle i { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform var(--dur-std,180ms); }
+.ob-toggle.is-on i { transform: translateX(18px); }
+
+/* ── Use selection ──────────────────────────────────────────── */
+.ob-use { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; width: 100%; max-width: 720px; }
+.ob-use__card {
+  background: #fff; border: 1px solid var(--border); border-radius: 18px;
+  padding: 40px 28px 34px; text-align: center; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.03);
+  transition: transform var(--dur-std,180ms) var(--ease, cubic-bezier(.22,1,.36,1)), box-shadow var(--dur-std,180ms), border-color var(--dur-std,180ms);
+}
+.ob-use__card:hover { transform: translateY(-3px); border-color: var(--green-300, #5CC88D); box-shadow: 0 14px 36px rgba(16,40,30,.10); }
+.ob-use__art { width: 92px; height: 92px; margin-bottom: 14px; color: var(--fg-2); display: flex; align-items: center; justify-content: center; }
+.ob-use__art svg { width: 100%; height: 100%; stroke-width: 1.4; }
+.ob-use__title { font-family: var(--font-display); font-weight: 600; font-size: 22px; letter-spacing: -0.01em; }
+.ob-use__desc { font-size: 13.5px; color: var(--fg-5); line-height: 1.5; max-width: 230px; }
+
+/* ── Trial (bento) ──────────────────────────────────────────── */
+.ob-trial { width: 100%; max-width: 660px; display: flex; flex-direction: column; align-items: center; }
+.ob-trial__h2 { font-size: 15px; color: var(--fg-5); text-align: center; margin: -2px 0 28px; max-width: 440px; line-height: 1.5; text-wrap: pretty; }
+.ob-bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
+.ob-cell {
+  border: 1px solid var(--border); border-radius: 16px; background: #fff;
+  padding: 18px; display: flex; flex-direction: column; overflow: hidden;
+}
+.ob-cell--wide { grid-column: span 3; }
+.ob-cell--hero { background: linear-gradient(180deg, #F4FBF7 0%, #FFFFFF 70%); border-color: var(--green-100, #C3ECD5); }
+.ob-cell__title { font-size: 14.5px; font-weight: 600; color: var(--fg-1); margin-bottom: 5px; }
+.ob-cell__desc { font-size: 12.5px; color: var(--fg-5); line-height: 1.45; }
+.ob-cell__tag { font: 500 11px/1 var(--font-mono, monospace); text-transform: uppercase; letter-spacing: .06em; color: var(--green-600, #0F8A4F); margin-top: 10px; }
+.ob-cell--mini { gap: 2px; }
+.ob-cell--mini .ob-cell__title { display: flex; align-items: center; gap: 8px; }
+.ob-cell--mini svg { width: 16px; height: 16px; color: var(--green-500, #16A35F); }
+.ob-trial__cta { width: 100%; max-width: 360px; margin-top: 28px; }
+.ob-trial__cta .ob-btn { height: 52px; }
+.ob-trial__self { margin-top: 6px; }
+
+/* ── Claude / MCP connector (optional setup step) ───────────────── */
+.ob-connect { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.ob-connect__node {
+  width: 46px; height: 46px; border-radius: 12px; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+}
+img.ob-connect__node { object-fit: contain; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 6px 16px rgba(16,40,30,.08); }
+.ob-connect__node--claude { overflow: hidden; }
+.ob-connect__node--claude img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ob-connect__link { color: var(--fg-6); display: flex; }
+.ob-connect__link svg { width: 18px; height: 18px; }
+.ob-rows--bullets { margin-bottom: 26px; }
+.ob-row--bullet { padding: 13px 16px; }
+.ob-connect__note { font-size: 12.5px; color: var(--fg-6); margin-top: 14px; text-align: center; }
+.ob-handoff { width: 100%; display: flex; flex-direction: column; align-items: center; }
+.ob-handoff__mark {
+  width: 64px; height: 64px; border-radius: 50%; margin-bottom: 18px;
+  background: var(--green-50, #E6F7EE); border: 2px solid var(--green-100, #C3ECD5);
+  color: var(--green-600, #0F8A4F); display: inline-flex; align-items: center; justify-content: center;
+}
+.ob-handoff__mark svg { width: 30px; height: 30px; }
+
+/* ── Full-screen workspace setup (reused modal steps, un-modaled) */
+.ob-setup { width: 100%; max-width: 540px; }
+.ob-setup .modal {
+  width: 100%; max-width: 540px; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 24px 60px rgba(16,40,30,.10);
+  border-radius: 18px;
+  /* Full-screen setup is a static card — drop the modal pop-in so it never
+     depends on entrance-animation completion to be visible. */
+  animation: none; opacity: 1; transform: none; max-height: none;
+}
+.ob-setup .scrim { all: unset; }
+.ob-setup-progress { display: flex; align-items: center; gap: 8px; margin: 0 auto 18px; font-size: 12.5px; color: var(--fg-5); }
+
+/* density-compact already handled in shell; nothing extra needed here */

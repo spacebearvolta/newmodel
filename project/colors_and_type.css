@@ -1,0 +1,139 @@
+/* ──────────────────────────────────────────────────────────────
+   Grain Design System — Colors, Type, Tokens
+   Source of truth for building Grain-branded interfaces.
+   ────────────────────────────────────────────────────────────── */
+
+/* Fonts: Inter + Poppins (marketing), Geist + Geist Mono (shadcn layer) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ── Brand ─────────────────────────────────────────────────── */
+  --grain-green-50:  #E6F7EE;
+  --grain-green-100: #C3ECD5;
+  --grain-green-200: #8FDBB1;
+  --grain-green-300: #5CC88D;
+  --grain-green-400: #2FB572;
+  --grain-green-500: #16A35F; /* primary */
+  --grain-green-600: #0F8A4F;
+  --grain-green-700: #0B6F3F;
+  --grain-green-800: #084F2D;
+
+  --grain-primary: var(--grain-green-500);
+  --grain-primary-hover: var(--grain-green-600);
+
+  /* ── Neutrals (cool near-black on warm whites) ────────────── */
+  --fg-0:  #000000;
+  --fg-1:  #0A0A0A; /* primary text */
+  --fg-2:  #18181B; /* secondary text / strong */
+  --fg-3:  #3F3F46; /* body in dense UI */
+  --fg-4:  #525252; /* tertiary */
+  --fg-5:  #737373; /* muted */
+  --fg-6:  #A3A3A3; /* placeholder */
+  --fg-7:  #D4D4D4; /* disabled */
+
+  --bg-0:  #FFFFFF; /* card */
+  --bg-1:  #FAFAFA; /* app canvas */
+  --bg-2:  #F5F5F5; /* alt surface */
+  --bg-3:  #F0F0F0;
+  --bg-4:  #E5E5E5; /* default border */
+  --bg-5:  #D4D4D4;
+
+  --border:        #E5E5E5;
+  --border-strong: #D4D4D4;
+  --border-inverse: rgba(255,255,255,0.10);
+
+  /* ── Semantic ──────────────────────────────────────────────── */
+  --success: #16A35F;
+  --success-bg: #E6F7EE;
+  --warning: #EA580C;
+  --warning-bg: #FFEDD5;
+  --danger:  #DC2626;
+  --danger-bg: #FEE2E2;
+  --info:    #0052B4;
+  --info-bg: #DBEAFE;
+
+  /* ── Type ──────────────────────────────────────────────────── */
+  --font-display: 'Poppins', 'Inter', system-ui, sans-serif;
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-alt:     'Geist', 'Inter', system-ui, sans-serif;
+  --font-mono:    'Geist Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Semantic type scale — marketing */
+  --h1-size: 64px; --h1-weight: 700; --h1-line: 1.05; --h1-tracking: -0.02em;
+  --h2-size: 48px; --h2-weight: 700; --h2-line: 1.1;  --h2-tracking: -0.02em;
+  --h3-size: 32px; --h3-weight: 600; --h3-line: 1.2;  --h3-tracking: -0.015em;
+  --h4-size: 24px; --h4-weight: 600; --h4-line: 1.25; --h4-tracking: -0.01em;
+
+  /* Semantic type scale — UI */
+  --ui-xl: 18px;
+  --ui-lg: 16px;
+  --ui-md: 14px; /* default UI */
+  --ui-sm: 12px;
+
+  --body-size: 16px; --body-line: 1.55;
+  --label-size: 14px; --label-weight: 500;
+  --code-size: 14px;
+
+  /* ── Spacing (4px grid) ────────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-32: 128px;
+
+  /* ── Radii ─────────────────────────────────────────────────── */
+  --radius-xs: 4px;
+  --radius-sm: 6px;  /* inputs, small controls */
+  --radius-md: 8px;  /* cards, buttons */
+  --radius-lg: 12px; /* elevated panels */
+  --radius-xl: 16px; /* marketing containers */
+  --radius-full: 9999px;
+
+  /* ── Shadows ───────────────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-float: 0 10px 40px rgba(0,0,0,0.08); /* app window / dropdowns */
+
+  /* ── Focus ─────────────────────────────────────────────────── */
+  --focus-ring: 0 0 0 2px rgba(22,163,95,0.35);
+  --focus-offset: 2px;
+
+  /* ── Motion ────────────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 120ms;
+  --dur-std: 180ms;
+  --dur-slow: 260ms;
+}
+
+/* ── Semantic element defaults ──────────────────────────────── */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--body-size);
+  line-height: var(--body-line);
+  color: var(--fg-1);
+  background: var(--bg-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, .h1 { font-family: var(--font-display); font-size: var(--h1-size); font-weight: var(--h1-weight); line-height: var(--h1-line); letter-spacing: var(--h1-tracking); color: var(--fg-1); margin: 0; }
+h2, .h2 { font-family: var(--font-display); font-size: var(--h2-size); font-weight: var(--h2-weight); line-height: var(--h2-line); letter-spacing: var(--h2-tracking); color: var(--fg-1); margin: 0; }
+h3, .h3 { font-family: var(--font-display); font-size: var(--h3-size); font-weight: var(--h3-weight); line-height: var(--h3-line); letter-spacing: var(--h3-tracking); color: var(--fg-1); margin: 0; }
+h4, .h4 { font-family: var(--font-sans); font-size: var(--h4-size); font-weight: var(--h4-weight); line-height: var(--h4-line); letter-spacing: var(--h4-tracking); color: var(--fg-1); margin: 0; }
+
+p { margin: 0; color: var(--fg-3); font-size: var(--body-size); line-height: var(--body-line); }
+.muted { color: var(--fg-5); }
+.small { font-size: var(--ui-sm); }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-5); }
+code, .code { font-family: var(--font-mono); font-size: var(--code-size); background: var(--bg-2); padding: 2px 6px; border-radius: var(--radius-xs); }
+
+a { color: var(--fg-1); text-decoration: none; }
+a:hover { text-decoration: underline; }
