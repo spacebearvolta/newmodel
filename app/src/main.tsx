@@ -5,6 +5,7 @@ import './styles/tokens.css';
 import './styles/base.css';
 import './styles/shell.css';
 import './styles/meetings.css';
+import './styles/onboarding.css';
 import './styles/hooks.css';
 import './styles/hookGallery.css';
 import './styles/tokens-v2.css';

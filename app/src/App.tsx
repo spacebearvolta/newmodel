@@ -1,12 +1,14 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { CreatorApp } from './components/creator/CreatorApp';
+import { RootGate } from './routes/RootGate';
+import { OnboardingApp } from './components/onboarding/OnboardingApp';
 import { HookGalleryRoute } from './routes/HookGalleryRoute';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<CreatorApp />} />
+        <Route path="/" element={<RootGate />} />
+        <Route path="/onboarding" element={<OnboardingApp />} />
         <Route path="/hook-gallery" element={<HookGalleryRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

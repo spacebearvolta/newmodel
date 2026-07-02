@@ -1,3 +1,38 @@
+/* ── Mac window chrome — ported from Meetings.html / Onboarding.html's
+   inline <style> blocks (identical in both). Wraps either app in a fake
+   macOS window so reviewers see one consistent "stitched experience"
+   frame; toggleable via the Tweaks panel. ─────────────────────────── */
+.mac-shell {
+  height: 100vh; box-sizing: border-box; display: flex; flex-direction: column;
+  background: linear-gradient(180deg, #2A6BB8 0%, #2960A8 30%, #1E5396 100%);
+  padding: 24px;
+}
+.mac-shell__window {
+  background: var(--bg-card); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.2);
+  flex: 1; display: flex; flex-direction: column; min-height: 0;
+}
+.mac-titlebar {
+  background: #F5F5F5; border-bottom: 1px solid var(--border);
+  padding: 10px 14px; display: flex; align-items: center; gap: 8px; position: relative;
+}
+.mac-traffic { display: flex; gap: 6px; }
+.mac-traffic span { width: 12px; height: 12px; border-radius: 50%; display: block; }
+.mac-traffic span:nth-child(1) { background: #FF5F57; }
+.mac-traffic span:nth-child(2) { background: #FEBC2E; }
+.mac-traffic span:nth-child(3) { background: #28C840; }
+.mac-titlebar__title {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-size: 12px; font-weight: 500; color: var(--fg-4);
+}
+.mac-body { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.mac-body > .app { flex: 1; min-height: 0; height: 100%; }
+.mac-body > .app > .canvas { overflow-y: auto; }
+.mac-body > .ob-host { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.ob-host > .ob-stage { flex: 1; min-height: 0; }
+.ob-novchrome { height: 100vh; display: flex; flex-direction: column; }
+.ob-novchrome > .ob-host { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
 /* ── App shell ─────────────────────────────────────────────── */
 .app { display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; }
 /* Ported from Meetings.html's page-level override: without this, .app's
