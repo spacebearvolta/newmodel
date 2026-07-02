@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../primitives/Icon';
+import { HgGateCardV2Live } from '../hooksV2/HooksV2Live';
 import { TweaksPanel, TweakSection, TweakRadio, TweakSelect, TweakToggle, useTweaks } from '../tweaks/TweaksPanel';
 
 interface NavRow {
@@ -111,15 +112,13 @@ function IntegrationsSettings({ plan, initial, onStartTrial, onBack }: {
     );
   } else if (paidInfo) {
     card = (
-      <div className="modal-v2 card-v2" style={{ width: 420, padding: '30px 32px', textAlign: 'center' }}>
-        <div className="mark-v2" style={{ margin: '0 auto 14px', width: 44, height: 44, background: activeRow?.brand, color: '#fff' }}>
-          <IntgGlyph row={activeRow} size={22} />
-        </div>
-        <h2 style={{ font: '700 19px/1.25 var(--font-sans)', color: 'var(--fg-1)', margin: '0 0 8px' }}>Try Grain Business to connect {paidInfo.name}</h2>
-        <p style={{ fontSize: 13.5, color: 'var(--fg-4)', lineHeight: 1.55, margin: '0 auto 20px', maxWidth: 320 }}>{paidInfo.desc}</p>
-        <button className="btn-v2 btn-v2--primary btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial</button>
-        <div style={{ marginTop: 12, fontSize: 12, color: 'var(--fg-5)' }}>Grain Business · free for 14 days</div>
-      </div>
+      <HgGateCardV2Live
+        name={paidInfo.name}
+        brand={activeRow?.brand || 'var(--fg-4)'}
+        initial={activeRow?.initial || '?'}
+        desc={paidInfo.desc}
+        onStartTrial={onStartTrial}
+      />
     );
   } else {
     card = (

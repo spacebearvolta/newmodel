@@ -637,7 +637,7 @@
 /* Compact "Start trial" CTA used inside a dropdown option */
 .set-mini-cta {
   flex-shrink: 0;
-  background: #4F6BFF;
+  background: var(--green-500);
   color: #fff;
   border: 0;
   border-radius: 7px;

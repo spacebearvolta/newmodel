@@ -1,8 +1,7 @@
-// HooksV2Live.tsx — production-wired versions of the finalized v2 hook
-// designs (see redesign/HooksV2.tsx for the static comparison mockups these
-// are visually identical to). These add real open/close state and callback
-// wiring so they can be dropped into the rebuilt app exactly like the
-// original TrialHooks.jsx baseline components were.
+// HooksV2Live.tsx — the redesigned trial/upsell hook components. Used both
+// by the live app (Meetings, sidebar, Integrations) and the Hook Gallery
+// dev-review tool at /hook-gallery, so there is exactly one version of each
+// hook's design anywhere in the app.
 import { Icon } from '../primitives/Icon';
 import { Modal } from '../primitives/Modal';
 import grainLogo from '../../assets/grain-logo.png';
@@ -139,6 +138,30 @@ export function TeamValueModalV2Live({ trigger, onClose, onStartTrial }: TeamVal
   );
 }
 
+// ── H6 — CRM connection gate ────────────────────────────────────────────────
+// Shared by the Integrations page's real CRM cards and this gallery entry, so
+// both stay in lockstep instead of drifting into two near-identical designs.
+interface HgGateCardV2LiveProps {
+  name: string;
+  brand: string;
+  initial: string;
+  desc: string;
+  onStartTrial?: () => void;
+}
+export function HgGateCardV2Live({ name, brand, initial, desc, onStartTrial }: HgGateCardV2LiveProps) {
+  return (
+    <div className="modal-v2 card-v2" style={{ width: 420, padding: '30px 32px', textAlign: 'center' }}>
+      <div className="mark-v2" style={{ margin: '0 auto 14px', width: 44, height: 44, background: brand, color: '#fff', fontWeight: 700, fontSize: 18 }}>
+        {initial}
+      </div>
+      <h2 style={{ font: '700 19px/1.25 var(--font-sans)', color: 'var(--fg-1)', margin: '0 0 8px' }}>Try Grain Business to connect {name}</h2>
+      <p style={{ fontSize: 13.5, color: 'var(--fg-4)', lineHeight: 1.55, margin: '0 auto 20px', maxWidth: 320 }}>{desc}</p>
+      <button className="btn-v2 btn-v2--primary btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial</button>
+      <div style={{ marginTop: 12, fontSize: 12, color: 'var(--fg-5)' }}>Grain Business · free for 14 days</div>
+    </div>
+  );
+}
+
 // ── H7 interstitial ───────────────────────────────────────────────────────
 const H7_MEETINGS_V2 = [
   { title: 'Weekly sync — Product', minutes: 34, locksInDays: 5 },
@@ -191,7 +214,7 @@ export function TrialExpiredInterstitialV2Live({ open, orgName = 'Acme', graceDa
                   </span>
                   <span style={{ minWidth: 0, flex: 1 }}>
                     <span style={{ display: 'block', fontSize: 12.5, fontWeight: 500, color: 'var(--fg-2)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.title}</span>
-                    <span style={{ display: 'block', fontSize: 11, color: flagged ? '#C2410C' : 'var(--fg-5)' }}>{m.minutes} min · {statusText}</span>
+                    <span style={{ display: 'block', fontSize: 11, color: flagged ? 'var(--fg-3)' : 'var(--fg-5)' }}>{m.minutes} min · {statusText}</span>
                   </span>
                 </div>
               );
@@ -217,7 +240,7 @@ export function TrialEndedCardV2Live({ orgName = 'Acme', graceDays, onUpgrade, o
       <div className="tec-v2__title">Trial ended</div>
       <p className="tec-v2__desc">Everything stays saved. Meetings shared by teammates unlock when {orgName} is active again.</p>
       {urgent && (
-        <p style={{ margin: '0 0 10px', fontSize: 12, fontWeight: 600, color: '#C2410C', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <p style={{ margin: '0 0 10px', fontSize: 12, fontWeight: 600, color: 'var(--fg-3)', display: 'flex', alignItems: 'center', gap: 6 }}>
           <Icon name="alert" size={13} /> {graceDays} {graceDays === 1 ? 'day' : 'days'} until history is deleted
         </p>
       )}

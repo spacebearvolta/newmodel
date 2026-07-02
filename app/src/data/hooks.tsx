@@ -1,15 +1,17 @@
 import type { ReactNode } from 'react';
-import { RecordingLimitModal } from '../components/hooks/RecordingLimitModal';
-import { HistoryLockBanner } from '../components/hooks/HistoryLockBanner';
-import { LockedMeetingModal } from '../components/hooks/LockedMeetingModal';
-import { TeamValueModal } from '../components/hooks/TeamValueModal';
-import { HgGateCard } from '../components/hooks/HgGateCard';
-import { TrialExpiredInterstitial } from '../components/hooks/TrialExpiredInterstitial';
-import { TrialEndedCard } from '../components/hooks/TrialEndedCard';
-import { FeatureNudgeChip } from '../components/hooks/FeatureNudgeChip';
-import { TeammateNudge } from '../components/hooks/TeammateNudge';
-import { TrialWidget } from '../components/trial/TrialWidget';
-import { TrialCountdown } from '../components/trial/TrialCountdown';
+import {
+  RecordingLimitModalV2Live,
+  HistoryLockBannerV2Live,
+  LockedMeetingModalV2Live,
+  TeamValueModalV2Live,
+  HgGateCardV2Live,
+  TrialExpiredInterstitialV2Live,
+  TrialEndedCardV2Live,
+  FeatureNudgeChipV2Live,
+  TeammateNudgeV2Live,
+  TrialWidgetV2Live,
+  TrialCountdownV2Live,
+} from '../components/hooksV2/HooksV2Live';
 
 const NOOP = () => {};
 const MEETING = { title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' };
@@ -30,7 +32,7 @@ export const HG_HOOKS: HookEntry[] = [
     trigger: 'A free user starts a recording (or uploads a file) longer than 45 minutes.',
     kind: 'modal',
     states: ['Recording', 'Upload'],
-    render: (s) => <RecordingLimitModal open kind={s === 1 ? 'upload' : 'record'} onClose={NOOP} onStartTrial={NOOP} />,
+    render: (s) => <RecordingLimitModalV2Live open kind={s === 1 ? 'upload' : 'record'} onClose={NOOP} onStartTrial={NOOP} />,
   },
   {
     tag: 'H2',
@@ -40,7 +42,7 @@ export const HG_HOOKS: HookEntry[] = [
     states: ['5 days', '3 days', '1 day'],
     render: (s) => (
       <div style={{ width: 620, maxWidth: '88vw' }}>
-        <HistoryLockBanner daysLeft={[5, 3, 1][s]} onStartTrial={NOOP} onDismiss={NOOP} />
+        <HistoryLockBannerV2Live daysLeft={[5, 3, 1][s]} onStartTrial={NOOP} onDismiss={NOOP} />
       </div>
     ),
   },
@@ -49,7 +51,7 @@ export const HG_HOOKS: HookEntry[] = [
     title: 'Locked meeting (past 30 days)',
     trigger: 'A free user opens a meeting older than the 30-day free history window.',
     kind: 'modal',
-    render: () => <LockedMeetingModal meeting={MEETING} onClose={NOOP} onStartTrial={NOOP} />,
+    render: () => <LockedMeetingModalV2Live meeting={MEETING} onClose={NOOP} onStartTrial={NOOP} />,
   },
   {
     tag: 'H4 · H5',
@@ -57,14 +59,22 @@ export const HG_HOOKS: HookEntry[] = [
     trigger: 'A free user clicks Invite, or tries to share a recording with a colleague.',
     kind: 'modal',
     states: ['Invite', 'Share'],
-    render: (s) => <TeamValueModal trigger={s === 1 ? 'share' : 'invite'} onClose={NOOP} onStartTrial={NOOP} />,
+    render: (s) => <TeamValueModalV2Live trigger={s === 1 ? 'share' : 'invite'} onClose={NOOP} onStartTrial={NOOP} />,
   },
   {
     tag: 'H6',
     title: 'CRM connection gate',
     trigger: 'A free user opens a CRM / workspace integration (HubSpot, Salesforce, …).',
     kind: 'inline',
-    render: () => <HgGateCard />,
+    render: () => (
+      <HgGateCardV2Live
+        name="HubSpot"
+        brand="#FF7A59"
+        initial="H"
+        desc="Skip the manual data entry, auto-sync AI notes to HubSpot Contact and Meeting objects."
+        onStartTrial={NOOP}
+      />
+    ),
   },
   {
     tag: 'H7',
@@ -73,7 +83,7 @@ export const HG_HOOKS: HookEntry[] = [
     kind: 'modal',
     states: ['30 days', '7 days', '3 days', '1 day'],
     render: (s) => (
-      <TrialExpiredInterstitial open orgName="Acme" graceDays={[30, 7, 3, 1][s]} onUpgrade={NOOP} onContinueFree={NOOP} />
+      <TrialExpiredInterstitialV2Live open orgName="Acme" graceDays={[30, 7, 3, 1][s]} onUpgrade={NOOP} onContinueFree={NOOP} />
     ),
   },
   {
@@ -84,7 +94,7 @@ export const HG_HOOKS: HookEntry[] = [
     states: ['30 days', '7 days', '1 day'],
     render: (s) => (
       <div style={{ width: 244 }}>
-        <TrialEndedCard orgName="Acme" graceDays={[30, 7, 1][s]} onUpgrade={NOOP} onTalkToSales={NOOP} onDismiss={NOOP} />
+        <TrialEndedCardV2Live orgName="Acme" graceDays={[30, 7, 1][s]} onUpgrade={NOOP} onTalkToSales={NOOP} />
       </div>
     ),
   },
@@ -95,7 +105,7 @@ export const HG_HOOKS: HookEntry[] = [
     kind: 'inline',
     states: ['Team meetings', 'Sharing', 'AI actions', 'Integrations'],
     render: (s) => (
-      <FeatureNudgeChip
+      <FeatureNudgeChipV2Live
         feature={['Team meetings', 'Sharing to a team', 'AI actions on shared meetings', 'Workspace integrations'][s]}
         daysLeft={8}
         onDismiss={NOOP}
@@ -107,7 +117,7 @@ export const HG_HOOKS: HookEntry[] = [
     title: 'Teammate engagement nudge',
     trigger: 'A teammate’s first meeting is captured in the trial workspace.',
     kind: 'inline',
-    render: () => <TeammateNudge name="Maya Chen" daysLeft={8} onView={NOOP} onClose={NOOP} />,
+    render: () => <TeammateNudgeV2Live name="Maya Chen" daysLeft={8} onView={NOOP} onClose={NOOP} />,
   },
   {
     tag: 'Trial',
@@ -117,7 +127,7 @@ export const HG_HOOKS: HookEntry[] = [
     states: ['14', '8', '5', '3', '1'],
     render: (s) => (
       <div style={{ width: 244 }}>
-        <TrialWidget daysLeft={[14, 8, 5, 3, 1][s]} orgName="Acme" onUpgrade={NOOP} onOpen={NOOP} />
+        <TrialWidgetV2Live daysLeft={[14, 8, 5, 3, 1][s]} onUpgrade={NOOP} onOpen={NOOP} />
       </div>
     ),
   },
@@ -127,6 +137,6 @@ export const HG_HOOKS: HookEntry[] = [
     trigger: 'Opens from the trial pill / widget at milestone days remaining.',
     kind: 'modal',
     states: ['8 days', '3 days', '1 day'],
-    render: (s) => <TrialCountdown daysLeft={[8, 3, 1][s]} orgName="Acme" onUpgrade={NOOP} onClose={NOOP} />,
+    render: (s) => <TrialCountdownV2Live daysLeft={[8, 3, 1][s]} orgName="Acme" onUpgrade={NOOP} onClose={NOOP} />,
   },
 ];

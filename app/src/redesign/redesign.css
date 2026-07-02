@@ -80,9 +80,9 @@ body { overflow: auto !important; }
 .h2-v2 {
   display: flex; align-items: center; gap: 14px;
   padding: 14px 16px; border-radius: var(--r-card);
-  background: #fff; border: 1px solid var(--green-500);
+  background: #fff; border: 1px solid var(--border-strong);
 }
-.h2-v2__icon { width: 34px; height: 34px; border-radius: var(--r-btn); background: #fff; border: 1px solid var(--green-100); color: var(--green-700); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.h2-v2__icon { width: 34px; height: 34px; border-radius: var(--r-btn); background: var(--fg-4); border: 0; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .h2-v2__text { flex: 1; min-width: 0; }
 .h2-v2__title { display: block; font: 600 14.5px/1.3 var(--font-sans); color: var(--fg-1); }
 .h2-v2__body { display: block; font-size: 12.5px; color: var(--fg-4); margin-top: 2px; }
