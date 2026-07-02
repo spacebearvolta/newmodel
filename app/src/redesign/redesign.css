@@ -1,0 +1,167 @@
+/* redesign.css — v2 exploration styles. Grain green stays the primary
+   accent (per Alex); shapes/elevation/motion follow DESIGN.md (rectangular
+   8px buttons, 10px cards, no invented hues, no all-caps outside tags). */
+
+/* The comparison page renders several "before" thumbnails that each mount
+   the real Modal component. Modal's own mount effect sets
+   document.body.style.overflow = 'hidden' to lock background scroll behind
+   a single real modal — correct there, but with five mounted at once on
+   this page it permanently locks the whole page's scroll. !important beats
+   Modal's plain (non-important) inline style, so this restores scrolling
+   without touching the Modal component itself. */
+body { overflow: auto !important; }
+
+/* ── Buttons: rectangular, DESIGN.md radius, no pill shape ────────────── */
+.btn-v2 {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border-radius: var(--r-btn);
+  border: 1px solid transparent;
+  font: 500 14px/20px var(--font-sans);
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: background var(--dur-v2-fast) var(--ease-v2-standard);
+}
+.btn-v2 svg { width: 14px; height: 14px; flex-shrink: 0; }
+.btn-v2--primary { background: var(--green-500); color: #fff; }
+.btn-v2--primary:hover { background: var(--green-600); }
+.btn-v2--dark { background: #111; color: #fff; }
+.btn-v2--dark:hover { background: #000; }
+.btn-v2--secondary { background: var(--bg-alt); color: var(--fg-2); border-color: var(--border); }
+.btn-v2--secondary:hover { background: var(--border); }
+.btn-v2--ghost { background: transparent; color: var(--fg-3); }
+.btn-v2--ghost:hover { background: var(--bg-alt); color: var(--fg-1); }
+.btn-v2--full { width: 100%; }
+.btn-v2--lg { padding: 12px 18px; font-size: 15px; }
+
+/* ── Shared eyebrow badge — pill is fine here (DESIGN.md allows pill on
+   badges, just not on buttons). No logo mark for now, per Alex — remove
+   until the real Grain logo file arrives, don't stand in with anything. ── */
+.eyebrow-v2 {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--green-50); color: var(--fg-1);
+  border-radius: var(--r-full);
+  padding: 4px 10px;
+  font: 600 12px/1 var(--font-sans);
+}
+
+/* ── Cards / modals: 10px radius, DESIGN.md shadow scale ──────────────── */
+.card-v2 {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+}
+.modal-v2 { border-radius: var(--r-card); box-shadow: var(--shadow-v2-lg); }
+.mark-v2 {
+  width: 48px; height: 48px; border-radius: var(--r-btn);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--green-50); color: var(--green-700);
+  flex-shrink: 0;
+}
+.mark-v2--warn { background: #FFF1E6; color: #C2410C; }
+
+/* ── H1 v2 — recording limit modal ─────────────────────────────────────
+   Loom inspo: single strong full-width CTA + a plain secondary link,
+   rather than two co-equal pill buttons. */
+.h1-v2 { padding: 28px 28px 24px; text-align: center; }
+.h1-v2__title { font: 600 20px/1.3 var(--font-sans); color: var(--fg-1); margin: 0 0 6px; }
+.h1-v2__sub { font-size: 14px; line-height: 1.55; color: var(--fg-4); margin: 0 auto 20px; max-width: 380px; }
+.h1-v2__values { list-style: none; margin: 0 auto 22px; padding: 0; max-width: 320px; text-align: left; display: flex; flex-direction: column; gap: 10px; }
+.h1-v2__values li { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--fg-2); }
+.h1-v2__values .mark-v2 { width: 26px; height: 26px; border-radius: 6px; }
+.h1-v2__foot { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0 28px 26px; }
+.h1-v2__link { background: none; border: 0; color: var(--fg-4); font: 500 13px var(--font-sans); cursor: pointer; padding: 4px; }
+.h1-v2__link:hover { color: var(--fg-1); text-decoration: underline; }
+
+/* ── H2 v2 — history banner ─────────────────────────────────────────────
+   Loom inspo: soft brand-tinted bar (their "1 of your viewers" banner)
+   instead of a neutral-gray alert; bolder lead sentence. */
+.h2-v2 {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border-radius: var(--r-card);
+  background: var(--green-50); border: 1px solid var(--green-100);
+}
+.h2-v2__icon { width: 34px; height: 34px; border-radius: var(--r-btn); background: #fff; border: 1px solid var(--green-100); color: var(--green-700); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.h2-v2__text { flex: 1; min-width: 0; }
+.h2-v2__title { display: block; font: 600 14.5px/1.3 var(--font-sans); color: var(--fg-1); }
+.h2-v2__body { display: block; font-size: 12.5px; color: var(--fg-4); margin-top: 2px; }
+.h2-v2__close { flex-shrink: 0; width: 28px; height: 28px; border-radius: 7px; border: 0; background: transparent; color: var(--fg-5); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.h2-v2__close:hover { background: rgba(0,0,0,.05); }
+
+/* ── H3 v2 — locked meeting ─────────────────────────────────────────────*/
+.h3-v2 { padding: 28px 28px 24px; text-align: center; }
+.h3-v2__title { font: 600 20px/1.3 var(--font-sans); color: var(--fg-1); margin: 0 0 14px; }
+.h3-v2__row { display: flex; align-items: center; gap: 12px; text-align: left; margin: 0 auto 16px; max-width: 340px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--r-btn); background: var(--bg-alt); }
+.h3-v2__thumb { width: 40px; height: 30px; border-radius: 6px; background: #fff; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--fg-5); flex-shrink: 0; }
+.h3-v2__name { display: block; font-size: 13px; font-weight: 600; color: var(--fg-2); }
+.h3-v2__meta { display: block; font-size: 11.5px; color: var(--fg-5); }
+.h3-v2__sub { font-size: 14px; line-height: 1.55; color: var(--fg-4); margin: 0 auto; max-width: 340px; }
+
+/* ── H4/H5 v2 — team value modal ────────────────────────────────────────
+   Loom inspo: gradient-tinted border on the highlighted plan card. */
+.h45-v2 { border-radius: var(--r-card); background: linear-gradient(135deg, var(--green-500), var(--green-300)); padding: 1.5px; }
+.h45-v2__inner { background: #fff; border-radius: calc(var(--r-card) - 1.5px); display: grid; grid-template-columns: 1fr 0.9fr; gap: 24px; padding: 28px 26px; }
+.h45-v2__title { font: 600 22px/1.25 var(--font-sans); color: var(--fg-1); margin: 12px 0 8px; }
+.h45-v2__sub { font-size: 14px; line-height: 1.55; color: var(--fg-4); margin: 0; }
+.h45-v2__values { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.h45-v2__values li { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--fg-2); }
+/* Fixed height + bottom fade so the last row cuts off mid-card, implying
+   more meetings below — same mask-image technique the original hook-preview
+   used, just applied over real rows instead of placeholder bars. */
+.h45-v2__preview {
+  height: 340px;
+  overflow: hidden;
+  mask-image: linear-gradient(180deg, #000 0%, #000 78%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 78%, transparent 100%);
+}
+
+/* ── H8 v2 — feature nudge chip ──────────────────────────────────────────
+   Reverted to purple per Alex — "make this banner purple like it used to
+   be." Colors match the original baseline's feature-nudge exactly. */
+.h8-v2 {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 10px 7px 8px; border-radius: var(--r-btn);
+  background: #F3F0FF; border: 1px solid #DDD3FB;
+  width: fit-content; max-width: 100%;
+}
+.h8-v2__icon { display: inline-flex; color: #6D45E8; flex-shrink: 0; }
+.h8-v2__text { font-size: 12.5px; color: #4A2FA8; }
+.h8-v2__text strong { font-weight: 600; color: #3A1F92; }
+.h8-v2__close { flex-shrink: 0; width: 20px; height: 20px; border: 0; border-radius: 5px; background: transparent; color: #6D45E8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.h8-v2__close:hover { background: rgba(109,69,232,.12); }
+
+/* ── H9 v2 — teammate nudge ──────────────────────────────────────────────
+   Loom inspo: bold black stat-style headline (their Insights cards). */
+.h9-v2 { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-card); box-shadow: var(--shadow-v2-lg); padding: 16px; width: 390px; position: relative; }
+.h9-v2__close { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border: 0; border-radius: var(--r-btn); background: transparent; color: var(--fg-5); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.h9-v2__close:hover { background: var(--bg-alt); }
+.h9-v2__eyebrow { display: inline-flex; align-items: center; gap: 5px; font: 600 11.5px var(--font-sans); color: var(--green-700); margin-bottom: 6px; }
+.h9-v2__head { display: flex; gap: 11px; align-items: center; padding-right: 20px; }
+.h9-v2__title { font: 600 13.5px/1.3 var(--font-sans); color: var(--fg-1); white-space: nowrap; }
+.h9-v2__body { font-size: 12.5px; color: var(--fg-4); line-height: 1.5; margin: 12px 0 0; }
+.h9-v2__actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+
+/* ── Trial widget v2 ──────────────────────────────────────────────────── */
+.tw-v2 { border: 1px solid var(--green-100); border-radius: var(--r-card); padding: 13px; background: linear-gradient(180deg, #F4FBF7 0%, #FFFFFF 72%); }
+.tw-v2__top { display: flex; align-items: center; gap: 9px; width: 100%; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
+.tw-v2__badge { flex: none; width: 30px; height: 30px; border-radius: var(--r-btn); display: flex; align-items: center; justify-content: center; background: var(--green-50); color: var(--green-700); }
+.tw-v2__days { font-size: 13.5px; font-weight: 600; color: var(--fg-1); display: block; }
+.tw-v2__plan { font-size: 11.5px; color: var(--fg-5); display: block; }
+.tw-v2__bar { height: 5px; border-radius: 9999px; background: var(--bg-alt); margin: 11px 0 6px; overflow: hidden; }
+.tw-v2__bar span { display: block; height: 100%; border-radius: 9999px; background: var(--green-500); }
+.tw-v2__meta { font-size: 11.5px; color: var(--fg-5); margin-bottom: 11px; }
+
+/* ── Trial-ended card v2 ──────────────────────────────────────────────── */
+.tec-v2 { border: 1px solid var(--border); border-radius: var(--r-card); padding: 14px; background: var(--bg-card); position: relative; }
+.tec-v2__title { font-size: 14px; font-weight: 700; color: var(--fg-1); margin-bottom: 6px; }
+.tec-v2__desc { font-size: 12px; color: var(--fg-5); line-height: 1.45; margin: 0 0 12px; }
+
+/* ── Trial countdown popup v2 ─────────────────────────────────────────── */
+.tc-v2 { width: 400px; background: var(--bg-card); border-radius: var(--r-drawer); overflow: hidden; box-shadow: var(--shadow-v2-xl); position: relative; }
+.tc-v2__hero { height: 188px; background: radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,.5), transparent 60%), linear-gradient(135deg, var(--green-50) 0%, #DCEFFB 52%, var(--green-100) 100%); position: relative; }
+.tc-v2__body { padding: 20px 22px 22px; }
+.tc-v2__days { font: 700 24px/1.15 var(--font-sans); color: var(--fg-1); margin: 0; }
+.tc-v2__sub { font-size: 14px; line-height: 1.5; color: var(--fg-4); margin: 6px 0 0; }
+.tc-v2__bar { height: 6px; border-radius: 9999px; background: var(--bg-alt); margin: 16px 0 8px; overflow: hidden; }
+.tc-v2__bar span { display: block; height: 100%; border-radius: 9999px; background: var(--green-500); }
+.tc-v2__meta { font-size: 12px; color: var(--fg-5); }
+.tc-v2__actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }

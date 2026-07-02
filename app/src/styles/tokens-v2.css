@@ -1,0 +1,27 @@
+/* tokens-v2.css — redesign exploration tokens, layered on top of tokens.css.
+   Radius/shadow/motion scale ported from DESIGN.md (SDL2/shadcn spec).
+   Color stays on Grain green per direction from Alex — DESIGN.md's
+   "no brand color" rule is intentionally NOT applied to hue, only to the
+   shape/elevation/motion system. */
+:root {
+  /* Radius — DESIGN.md border_radius scale */
+  --r-btn: 8px;      /* buttons, inputs, badges */
+  --r-card: 10px;    /* cards, popovers, dialogs — DESIGN.md's --radius */
+  --r-drawer: 14px;  /* drawers, large containers */
+  --r-full: 9999px;  /* avatars, pill badges, switch knobs only — never buttons */
+
+  /* Shadows — DESIGN.md shadows scale */
+  --shadow-v2-xs: 0 1px 2px 0 rgba(0,0,0,.05);
+  --shadow-v2-sm: 0 1px 3px 0 rgba(0,0,0,.10), 0 1px 2px -1px rgba(0,0,0,.10);
+  --shadow-v2-md: 0 4px 6px -1px rgba(0,0,0,.10), 0 2px 4px -2px rgba(0,0,0,.10);
+  --shadow-v2-lg: 0 10px 15px -3px rgba(0,0,0,.10), 0 4px 6px -4px rgba(0,0,0,.10);
+  --shadow-v2-xl: 0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+  --focus-ring-v2: 0 0 0 3px rgba(10,10,10,.30);
+
+  /* Motion — DESIGN.md motion scale */
+  --dur-v2-fast: 150ms;
+  --dur-v2-base: 200ms;
+  --dur-v2-slow: 300ms;
+  --ease-v2-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-v2-entrance: cubic-bezier(0, 0, 0.2, 1);
+}
