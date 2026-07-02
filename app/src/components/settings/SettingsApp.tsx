@@ -4,12 +4,23 @@ import { SettingsSidebar } from './SettingsSidebar';
 import type { SettingsPage } from './SettingsSidebar';
 import { MyMeetingsNew } from './MyMeetingsNew';
 import { Preferences } from './Preferences';
+import { DesktopNotifications } from './Desktop';
+import { EmailNotifications } from './Email';
 
 export function SettingsApp() {
   const navigate = useNavigate();
   const [page, setPage] = useState<SettingsPage>('my-meetings');
+  const backToPreferences = () => setPage('preferences');
 
-  const body = page === 'preferences' ? <Preferences /> : <MyMeetingsNew />;
+  let body;
+  if (page === 'preferences') body = <Preferences onDesktop={() => setPage('desktop')} onEmail={() => setPage('email')} />;
+  else if (page === 'desktop') body = <DesktopNotifications onBack={backToPreferences} />;
+  else if (page === 'email') body = <EmailNotifications onBack={backToPreferences} />;
+  else body = <MyMeetingsNew />;
+
+  // Desktop/Email are subpages of Preferences — keep the sidebar highlighting
+  // "Preferences" while viewing either, matching the original's nav grouping.
+  const sidebarActive = page === 'desktop' || page === 'email' ? 'preferences' : page;
 
   return (
     <div className="mac-shell">
@@ -20,7 +31,7 @@ export function SettingsApp() {
         </div>
         <div className="mac-body">
           <div className="gr-app" style={{ height: '100%', minHeight: 0 }}>
-            <SettingsSidebar active={page} onNav={setPage} onBack={() => navigate('/')} />
+            <SettingsSidebar active={sidebarActive} onNav={setPage} onBack={() => navigate('/')} />
             <main className="gr-main">{body}</main>
           </div>
         </div>

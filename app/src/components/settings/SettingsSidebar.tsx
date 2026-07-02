@@ -1,6 +1,6 @@
 import { Icon } from '../primitives/Icon';
 
-export type SettingsPage = 'my-meetings' | 'preferences' | 'my-account' | 'connected-accounts';
+export type SettingsPage = 'my-meetings' | 'preferences' | 'my-account' | 'connected-accounts' | 'desktop' | 'email';
 
 const ROWS: { id: SettingsPage; label: string; icon: string }[] = [
   { id: 'my-meetings', label: 'My meetings', icon: 'video' },

@@ -5,6 +5,7 @@ import { SettingsApp } from './components/settings/SettingsApp';
 import { IntegrationsApp } from './components/integrations/IntegrationsApp';
 import { OrgAdminApp } from './components/orgadmin/OrgAdminApp';
 import { HookGalleryRoute } from './routes/HookGalleryRoute';
+import { EmailMocksRoute } from './routes/EmailMocksRoute';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/integrations" element={<IntegrationsApp />} />
         <Route path="/org-admin" element={<OrgAdminApp />} />
         <Route path="/hook-gallery" element={<HookGalleryRoute />} />
+        <Route path="/trial-emails" element={<EmailMocksRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

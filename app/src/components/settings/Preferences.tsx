@@ -10,7 +10,7 @@ interface PrefState {
   openAfterRecording: boolean;
 }
 
-export function Preferences() {
+export function Preferences({ onDesktop, onEmail }: { onDesktop?: () => void; onEmail?: () => void }) {
   const [s, setS] = useState<PrefState>({
     openInDesktop: true,
     openOnStartup: true,
@@ -20,8 +20,8 @@ export function Preferences() {
   const set = <K extends keyof PrefState>(k: K, v: PrefState[K]) => setS((p) => ({ ...p, [k]: v }));
 
   const channels = [
-    { id: 'desktop', icon: 'monitor', title: 'Desktop', enabled: true, status: 'Enabled for meeting reminder and detection notifications.' },
-    { id: 'email', icon: 'mail', title: 'Email', enabled: true, status: 'Enabled for personal meeting recaps.' },
+    { id: 'desktop', icon: 'monitor', title: 'Desktop', enabled: true, status: 'Enabled for meeting reminder and detection notifications.', onClick: onDesktop },
+    { id: 'email', icon: 'mail', title: 'Email', enabled: true, status: 'Enabled for personal meeting recaps.', onClick: onEmail },
     { id: 'slack', icon: 'slack', title: 'Slack', enabled: false, status: 'Disabled' },
   ];
 
@@ -68,7 +68,7 @@ export function Preferences() {
         </div>
         <div className="set-card">
           {channels.map((c) => (
-            <button key={c.id} type="button" className="set-channel">
+            <button key={c.id} type="button" className="set-channel" onClick={c.onClick}>
               <span className="set-channel__icon" aria-hidden="true"><Icon name={c.icon} size={20} /></span>
               <span className="set-channel__text">
                 <p className="set-channel__title">{c.title}</p>
