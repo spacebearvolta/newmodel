@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CreatorApp } from './creator/CreatorApp';
 import { JoinerApp } from './joiner/JoinerApp';
 import { HookGallery } from './HookGallery';
@@ -35,8 +36,10 @@ const DEFAULTS: Defaults = {
 };
 
 export function AppShell() {
+  const navigate = useNavigate();
   const [t, setT] = useTweaks<Defaults>(DEFAULTS);
   const [galleryOpen, setGalleryOpen] = useState(false);
+  const goSettings = () => navigate('/settings');
 
   // Arriving fresh from onboarding ("personal use" or workspace setup) must
   // never land on a stale flow tweak like an expired trial — a brand-new
@@ -83,9 +86,10 @@ export function AppShell() {
         graceDays={t.graceDays}
         teammateNudge={t.teammateNudge}
         showClaudeBanner={t.mcpFirstMeetingBanner}
+        onSettings={goSettings}
       />
     )
-    : <JoinerApp key="joiner" hasMeetings={t.hasMeetings} inOrg={t.joinerInOrg} onReset={reset} />;
+    : <JoinerApp key="joiner" hasMeetings={t.hasMeetings} inOrg={t.joinerInOrg} onReset={reset} onSettings={goSettings} />;
 
   return (
     <>

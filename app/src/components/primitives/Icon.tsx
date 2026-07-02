@@ -70,6 +70,11 @@ const ICONS: Record<string, React.ReactNode> = {
   thumbsUp:  <><path d="M7 10v12" /><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" /></>,
   handshake: <><path d="m11 17 2 2a1 1 0 1 0 3-3" /><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" /><path d="m21 3 1 11h-2" /><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" /><path d="M3 4h8" /></>,
 
+  // Settings additions
+  monitor: <><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></>,
+  mail: <><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></>,
+  slack: <><rect width="3" height="8" x="13" y="2" rx="1.5" /><path d="M19 8.5V10h1.5A1.5 1.5 0 1 0 19 8.5" /><rect width="3" height="8" x="8" y="14" rx="1.5" /><path d="M5 15.5V14H3.5A1.5 1.5 0 1 0 5 15.5" /><rect width="8" height="3" x="14" y="13" rx="1.5" /><path d="M15.5 19H14v1.5a1.5 1.5 0 1 0 1.5-1.5" /><rect width="8" height="3" x="2" y="8" rx="1.5" /><path d="M8.5 5H10V3.5A1.5 1.5 0 1 0 8.5 5" /></>,
+
   // v2 redesign additions — context-specific replacements for the generic
   // Lucide "sparkles" mark, picked from the shared icon catalog by name.
   gem:        <><path d="M6 3h12l4 6-10 13L2 9Z" /><path d="M11 3 8 9l4 13 4-13-3-6" /><path d="M2 9h20" /></>,
@@ -89,9 +94,10 @@ interface IconProps {
   size?: number;
   stroke?: number;
   style?: React.CSSProperties;
+  className?: string;
 }
 
-export function Icon({ name, size = 16, stroke = 2, style }: IconProps) {
+export function Icon({ name, size = 16, stroke = 2, style, className }: IconProps) {
   const path = ICONS[name];
   if (!path) return null;
   return (
@@ -105,6 +111,7 @@ export function Icon({ name, size = 16, stroke = 2, style }: IconProps) {
       strokeLinecap="round"
       strokeLinejoin="round"
       style={style}
+      className={className}
     >
       {path}
     </svg>
