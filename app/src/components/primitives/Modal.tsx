@@ -7,9 +7,13 @@ interface ModalProps {
   children?: ReactNode;
   size?: 'md' | 'lg' | 'xl';
   dismissible?: boolean;
+  // Skip the `.modal.modal--{size}` card wrapper — used by v2 hook designs
+  // that bring their own self-contained card styling (.modal-v2 .card-v2)
+  // and would otherwise end up double-boxed inside Modal's own card.
+  bare?: boolean;
 }
 
-export function Modal({ open, onClose, children, size = 'md', dismissible = true }: ModalProps) {
+export function Modal({ open, onClose, children, size = 'md', dismissible = true, bare = false }: ModalProps) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -31,9 +35,13 @@ export function Modal({ open, onClose, children, size = 'md', dismissible = true
         if (e.target === e.currentTarget && dismissible) onClose?.();
       }}
     >
-      <div className={`modal modal--${size}`} role="dialog" aria-modal="true">
-        {children}
-      </div>
+      {bare ? (
+        <div role="dialog" aria-modal="true">{children}</div>
+      ) : (
+        <div className={`modal modal--${size}`} role="dialog" aria-modal="true">
+          {children}
+        </div>
+      )}
     </div>
   );
 }

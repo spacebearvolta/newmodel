@@ -1,22 +1,17 @@
-import { useState } from 'react';
-import { HookGallery } from './components/HookGallery';
-import { Icon } from './components/primitives/Icon';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { CreatorApp } from './components/creator/CreatorApp';
+import { HookGalleryRoute } from './routes/HookGalleryRoute';
 
 function App() {
-  const [open, setOpen] = useState(true);
-
-  if (!open) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <button className="btn btn--dark btn--pill btn--lg" onClick={() => setOpen(true)}>
-          <Icon name="sparkles" size={14} />
-          <span className="btn-label">Open Hook Gallery</span>
-        </button>
-      </div>
-    );
-  }
-
-  return <HookGallery open={open} onClose={() => setOpen(false)} />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<CreatorApp />} />
+        <Route path="/hook-gallery" element={<HookGalleryRoute />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
