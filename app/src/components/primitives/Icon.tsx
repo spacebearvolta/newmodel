@@ -75,6 +75,13 @@ const ICONS: Record<string, React.ReactNode> = {
   mail: <><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></>,
   slack: <><rect width="3" height="8" x="13" y="2" rx="1.5" /><path d="M19 8.5V10h1.5A1.5 1.5 0 1 0 19 8.5" /><rect width="3" height="8" x="8" y="14" rx="1.5" /><path d="M5 15.5V14H3.5A1.5 1.5 0 1 0 5 15.5" /><rect width="8" height="3" x="14" y="13" rx="1.5" /><path d="M15.5 19H14v1.5a1.5 1.5 0 1 0 1.5-1.5" /><rect width="8" height="3" x="2" y="8" rx="1.5" /><path d="M8.5 5H10V3.5A1.5 1.5 0 1 0 8.5 5" /></>,
 
+  // Integrations page additions
+  receipt: <><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" /><path d="M16 8h-6" /><path d="M16 12h-6" /><path d="M13 16h-3" /></>,
+  circleUserRound: <><circle cx="12" cy="12" r="10" /><circle cx="12" cy="10" r="3" /><path d="M7 20.7a7.5 7.5 0 0 1 10 0" /></>,
+  appWindow: <><rect width="18" height="14" x="3" y="5" rx="2" /><path d="M3 9h18" /><path d="M7 7h.01" /><path d="M11 7h.01" /></>,
+  squareTerminal: <><rect width="18" height="18" x="3" y="3" rx="2" /><path d="m7 10 3 3-3 3" /><path d="M12 16h5" /></>,
+  codeXml: <><path d="m18 16 4-4-4-4" /><path d="m6 8-4 4 4 4" /><path d="m14.5 4-5 16" /></>,
+
   // v2 redesign additions — context-specific replacements for the generic
   // Lucide "sparkles" mark, picked from the shared icon catalog by name.
   gem:        <><path d="M6 3h12l4 6-10 13L2 9Z" /><path d="M11 3 8 9l4 13 4-13-3-6" /><path d="M2 9h20" /></>,

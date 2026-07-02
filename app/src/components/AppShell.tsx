@@ -40,6 +40,7 @@ export function AppShell() {
   const [t, setT] = useTweaks<Defaults>(DEFAULTS);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const goSettings = () => navigate('/settings');
+  const goIntegrations = () => navigate('/integrations');
 
   // Arriving fresh from onboarding ("personal use" or workspace setup) must
   // never land on a stale flow tweak like an expired trial — a brand-new
@@ -87,6 +88,7 @@ export function AppShell() {
         teammateNudge={t.teammateNudge}
         showClaudeBanner={t.mcpFirstMeetingBanner}
         onSettings={goSettings}
+        onIntegrations={goIntegrations}
       />
     )
     : <JoinerApp key="joiner" hasMeetings={t.hasMeetings} inOrg={t.joinerInOrg} onReset={reset} onSettings={goSettings} />;

@@ -9,6 +9,7 @@ import './styles/meetings.css';
 import './styles/onboarding.css';
 import './styles/settingsApp.css';
 import './styles/settingsPage.css';
+import './styles/integrations.css';
 import './styles/hooks.css';
 import './styles/hookGallery.css';
 import './styles/tokens-v2.css';

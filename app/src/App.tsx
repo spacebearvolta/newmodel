@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { RootGate } from './routes/RootGate';
 import { OnboardingApp } from './components/onboarding/OnboardingApp';
 import { SettingsApp } from './components/settings/SettingsApp';
+import { IntegrationsApp } from './components/integrations/IntegrationsApp';
 import { HookGalleryRoute } from './routes/HookGalleryRoute';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<RootGate />} />
         <Route path="/onboarding" element={<OnboardingApp />} />
         <Route path="/settings" element={<SettingsApp />} />
+        <Route path="/integrations" element={<IntegrationsApp />} />
         <Route path="/hook-gallery" element={<HookGalleryRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
