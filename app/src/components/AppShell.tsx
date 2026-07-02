@@ -41,6 +41,7 @@ export function AppShell() {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const goSettings = () => navigate('/settings');
   const goIntegrations = () => navigate('/integrations');
+  const goOrgAdmin = () => navigate('/org-admin');
 
   // Arriving fresh from onboarding ("personal use" or workspace setup) must
   // never land on a stale flow tweak like an expired trial — a brand-new
@@ -89,6 +90,7 @@ export function AppShell() {
         showClaudeBanner={t.mcpFirstMeetingBanner}
         onSettings={goSettings}
         onIntegrations={goIntegrations}
+        onOrgAdmin={goOrgAdmin}
       />
     )
     : <JoinerApp key="joiner" hasMeetings={t.hasMeetings} inOrg={t.joinerInOrg} onReset={reset} onSettings={goSettings} />;

@@ -3,6 +3,7 @@ import { RootGate } from './routes/RootGate';
 import { OnboardingApp } from './components/onboarding/OnboardingApp';
 import { SettingsApp } from './components/settings/SettingsApp';
 import { IntegrationsApp } from './components/integrations/IntegrationsApp';
+import { OrgAdminApp } from './components/orgadmin/OrgAdminApp';
 import { HookGalleryRoute } from './routes/HookGalleryRoute';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route path="/onboarding" element={<OnboardingApp />} />
         <Route path="/settings" element={<SettingsApp />} />
         <Route path="/integrations" element={<IntegrationsApp />} />
+        <Route path="/org-admin" element={<OrgAdminApp />} />
         <Route path="/hook-gallery" element={<HookGalleryRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

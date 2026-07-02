@@ -82,6 +82,12 @@ const ICONS: Record<string, React.ReactNode> = {
   squareTerminal: <><rect width="18" height="18" x="3" y="3" rx="2" /><path d="m7 10 3 3-3 3" /><path d="M12 16h5" /></>,
   codeXml: <><path d="m18 16 4-4-4-4" /><path d="m6 8-4 4 4 4" /><path d="m14.5 4-5 16" /></>,
 
+  // Org Admin page additions
+  clipboardList: <><rect width="8" height="4" x="8" y="2" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></>,
+  tag: <><path d="M12.59 21.41 2 10.83V2h8.83l10.58 10.59a2 2 0 0 1 0 2.82L15.4 21.41a2 2 0 0 1-2.82 0Z" /><circle cx="7.5" cy="7.5" r="1" /></>,
+  phone: <><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /></>,
+  cloud: <><path d="M17.5 19H9a7 7 0 1 1 6.71-9h.79a4.5 4.5 0 0 1 1 8.9" /></>,
+
   // v2 redesign additions — context-specific replacements for the generic
   // Lucide "sparkles" mark, picked from the shared icon catalog by name.
   gem:        <><path d="M6 3h12l4 6-10 13L2 9Z" /><path d="M11 3 8 9l4 13 4-13-3-6" /><path d="M2 9h20" /></>,
