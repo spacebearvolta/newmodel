@@ -291,7 +291,7 @@ function CaptureAccessSection({ title, sub, onTrial, participantValue, onPartici
             <div className="oa-sens-row">
               <span className="sens-tag sens-tag--high"><span className="sens-tag__dot" aria-hidden="true" />Sensitive</span>
             </div>
-            <p className="set-inline__desc oa-sens-desc"><strong style={{ color: 'var(--fg-1)', fontWeight: 500 }}>Only participants</strong> — Sensitive meetings are not automatically shared with nonparticipants.</p>
+            <p className="set-inline__desc oa-sens-desc"><strong style={{ color: 'var(--fg-1)', fontWeight: 500 }}>Only participants</strong>: sensitive meetings are not automatically shared with nonparticipants.</p>
           </div>
         </>
       ) : (

@@ -43,12 +43,12 @@ function EmailShell({ children }: { children: ReactNode }) {
 
 function TrialEndedEmail({ orgName = 'Acme', graceDays = 30 }: { orgName?: string; graceDays?: number }) {
   return (
-    <EmailFrame from="Grain" fromAddr="hello@grain.com" subject={`Your Grain Business trial has ended — your meetings are saved for ${graceDays} days`}>
+    <EmailFrame from="Grain" fromAddr="hello@grain.com" subject={`Your Grain Business trial has ended: your meetings are saved for ${graceDays} days`}>
       <EmailShell>
         <div className="em-icon em-icon--warm"><Icon name="clock" /></div>
         <h1 className="em-h1">Your Business trial has ended</h1>
         <p className="em-p">Hi Jeff,</p>
-        <p className="em-p">Your Grain Business trial for <strong>{orgName}</strong> has wrapped up. Good news — nothing's gone. Your organization's shared meetings are saved for the next <strong>{graceDays} days</strong>. Reactivate any time to switch your workspace back on and keep everything.</p>
+        <p className="em-p">Your Grain Business trial for <strong>{orgName}</strong> has wrapped up. Good news, nothing's gone. Your organization's shared meetings are saved for the next <strong>{graceDays} days</strong>. Reactivate any time to switch your workspace back on and keep everything.</p>
         <div className="em-callout">
           <span className="em-callout__icon"><Icon name="shield" size={16} /></span>
           <div>
@@ -72,7 +72,7 @@ function TeammateEmail({ orgName = 'Acme', daysLeft = 8, teammate = 'Maya Chen' 
         <div className="em-eyebrow"><Icon name="sparkles" size={14} /> Your trial is working</div>
         <h1 className="em-h1">{first} just had their first meeting captured</h1>
         <p className="em-p">Hi Jeff,</p>
-        <p className="em-p"><strong>{teammate}</strong> recorded their first meeting in your <strong>{orgName}</strong> workspace. That's shared context your whole team can search, summarize, and build on — exactly what Grain Business is for.</p>
+        <p className="em-p"><strong>{teammate}</strong> recorded their first meeting in your <strong>{orgName}</strong> workspace. That's shared context your whole team can search, summarize, and build on: exactly what Grain Business is for.</p>
         <div className="em-mtg">
           <span className="em-mtg__thumb"><Icon name="video" size={18} /></span>
           <div className="em-mtg__text">
@@ -81,7 +81,7 @@ function TeammateEmail({ orgName = 'Acme', daysLeft = 8, teammate = 'Maya Chen' 
           </div>
         </div>
         <a className="em-btn em-btn--dark" href="#" onClick={(e) => e.preventDefault()}>See the meeting</a>
-        <p className="em-secondary"><strong>{daysLeft} days left</strong> in your trial — keep the momentum going.</p>
+        <p className="em-secondary"><strong>{daysLeft} days left</strong> in your trial. Keep the momentum going.</p>
       </EmailShell>
     </EmailFrame>
   );

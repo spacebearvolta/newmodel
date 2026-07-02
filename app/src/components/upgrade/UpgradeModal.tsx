@@ -63,7 +63,7 @@ export function UpgradePlanModal({ open, onClose, reactivate = false, showTrialB
         {reactivate && (
           <div className="up-reactivate">
             <div className="up-reactivate__text">
-              <strong>Your Grain Business trial has ended.</strong> Your organization and its shared meetings are preserved — upgrade to switch them back on, or talk to sales about reactivating your trial.
+              <strong>Your Grain Business trial has ended.</strong> Your organization and its shared meetings are preserved; upgrade to switch them back on, or talk to sales about reactivating your trial.
             </div>
             <button className="up-reactivate__cta" onClick={onTalkToSales}>
               <Icon name="send" size={14} /> <span>Talk to sales to reactivate trial</span>

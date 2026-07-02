@@ -88,7 +88,7 @@ export function JoinerApp({ onSettings, onReset, hasMeetings = true, inOrg = fal
             onStartTrial={declined ? () => setUpgradeOpen(true) : open}
             gate={declined ? undefined : {
               title: `Join ${INVITE.orgName} to see shared meetings`,
-              desc: `All meetings is ${INVITE.orgName}'s shared library — every meeting teammates share to a team shows up here. Your invite from ${INVITE.inviterName.split(' ')[0]} includes access.`,
+              desc: `All meetings is ${INVITE.orgName}'s shared library: every meeting teammates share to a team shows up here. Your invite from ${INVITE.inviterName.split(' ')[0]} includes access.`,
               cta: `View your invite to ${INVITE.orgName}`,
               note: `${INVITE.memberCount} teammates already share meeting context`,
             }}

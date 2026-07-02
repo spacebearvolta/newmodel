@@ -45,7 +45,7 @@ const INTG_NAV: NavGroup[] = [
 ];
 
 const INTG_INFO: Record<string, { name: string; desc: string }> = {
-  zoom: { name: 'Zoom', desc: 'Import your Zoom cloud recordings automatically — Grain transcribes and summarizes every call.' },
+  zoom: { name: 'Zoom', desc: 'Import your Zoom cloud recordings automatically: Grain transcribes and summarizes every call.' },
   slack: { name: 'Slack', desc: 'Share meeting summaries and clips to Slack channels the moment a call wraps.' },
   hubspot: { name: 'HubSpot', desc: 'Skip the manual data entry, auto-sync AI notes to HubSpot Contact and Meeting objects.' },
   aircall: { name: 'Aircall', desc: 'Record, transcribe, and summarize your Aircall conversations alongside your meetings.' },
@@ -56,18 +56,11 @@ const INTG_INFO: Record<string, { name: string; desc: string }> = {
 
 const INTG_FREE: Record<string, { name: string; desc: string }> = {
   mcp: { name: 'MCP Clients', desc: 'Connect Grain to Claude and other MCP clients to use your meetings as live context in your AI workflows.' },
-  api: { name: 'API', desc: 'Build on top of Grain — pull transcripts, summaries, and meeting data into your own tools.' },
+  api: { name: 'API', desc: 'Build on top of Grain: pull transcripts, summaries, and meeting data into your own tools.' },
 };
 
 const ROW_BY_ID: Record<string, NavRow> = {};
 INTG_NAV.forEach((g) => g.rows.forEach((r) => { ROW_BY_ID[r.id] = r; }));
-
-const INTG_VALUE_POINTS = [
-  { icon: 'infinity', label: 'No 45-minute recording cap' },
-  { icon: 'history', label: 'Unlimited meeting history' },
-  { icon: 'plug', label: 'Connect HubSpot, Salesforce, Slack & more' },
-  { icon: 'users', label: 'A shared library your whole team can search' },
-];
 
 function IntgGlyph({ row, size = 18 }: { row?: NavRow; size?: number }) {
   if (!row) return null;
@@ -109,7 +102,7 @@ function IntegrationsSettings({ plan, initial, onStartTrial, onBack }: {
         <span className="intg-card__logo" style={{ background: activeRow?.brand }}>{activeRow?.initial}</span>
         <h2 className="intg-card__title">Connect {paidInfo.name}</h2>
         <p className="intg-card__desc">{paidInfo.desc}</p>
-        <div className="intg-trial-chip"><Icon name="sparkles" size={14} /> Workspace integrations are a Business feature — connect {paidInfo.name} while your trial is active.</div>
+        <div className="intg-trial-chip"><Icon name="sparkles" size={14} /> Workspace integrations are a Business feature. Connect {paidInfo.name} while your trial is active.</div>
         <div className="intg-card__actions">
           <a className="intg-card__learn" href="#" onClick={(e) => e.preventDefault()}>Learn more</a>
           <button className="gr-btn gr-btn--primary gr-btn--md" onClick={(e) => e.preventDefault()}>Connect {paidInfo.name}</button>
@@ -118,21 +111,14 @@ function IntegrationsSettings({ plan, initial, onStartTrial, onBack }: {
     );
   } else if (paidInfo) {
     card = (
-      <div className="intg-card">
-        <div className="intg-card__eyebrow"><Icon name="sparkles" size={13} /> Grain Business · free for 14 days</div>
-        <span className="intg-card__logo" style={{ background: activeRow?.brand }}>{activeRow?.initial}</span>
-        <h2 className="intg-card__title">Try Grain Business to connect {paidInfo.name}</h2>
-        <p className="intg-card__desc">{paidInfo.desc}</p>
-        <ul className="intg-values">
-          {INTG_VALUE_POINTS.map((p) => (
-            <li key={p.label}><span className="intg-values__icon"><Icon name={p.icon} size={15} /></span><span>{p.label}</span></li>
-          ))}
-        </ul>
-        <div className="intg-card__actions">
-          <a className="intg-card__learn" href="#" onClick={(e) => e.preventDefault()}>Learn more</a>
-          <button className="gr-btn gr-btn--dark gr-btn--md" onClick={onStartTrial}>Start free trial</button>
+      <div className="modal-v2 card-v2" style={{ width: 420, padding: '30px 32px', textAlign: 'center' }}>
+        <div className="mark-v2" style={{ margin: '0 auto 14px', width: 44, height: 44, background: activeRow?.brand, color: '#fff' }}>
+          <IntgGlyph row={activeRow} size={22} />
         </div>
-        <p className="intg-card__note">Start a free 14 day Grain Business trial to connect a CRM integration.</p>
+        <h2 style={{ font: '700 19px/1.25 var(--font-sans)', color: 'var(--fg-1)', margin: '0 0 8px' }}>Try Grain Business to connect {paidInfo.name}</h2>
+        <p style={{ fontSize: 13.5, color: 'var(--fg-4)', lineHeight: 1.55, margin: '0 auto 20px', maxWidth: 320 }}>{paidInfo.desc}</p>
+        <button className="btn-v2 btn-v2--primary btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial</button>
+        <div style={{ marginTop: 12, fontSize: 12, color: 'var(--fg-5)' }}>Grain Business · free for 14 days</div>
       </div>
     );
   } else {

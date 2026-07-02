@@ -26,7 +26,7 @@ export function ViewTabs({ views, activeId, onChange, onAdd, lockedIds, onLocked
               role="tab"
               aria-selected={isActive}
               className={`view-tab ${isActive ? 'is-active' : ''} ${isLocked ? 'is-locked' : ''}`}
-              title={isLocked ? 'Paused — reactivate to use this view' : undefined}
+              title={isLocked ? 'Paused: reactivate to use this view' : undefined}
               onClick={() => (isLocked ? onLockedClick?.(v) : onChange?.(v.id))}
             >
               {v.label}

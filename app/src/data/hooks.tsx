@@ -27,7 +27,7 @@ export const HG_HOOKS: HookEntry[] = [
   {
     tag: 'H1',
     title: 'Recording length wall',
-    trigger: 'A free user starts a recording — or uploads a file — longer than 45 minutes.',
+    trigger: 'A free user starts a recording (or uploads a file) longer than 45 minutes.',
     kind: 'modal',
     states: ['Recording', 'Upload'],
     render: (s) => <RecordingLimitModal open kind={s === 1 ? 'upload' : 'record'} onClose={NOOP} onStartTrial={NOOP} />,
@@ -68,7 +68,7 @@ export const HG_HOOKS: HookEntry[] = [
   },
   {
     tag: 'H7',
-    title: 'Trial expired — interstitial',
+    title: 'Trial expired: interstitial',
     trigger: 'Shown once on the first login after the Business trial ends.',
     kind: 'modal',
     states: ['30 days', '7 days', '3 days', '1 day'],
@@ -91,7 +91,7 @@ export const HG_HOOKS: HookEntry[] = [
   {
     tag: 'H8',
     title: 'Feature-usage nudge',
-    trigger: 'Mid-trial use of a Business-only feature — team meetings, sharing, AI actions, integrations.',
+    trigger: 'Mid-trial use of a Business-only feature: team meetings, sharing, AI actions, integrations.',
     kind: 'inline',
     states: ['Team meetings', 'Sharing', 'AI actions', 'Integrations'],
     render: (s) => (

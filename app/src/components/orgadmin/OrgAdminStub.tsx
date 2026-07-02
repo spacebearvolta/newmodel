@@ -14,7 +14,7 @@ export function OrgAdminStub({ title, icon }: { title: string; icon?: string }) 
         <Icon name={icon || 'wrench'} size={28} />
         <div>
           <p className="oa-stub__title">{title} settings live here.</p>
-          <p className="oa-stub__sub">This section isn't built out in this prototype yet — the sidebar shows the full Organization admin nav.</p>
+          <p className="oa-stub__sub">This section isn't built out in this prototype yet; the sidebar shows the full Organization admin nav.</p>
         </div>
       </div>
     </div>

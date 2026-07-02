@@ -30,7 +30,7 @@ export function ClaudeHandoff({ onReturn }: { onReturn?: () => void }) {
             <Icon name="ext" size={28} />
           </div>
           <div className="success-block__title">Finish connecting in Claude</div>
-          <div className="success-block__sub">Claude will open in your browser to finish connecting Grain. Once you're done there, come back — your meeting context will be available in Claude.</div>
+          <div className="success-block__sub">Claude will open in your browser to finish connecting Grain. Once you're done there, come back: your meeting context will be available in Claude.</div>
         </div>
       </div>
       <div className="modal__foot modal__foot--end">
@@ -44,31 +44,22 @@ export function ClaudeHandoff({ onReturn }: { onReturn?: () => void }) {
 export function StartTrialPromo({ orgCreated, onClick, onDismiss }: { orgCreated?: boolean; onClick?: () => void; onDismiss?: () => void }) {
   if (orgCreated) {
     return (
-      <div className="card">
-        <div className="card__thumb" style={{ background: 'linear-gradient(135deg, #E6F7EE 0%, #C3ECD5 100%)', textAlign: 'center', padding: '18px 14px' }}>
-          <Icon name="check" size={22} stroke={2.5} style={{ color: '#0B6F3F' }} />
-        </div>
-        <p className="card__title">Organization ready</p>
-        <p className="card__desc">Invite teammates from Members anytime.</p>
+      <div className="stp-v2">
+        <span className="mark-v2" style={{ width: 40, height: 40, marginBottom: 10 }}><Icon name="check" size={18} stroke={2.5} /></span>
+        <p className="stp-v2__title">Organization ready</p>
+        <p className="stp-v2__desc">Invite teammates from Members anytime.</p>
       </div>
     );
   }
   return (
-    <div className="card is-clickable" onClick={onClick}>
-      <button className="card__dismiss" aria-label="Dismiss" title="Dismiss" onClick={(e) => { e.stopPropagation(); onDismiss?.(); }}>
+    <div className="stp-v2 stp-v2--clickable" onClick={onClick}>
+      <button className="stp-v2__dismiss" aria-label="Dismiss" title="Dismiss" onClick={(e) => { e.stopPropagation(); onDismiss?.(); }}>
         <Icon name="close" size={13} stroke={2.25} />
       </button>
-      <div className="card__thumb">
-        <div className="card__line" />
-        <div className="card__line" />
-        <div className="card__line" />
-        <Icon name="sparkles" size={22} style={{ position: 'absolute', right: -4, bottom: -4, color: '#4F6BFF' }} />
-      </div>
-      <p className="card__title">Work with your team</p>
-      <p className="card__desc">Try Grain Business to get the power of shared meeting context.</p>
-      <button className="card__cta card__cta--green" onClick={(e) => { e.stopPropagation(); onClick?.(); }}>
-        <span className="btn-label">Start trial</span>
-      </button>
+      <span className="mark-v2" style={{ width: 40, height: 40, marginBottom: 10 }}><Icon name="gem" size={18} /></span>
+      <p className="stp-v2__title">Work with your team</p>
+      <p className="stp-v2__desc">Try Grain Business to get the power of shared meeting context.</p>
+      <button className="btn-v2 btn-v2--primary btn-v2--full" onClick={(e) => { e.stopPropagation(); onClick?.(); }}>Start trial</button>
     </div>
   );
 }
@@ -105,12 +96,8 @@ export function TrialBentoStep({ onStart, onSelf, onClose }: { onStart?: () => v
         </div>
       </div>
       <div className="modal__foot trial-bento__foot">
-        <button className="btn btn--primary btn--pill btn--lg trial-bento__cta" onClick={onStart}>
-          <span className="btn-label">Start trial</span>
-        </button>
-        <button className="trial-bento__self" onClick={onSelf}>
-          <span className="btn-label">Use Grain by myself</span>
-        </button>
+        <button className="btn-v2 btn-v2--primary btn-v2--lg trial-bento__cta" onClick={onStart}>Start trial</button>
+        <button className="trial-bento__self" onClick={onSelf}>Use Grain by myself</button>
       </div>
     </>
   );
@@ -164,7 +151,7 @@ export function RequestSentStep({ org, onDone }: { org: { name: string; plan: st
         <div className="success-block">
           <div className="success-block__mark"><Icon name="send" size={28} stroke={2} /></div>
           <div className="success-block__title">Request sent</div>
-          <div className="success-block__sub">{`${org.name}'s admins will review your request. Until then, nothing changes — you keep using Grain on your own and your meetings stay yours.`}</div>
+          <div className="success-block__sub">{`${org.name}'s admins will review your request. Until then, nothing changes; you keep using Grain on your own and your meetings stay yours.`}</div>
         </div>
         <div className="kv-list" style={{ padding: '20px 8px 0', borderTop: '1px solid var(--border)', marginTop: 22 }}>
           <div className="kv-row">
@@ -221,8 +208,8 @@ export function ExplainTransferStep({ orgName, meetingCount, userName, onBack, o
   onBack?: () => void; onCancel?: () => void; onNext?: () => void; onClose?: () => void;
 }) {
   const moveNote = `Your ${meetingCount} meetings move into ${orgName}, and ${orgName} owns them going forward.`;
-  const accessNote = `They will not be shared with anyone unless you share them — existing sharing stays exactly as you set it.`;
-  const settingsNote = `Your settings — capture preferences, integrations, templates — now apply inside ${orgName}.`;
+  const accessNote = `They will not be shared with anyone unless you share them; existing sharing stays exactly as you set it.`;
+  const settingsNote = `Your settings (capture preferences, integrations, templates) now apply inside ${orgName}.`;
   const oneWayNote = `This is one-way. There's no separate personal space afterward; if you ever leave ${orgName}, transferred meetings stay with the organization.`;
 
   return (
@@ -266,7 +253,7 @@ export function ExplainTransferStep({ orgName, meetingCount, userName, onBack, o
         <div className="warn-callout warn-callout--info">
           <div className="warn-callout__icon"><Icon name="info" size={16} /></div>
           <div className="warn-callout__text">
-            <span>{`Not ready? Choose "Don't create" — nothing changes, and you keep using Grain on your own.`}</span> <a href="#" onClick={(e) => e.preventDefault()}>Learn more</a>
+            <span>{`Not ready? Choose "Don't create"; nothing changes, and you keep using Grain on your own.`}</span> <a href="#" onClick={(e) => e.preventDefault()}>Learn more</a>
           </div>
         </div>
       </div>

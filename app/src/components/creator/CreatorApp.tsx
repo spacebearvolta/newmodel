@@ -138,19 +138,19 @@ export function CreatorApp({
   const talkToSales = () => {
     setUpgradeOpen(false);
     setCheckoutOpen(false);
-    setToast('Thanks — our team will reach out about reactivating your trial.');
+    setToast('Thanks. Our team will reach out about reactivating your trial.');
     setTimeout(() => setToast(null), 2600);
   };
   const completeReactivation = () => {
     setCheckoutOpen(false);
-    setToast(`Payment received — ${orgName} is active again.`);
+    setToast(`Payment received. ${orgName} is active again.`);
     setTimeout(() => setToast(null), 2800);
   };
 
   const onFeatureUse = (f: string) => {
     const FEATURE_LABELS: Record<string, string> = { share: 'Sharing to a team', ai: 'AI actions on shared meetings', integration: 'Workspace integrations' };
     const label = FEATURE_LABELS[f] || 'This';
-    setToast(`${label} is a Grain Business feature — ${trialDays} ${trialDays === 1 ? 'day' : 'days'} left in your trial.`);
+    setToast(`${label} is a Grain Business feature: ${trialDays} ${trialDays === 1 ? 'day' : 'days'} left in your trial.`);
     setTimeout(() => setToast(null), 3400);
   };
 

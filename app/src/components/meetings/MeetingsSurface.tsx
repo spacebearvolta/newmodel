@@ -24,7 +24,7 @@ function AccessCell({ shared, tombstoned, orgName = 'the workspace' }: { shared?
   if (tombstoned) {
     const shareList = isAll ? 'all teams' : list.join(', ');
     return (
-      <span className="ms-cell ms-cell--access is-tombstoned" title={`Shared with ${shareList} — paused while ${orgName} is inactive. Only you can see this meeting right now.`}>
+      <span className="ms-cell ms-cell--access is-tombstoned" title={`Shared with ${shareList}, paused while ${orgName} is inactive. Only you can see this meeting right now.`}>
         <Icon name={icon} /><span>{label}</span>
       </span>
     );
@@ -64,7 +64,7 @@ function MeetingRowRich({ m, solo, locked, tombstoneAccess, orgName, lockReason,
       <div className="ms-row__main">
         <div className="ms-row__title">
           {m.title}
-          {!locked && m.badge ? <span className="ms-badge" title="Desktop capture missed this one — the backup bot recorded it automatically."><Icon name="check" /> {m.badge}</span> : null}
+          {!locked && m.badge ? <span className="ms-badge" title="Desktop capture missed this one, so the backup bot recorded it automatically."><Icon name="check" /> {m.badge}</span> : null}
         </div>
         <div className="ms-row__meta">
           <span>{m.when}</span>
@@ -216,9 +216,9 @@ export function ExpiredBar({ orgName, graceDays, onRestartTrial, onUpgrade, onTa
       <span className="expired-bar__icon"><Icon name="circleAlert" /></span>
       <span className="expired-bar__text">
         {urgent ? (
-          <><strong>{graceDays} {graceDays === 1 ? 'day' : 'days'} until {orgName}'s meeting history starts being deleted.</strong> Reactivate to keep everything your team recorded — meetings you recorded or joined stay yours.</>
+          <><strong>{graceDays} {graceDays === 1 ? 'day' : 'days'} until {orgName}'s meeting history starts being deleted.</strong> Reactivate to keep everything your team recorded; meetings you recorded or joined stay yours.</>
         ) : (
-          <><strong>{orgName}'s Business trial has ended.</strong> All organization meetings are accessible for {graceDays != null ? graceDays : 30} days — meetings you recorded or joined stay fully yours. <a className="expired-bar__link" href="#" onClick={(e) => { e.preventDefault(); onTalkToSales?.(); }}>Talk to sales</a>.</>
+          <><strong>{orgName}'s Business trial has ended.</strong> All organization meetings are accessible for {graceDays != null ? graceDays : 30} days; meetings you recorded or joined stay fully yours. <a className="expired-bar__link" href="#" onClick={(e) => { e.preventDefault(); onTalkToSales?.(); }}>Talk to sales</a>.</>
         )}
       </span>
       <span className="expired-bar__actions">

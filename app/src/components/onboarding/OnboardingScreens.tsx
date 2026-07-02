@@ -73,7 +73,7 @@ export function ObSurvey({ onNext }: { onNext: () => void }) {
             </div>
             <div>
               <label className="ob-q__label">What kind of work do you do?<span className="ob-q__req">*</span></label>
-              <Select value="Sales — Account Executive" />
+              <Select value="Sales, Account Executive" />
             </div>
             <div>
               <label className="ob-q__label">What's your primary CRM?<span className="ob-q__req">*</span></label>
@@ -184,7 +184,7 @@ export function ObClaude({ onConnected, onSkip }: { onConnected: () => void; onS
             <span className="ob-connect__node ob-connect__node--claude"><img src={claudeIcon} alt="Claude" /></span>
           </div>
           <h1 className="ob-panel__title">Use your Grain meetings in Claude</h1>
-          <p className="ob-panel__sub">Grain keeps the record of what was said. Connect Claude to ask questions, draft follow-ups, and build workflows from real meeting context — without copying transcripts.</p>
+          <p className="ob-panel__sub">Grain keeps the record of what was said. Connect Claude to ask questions, draft follow-ups, and build workflows from real meeting context, without copying transcripts.</p>
           <div className="ob-rows ob-rows--bullets">
             {bullets.map((b) => (
               <div className="ob-row ob-row--bullet" key={b.text}>

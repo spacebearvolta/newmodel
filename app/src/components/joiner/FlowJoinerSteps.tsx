@@ -51,9 +51,9 @@ export function JExplainTransferStep({ orgName, meetingCount, inviterName, userN
   onBack?: () => void; onNext?: () => void; onClose?: () => void;
 }) {
   const lines = [
-    `Your settings — capture preferences, integrations, templates — now apply inside ${orgName}.`,
+    `Your settings (capture preferences, integrations, templates) now apply inside ${orgName}.`,
     `Your ${meetingCount} meetings move into ${orgName}, and ${orgName} owns them going forward.`,
-    `They will not be shared with anyone unless you share them — existing sharing stays exactly as you set it.`,
+    `They will not be shared with anyone unless you share them; existing sharing stays exactly as you set it.`,
     `This is one-way. There's no separate personal space afterward; if you ever leave ${orgName}, moved meetings stay with the organization.`,
   ];
   return (
@@ -61,7 +61,7 @@ export function JExplainTransferStep({ orgName, meetingCount, inviterName, userN
       <div className="modal__head">
         <div className="modal__heading">
           <h2 className="modal__title">{`Joining ${orgName} moves your meetings with you`}</h2>
-          <p className="modal__sub">Two things happen when you join. You'll decide next — here's exactly what they are:</p>
+          <p className="modal__sub">Two things happen when you join, and you'll decide next. Here's exactly what they are:</p>
         </div>
         <button className="modal__close" onClick={onClose}><Icon name="close" /></button>
       </div>
@@ -87,7 +87,7 @@ export function JExplainTransferStep({ orgName, meetingCount, inviterName, userN
         <ul className="bullets">{lines.map((l) => <li key={l}>{l}</li>)}</ul>
         <div className="warn-callout warn-callout--info">
           <div className="warn-callout__icon"><Icon name="info" size={16} /></div>
-          <div className="warn-callout__text">Not ready? You can decline — nothing changes, and you keep using Grain on your own. <a href="#" onClick={(e) => e.preventDefault()}>Learn more</a></div>
+          <div className="warn-callout__text">Not ready? You can decline; nothing changes, and you keep using Grain on your own. <a href="#" onClick={(e) => e.preventDefault()}>Learn more</a></div>
         </div>
       </div>
       <div className="modal__foot modal__foot--end">
@@ -108,7 +108,7 @@ export function DecisionStep({ orgName, choice, onChoice, meetingCount = 6, onBa
       <div className="modal__head">
         <div className="modal__heading">
           <h2 className="modal__title">{`Join ${orgName} with your meetings?`}</h2>
-          <p className="modal__sub">{`Joining moves your ${meetingCount} meetings into ${orgName} — there's no way to join without them.`}</p>
+          <p className="modal__sub">{`Joining moves your ${meetingCount} meetings into ${orgName}; there's no way to join without them.`}</p>
         </div>
         <button className="modal__close" onClick={onClose}><Icon name="close" /></button>
       </div>
@@ -117,7 +117,7 @@ export function DecisionStep({ orgName, choice, onChoice, meetingCount = 6, onBa
           <button className={`choice ${choice === 'join' ? 'is-selected' : ''}`} onClick={() => onChoice('join')}>
             <div className="choice__line-icon"><Icon name="swap" size={20} /></div>
             <div className="choice__text">
-              <div className="choice__title">Join — move my meetings</div>
+              <div className="choice__title">Join and move my meetings</div>
               <div className="choice__desc">{`All ${meetingCount} meetings move into ${orgName}, and ${orgName} owns them going forward. They will not be shared with anyone unless you share them.`}</div>
             </div>
             <span className="choice__radio"><Icon name="check" size={12} stroke={3} /></span>
@@ -126,7 +126,7 @@ export function DecisionStep({ orgName, choice, onChoice, meetingCount = 6, onBa
             <div className="choice__line-icon"><Icon name="close" size={20} /></div>
             <div className="choice__text">
               <div className="choice__title">Don't join</div>
-              <div className="choice__desc">Decline the invite. Nothing changes — you keep using Grain on your own, and your meetings stay where they are.</div>
+              <div className="choice__desc">Decline the invite. Nothing changes; you keep using Grain on your own, and your meetings stay where they are.</div>
             </div>
             <span className="choice__radio"><Icon name="check" size={12} stroke={3} /></span>
           </button>
@@ -158,7 +158,7 @@ export function JoinedStep({ orgName, meetingCount, inviterName, memberCount, on
   orgName: string; meetingCount: number; inviterName: string; memberCount: number; onDone?: () => void;
 }) {
   const summary = meetingCount > 0
-    ? `Your ${meetingCount} meetings moved with you — they're not shared with anyone unless you share them.`
+    ? `Your ${meetingCount} meetings moved with you; they're not shared with anyone unless you share them.`
     : `You're a member. New meetings you capture are owned by ${orgName}.`;
   return (
     <>

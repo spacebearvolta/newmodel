@@ -24,7 +24,7 @@ export function RecordingLimitModalV2Live({ open, kind = 'record', onClose, onSt
             {isUpload ? 'This recording is longer than 45 minutes' : 'Free recordings stop at 45 minutes'}
           </h2>
           <p className="h1-v2__sub">
-            Start a Business trial to {isUpload ? 'upload and transcribe' : 'capture'} meetings of any length — every
+            Start a Business trial to {isUpload ? 'upload and transcribe' : 'capture'} meetings of any length. Every
             conversation captured end to end.
           </p>
           <ul className="h1-v2__values">
@@ -75,13 +75,6 @@ export function LockedMeetingModalV2Live({ meeting, onClose, onStartTrial }: Loc
       <div className="modal-v2 card-v2" style={{ width: 440 }}>
         <div className="h3-v2">
           <h2 className="h3-v2__title">This meeting is locked</h2>
-          <div className="h3-v2__row">
-            <span className="h3-v2__thumb"><Icon name="lock" size={13} /></span>
-            <span>
-              <span className="h3-v2__name">{meeting?.title}</span>
-              <span className="h3-v2__meta">{meeting?.date}</span>
-            </span>
-          </div>
           <p className="h3-v2__sub">Start a Business trial to unlock this meeting and keep every meeting you record, for good.</p>
         </div>
         <div className="h1-v2__foot" style={{ paddingTop: 0 }}>
@@ -95,8 +88,8 @@ export function LockedMeetingModalV2Live({ meeting, onClose, onStartTrial }: Loc
 
 // ── H4 / H5 ───────────────────────────────────────────────────────────────
 const TEAM_MODAL_COPY_V2 = {
-  invite: { title: 'Work is better, together.', sub: 'Invite your whole team — everyone’s shared meetings build one searchable, AI-ready memory.', cta: 'Start free trial to invite' },
-  share: { title: 'Share this meeting with your team', sub: 'Give your team the full context of every call — not just the parts they were in.', cta: 'Start free trial to share' },
+  invite: { title: 'Work is better, together.', sub: 'Invite your whole team: everyone’s shared meetings build one searchable, AI-ready memory.', cta: 'Start free trial to invite' },
+  share: { title: 'Share this meeting with your team', sub: 'Give your team the full context of every call, not just the parts they were in.', cta: 'Start free trial to share' },
 };
 const TEAM_PREVIEW_TITLES = [
   'Q2 planning offsite — day 1', 'Discovery call — Quest.io', 'Weekly sync — Product',
@@ -114,14 +107,13 @@ export function TeamValueModalV2Live({ trigger, onClose, onStartTrial }: TeamVal
       <div className="h45-v2" style={{ width: 620 }}>
         <div className="h45-v2__inner">
           <div>
-            <span className="eyebrow-v2">Grain Business · free for 14 days</span>
             <h2 className="h45-v2__title">{copy.title}</h2>
             <p className="h45-v2__sub">{copy.sub}</p>
             <ul className="h45-v2__values">
               <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="infinity" size={13} /></span> No 45-minute recording cap</li>
               <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="history" size={13} /></span> Unlimited meeting history</li>
               <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="users" size={13} /></span> A shared library your whole team can search</li>
-              <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="plug" size={13} /></span> Integrations & API — HubSpot, Salesforce, Slack</li>
+              <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="plug" size={13} /></span> Integrations & API: HubSpot, Salesforce, Slack</li>
             </ul>
             <div className="h1-v2__foot" style={{ padding: 0, marginTop: 22 }}>
               <button className="btn-v2 btn-v2--primary btn-v2--lg btn-v2--full" onClick={onStartTrial}>{copy.cta}</button>
@@ -133,7 +125,7 @@ export function TeamValueModalV2Live({ trigger, onClose, onStartTrial }: TeamVal
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {TEAM_PREVIEW_TITLES.map((title) => (
                 <div key={title} className="card-v2" style={{ padding: '8px 10px', display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
-                  <span style={{ width: 30, height: 30, borderRadius: 6, background: 'var(--green-100)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ width: 30, height: 30, borderRadius: 6, background: 'var(--fg-4)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Icon name="video" size={14} />
                   </span>
                   <span style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--fg-2)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</span>
@@ -172,7 +164,7 @@ export function TrialExpiredInterstitialV2Live({ open, orgName = 'Acme', graceDa
         <div>
           <h2 style={{ font: '700 26px/1.25 var(--font-sans)', color: 'var(--fg-1)', margin: '0 0 10px' }}>Your Grain Business trial has ended</h2>
           <p style={{ fontSize: 14.5, lineHeight: 1.6, color: 'var(--fg-4)', margin: 0 }}>
-            Nothing's gone. {orgName}'s shared meetings are saved for {graceDays} days — reactivate to switch everything back on.
+            Nothing's gone. {orgName}'s shared meetings are saved for {graceDays} days. Reactivate to switch everything back on.
           </p>
           <ul className="h45-v2__values">
             <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="infinity" size={13} /></span> No 45-minute recording cap</li>
@@ -194,7 +186,7 @@ export function TrialExpiredInterstitialV2Live({ open, orgName = 'Acme', graceDa
               const statusText = isOld ? `${m.daysOld} days old` : `locking in ${m.locksInDays} days`;
               return (
                 <div key={m.title} className="card-v2" style={{ padding: '8px 10px', display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
-                  <span style={{ width: 30, height: 30, borderRadius: 6, background: 'var(--green-100)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ width: 30, height: 30, borderRadius: 6, background: 'var(--fg-4)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Icon name="video" size={14} />
                   </span>
                   <span style={{ minWidth: 0, flex: 1 }}>
@@ -276,7 +268,7 @@ export function TeammateNudgeV2Live({ name = 'Maya Chen', daysLeft, onView, onCl
         </div>
       </div>
       <p className="h9-v2__body">
-        {first}'s meeting just landed in your workspace — that's shared context your whole team can search and build on.
+        {first}'s meeting just landed in your workspace. That's shared context your whole team can search and build on.
       </p>
       <div className="h9-v2__actions">
         <button className="btn-v2 btn-v2--ghost" onClick={onClose}>Not now</button>
@@ -306,7 +298,7 @@ export function TrialWidgetV2Live({ daysLeft = 14, onUpgrade, onOpen }: TrialWid
       </button>
       <div className="tw-v2__bar"><span style={{ width: `${pct}%`, background: urgent ? '#C1542A' : undefined }} /></div>
       <div className="tw-v2__meta">Day {dayNum} of {TOTAL}</div>
-      <button className="btn-v2 btn-v2--primary btn-v2--full" onClick={onUpgrade}><Icon name="gem" size={13} /> Upgrade now</button>
+      <button className={`btn-v2 ${urgent ? 'btn-v2--warn' : 'btn-v2--primary'} btn-v2--full`} onClick={onUpgrade}><Icon name="gem" size={13} /> Upgrade now</button>
     </div>
   );
 }
@@ -359,11 +351,11 @@ export function TrialCountdownV2Live({ daysLeft, orgName = 'Acme', onUpgrade, on
           <p className="tc-v2__sub">
             {urgent ? `Upgrade before your trial ends to keep ${orgName} and your shared meeting context.` : 'Upgrade to keep using Grain with your team.'}
           </p>
-          <div className="tc-v2__bar"><span style={{ width: `${pct}%` }} /></div>
+          <div className="tc-v2__bar"><span style={{ width: `${pct}%`, background: urgent ? '#C1542A' : undefined }} /></div>
           <div className="tc-v2__meta">Day {dayNum} of {TOTAL} · {orgName} · Grain Business</div>
           <div className="tc-v2__actions">
             <button className="btn-v2 btn-v2--ghost" onClick={onClose}>Maybe later</button>
-            <button className="btn-v2 btn-v2--primary btn-v2--lg" onClick={onUpgrade}><Icon name="gem" size={14} /> Upgrade now</button>
+            <button className={`btn-v2 ${urgent ? 'btn-v2--warn' : 'btn-v2--primary'} btn-v2--lg`} onClick={onUpgrade}><Icon name="gem" size={14} /> Upgrade now</button>
           </div>
         </div>
       </div>
