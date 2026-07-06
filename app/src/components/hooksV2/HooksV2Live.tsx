@@ -138,27 +138,143 @@ export function TeamValueModalV2Live({ trigger, onClose, onStartTrial }: TeamVal
   );
 }
 
-// ── H6 — CRM connection gate ────────────────────────────────────────────────
-// Shared by the Integrations page's real CRM cards and this gallery entry, so
-// both stay in lockstep instead of drifting into two near-identical designs.
-interface HgGateCardV2LiveProps {
-  name: string;
-  brand: string;
-  initial: string;
+// ── H6 — Feature / integration upgrade gate ─────────────────────────────────
+// Generalized "Upgrade your plan to access/connect X" empty-state gate. One
+// shared design covers every locked-feature and locked-integration surface
+// (Trackers, Coaching, Teams, Upload, Slack, HubSpot, Salesforce, API, …) plus
+// the Hook Gallery, so they never drift. `eyebrow` sits above the title; pass
+// `brand`/`initial` for an integration glyph or `icon` for a green feature mark
+// (both optional — the deck's gates are glyph-less by default).
+interface UpgradeGateCardV2LiveProps {
+  title: string;
   desc: string;
-  onStartTrial?: () => void;
+  eyebrow?: string;
+  icon?: string;
+  brand?: string;
+  initial?: string;
+  onLearnMore?: () => void;
+  onUpgrade?: () => void;
 }
-export function HgGateCardV2Live({ name, brand, initial, desc, onStartTrial }: HgGateCardV2LiveProps) {
+export function UpgradeGateCardV2Live({ title, desc, eyebrow, icon, brand, initial, onLearnMore, onUpgrade }: UpgradeGateCardV2LiveProps) {
   return (
-    <div className="modal-v2 card-v2" style={{ width: 420, padding: '30px 32px', textAlign: 'center' }}>
-      <div className="mark-v2" style={{ margin: '0 auto 14px', width: 44, height: 44, background: brand, color: '#fff', fontWeight: 700, fontSize: 18 }}>
-        {initial}
+    <div className="gate-v2">
+      {(brand || icon) && (
+        <span className="gate-v2__glyph">
+          {brand ? (
+            <span className="mark-v2" style={{ width: 44, height: 44, background: brand, color: '#fff', fontWeight: 700, fontSize: 18 }}>{initial}</span>
+          ) : (
+            <span className="mark-v2" style={{ width: 44, height: 44 }}><Icon name={icon!} size={20} /></span>
+          )}
+        </span>
+      )}
+      {eyebrow && <div className="gate-v2__eyebrow">{eyebrow}</div>}
+      <h2 className="gate-v2__title">{title}</h2>
+      <p className="gate-v2__desc">{desc}</p>
+      <div className="gate-v2__actions">
+        <button className="btn-v2 btn-v2--secondary" onClick={onLearnMore}><Icon name="ext" size={13} /> Learn more</button>
+        <button className="btn-v2 btn-v2--primary" onClick={onUpgrade}>Upgrade</button>
       </div>
-      <h2 style={{ font: '700 19px/1.25 var(--font-sans)', color: 'var(--fg-1)', margin: '0 0 8px' }}>Try Grain Business to connect {name}</h2>
-      <p style={{ fontSize: 13.5, color: 'var(--fg-4)', lineHeight: 1.55, margin: '0 auto 20px', maxWidth: 320 }}>{desc}</p>
-      <button className="btn-v2 btn-v2--primary btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial</button>
-      <div style={{ marginTop: 12, fontSize: 12, color: 'var(--fg-5)' }}>Grain Business · free for 14 days</div>
     </div>
+  );
+}
+
+// ── H8b (deck #8) — Plans / pricing overlay modal ───────────────────────────
+// Full three-plan comparison shown from any "see plans" / "upgrade your plan"
+// entry point. Business is the highlighted (Popular) plan; per the green
+// convention its CTA is the single primary, Starter is secondary, Free is the
+// disabled current-plan state.
+interface PlanDef {
+  id: 'free' | 'starter' | 'business';
+  name: string;
+  tagline: string;
+  price: string;
+  priceUnit?: string;
+  priceAlt?: string;
+  popular?: boolean;
+  moreLabel?: string;
+  features: string[];
+}
+const PLANS_V2: PlanDef[] = [
+  {
+    id: 'free', name: 'Free', tagline: 'Quick and easy way to use Grain',
+    price: '$0', priceAlt: 'Free forever',
+    features: [
+      'Unlimited meetings, 45-min limit', 'AI notes and action items', 'Basic MCP access',
+      '30-day meeting history', 'AI Notepad with live notes, transcript, and clip creation',
+      'Collaborative workspace', 'Desktop Capture', 'Unlimited notetaker seats',
+    ],
+  },
+  {
+    id: 'starter', name: 'Starter', tagline: 'For product, design, and research',
+    price: '$15', priceUnit: 'per seat/month\nbilled annually', priceAlt: '$19 billed monthly',
+    moreLabel: 'Everything in Free +',
+    features: [
+      'Unlimited meeting duration', 'Unlimited meeting history', 'Advanced AI notes',
+      'Custom AI prompts', 'Admin controls', '1 team', 'Slack integration',
+      'Productboard integration', 'Personal Zapier integration', 'Personal API',
+      'Import audio & video files',
+    ],
+  },
+  {
+    id: 'business', name: 'Business', tagline: 'For sales and customer success',
+    price: '$29', priceUnit: 'per seat/month\nbilled annually', priceAlt: '$39 billed monthly',
+    popular: true, moreLabel: 'Everything in Starter +',
+    features: [
+      'HubSpot integration', 'Salesforce integration', 'Workspace Zapier integration',
+      'Unlimited teams', 'Custom AI follow-up email', 'AI coaching', 'Trackers',
+      'Team interaction metrics', 'Unlimited uploads', 'Workspace API', 'Advanced MCP access',
+    ],
+  },
+];
+interface PlansModalV2LiveProps {
+  open: boolean;
+  currentPlan?: 'free' | 'starter' | 'business';
+  onClose?: () => void;
+  onUpgrade?: (plan: 'starter' | 'business') => void;
+  onBookDemo?: () => void;
+}
+export function PlansModalV2Live({ open, currentPlan = 'free', onClose, onUpgrade, onBookDemo }: PlansModalV2LiveProps) {
+  return (
+    <Modal open={open} onClose={onClose} bare>
+      <div className="plans-v2">
+        <button className="plans-v2__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
+        <div className="plans-v2__head"><span className="plans-v2__headIcon"><Icon name="upgradeCircle" size={20} /></span> Upgrade your plan</div>
+        <div className="plans-v2__grid">
+          {PLANS_V2.map((p) => {
+            const isCurrent = p.id === currentPlan;
+            return (
+              <div key={p.id} className={`plans-v2__col${p.popular ? ' plans-v2__col--popular' : ''}`}>
+                {p.popular && <span className="plans-v2__badge">Popular</span>}
+                <div className="plans-v2__name">{p.name}</div>
+                <div className="plans-v2__tag">{p.tagline}</div>
+                <div className="plans-v2__price">
+                  <span className="plans-v2__priceNum">{p.price}</span>
+                  {p.priceUnit && <span className="plans-v2__priceUnit">{p.priceUnit}</span>}
+                </div>
+                {p.priceAlt && <div className="plans-v2__priceAlt">{p.priceAlt}</div>}
+                <div className="plans-v2__cta">
+                  {isCurrent ? (
+                    <button className="btn-v2 btn-v2--secondary btn-v2--full" disabled>Current plan</button>
+                  ) : (
+                    <button
+                      className={`btn-v2 btn-v2--full ${p.popular ? 'btn-v2--primary' : 'btn-v2--secondary'}`}
+                      onClick={() => onUpgrade?.(p.id as 'starter' | 'business')}
+                    >Upgrade</button>
+                  )}
+                </div>
+                {p.moreLabel && <div className="plans-v2__more">{p.moreLabel}</div>}
+                <ul className="plans-v2__feats">
+                  {p.features.map((f) => (
+                    <li key={f}><Icon name="check" size={14} /> {f}</li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+        <div className="plans-v2__foot">Enterprise customer? <button onClick={onBookDemo}>Book a demo</button></div>
+      </div>
+    </Modal>
   );
 }
 

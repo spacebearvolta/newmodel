@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../primitives/Icon';
-import { HgGateCardV2Live } from '../hooksV2/HooksV2Live';
+import { UpgradeGateCardV2Live } from '../hooksV2/HooksV2Live';
 import { TweaksPanel, TweakSection, TweakRadio, TweakSelect, TweakToggle, useTweaks } from '../tweaks/TweaksPanel';
 
 interface NavRow {
@@ -112,12 +112,11 @@ function IntegrationsSettings({ plan, initial, onStartTrial, onBack }: {
     );
   } else if (paidInfo) {
     card = (
-      <HgGateCardV2Live
-        name={paidInfo.name}
-        brand={activeRow?.brand || 'var(--fg-4)'}
-        initial={activeRow?.initial || '?'}
+      <UpgradeGateCardV2Live
+        title={`Upgrade your plan to connect ${paidInfo.name}`}
         desc={paidInfo.desc}
-        onStartTrial={onStartTrial}
+        onLearnMore={() => {}}
+        onUpgrade={onStartTrial}
       />
     );
   } else {

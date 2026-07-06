@@ -4,7 +4,8 @@ import {
   HistoryLockBannerV2Live,
   LockedMeetingModalV2Live,
   TeamValueModalV2Live,
-  HgGateCardV2Live,
+  UpgradeGateCardV2Live,
+  PlansModalV2Live,
   TrialExpiredInterstitialV2Live,
   TrialEndedCardV2Live,
   FeatureNudgeChipV2Live,
@@ -63,18 +64,33 @@ export const HG_HOOKS: HookEntry[] = [
   },
   {
     tag: 'H6',
-    title: 'CRM connection gate',
-    trigger: 'A free user opens a CRM / workspace integration (HubSpot, Salesforce, …).',
+    title: 'Feature / integration upgrade gate',
+    trigger: 'A free user opens a locked feature (Trackers, Coaching, Teams…) or integration (Slack, HubSpot…).',
     kind: 'inline',
-    render: () => (
-      <HgGateCardV2Live
-        name="HubSpot"
-        brand="#FF7A59"
-        initial="H"
-        desc="Skip the manual data entry, auto-sync AI notes to HubSpot Contact and Meeting objects."
-        onStartTrial={NOOP}
-      />
-    ),
+    states: ['Trackers', 'Coaching', 'HubSpot', 'Slack'],
+    render: (s) => {
+      const gate = [
+        { eyebrow: 'Grain Trackers', title: 'Upgrade your plan to access Trackers', desc: 'Track and be automatically alerted of key words or phrases in your meetings.' },
+        { eyebrow: 'Grain Coaching', title: 'Upgrade your plan to access Coaching', desc: 'Automate performance scores for effective coaching and personal improvement.' },
+        { title: 'Upgrade your plan to connect HubSpot', desc: 'Skip the manual data entry, auto-sync AI notes to HubSpot Contact and Meeting objects.' },
+        { title: 'Upgrade your plan to connect Slack', desc: 'Send meeting notes, clips, and Trackers captured by Grain to Slack channels.' },
+      ][s];
+      // Rendered on a white surface to mirror the real settings/integrations
+      // page the gate sits centered in (the component itself is intentionally
+      // background-less for that white-page context).
+      return (
+        <div style={{ width: 620, maxWidth: '88vw', background: '#fff', borderRadius: 10, padding: '56px 24px' }}>
+          <UpgradeGateCardV2Live {...gate} onLearnMore={NOOP} onUpgrade={NOOP} />
+        </div>
+      );
+    },
+  },
+  {
+    tag: 'Plans',
+    title: 'Plans / pricing modal',
+    trigger: 'Opened from any “Upgrade your plan” / “see plans” entry point.',
+    kind: 'modal',
+    render: () => <PlansModalV2Live open currentPlan="free" onClose={NOOP} onUpgrade={NOOP} onBookDemo={NOOP} />,
   },
   {
     tag: 'H7',
