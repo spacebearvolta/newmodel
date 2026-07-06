@@ -23,3 +23,6 @@ The design medium is **HTML/CSS/JS** — these are prototypes, not production co
 - `README.md` — this file
 - `chats/` — conversation transcripts (read these!)
 - `project/` — the `Alex's new model` project files (HTML prototypes, assets, components)
+
+<!-- Test line added by Claude Code. -->
+
