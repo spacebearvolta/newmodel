@@ -1019,26 +1019,10 @@ body.hide-diff .diff-flag { display: none; }
 }
 .view-strap__title { font-size: 12px; color: var(--fg-5); display: inline-flex; align-items: center; gap: 8px; }
 .view-strap__title b { color: var(--fg-1); font-weight: 600; }
-.view-tabs {
-  display: inline-flex;
-  background: var(--bg-2);
-  border-radius: 9999px;
-  padding: 3px;
-  border: 1px solid var(--border);
-}
-.view-tab {
-  border: 0;
-  background: transparent;
-  font: inherit;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--fg-5);
-  padding: 5px 14px;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: all var(--dur-fast);
-}
-.view-tab.is-active { background: #fff; color: var(--fg-1); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+/* NOTE: the old segmented "pill" .view-tabs/.view-tab rules lived here and
+   leaked onto the meetings surface (the only consumer of ViewTabs), producing
+   an unwanted oval button container. Removed — the meetings tabs are styled by
+   shell.css as plain text tabs (active = bold, no fill). */
 
 /* macOS chrome around the prototype ---------------------- */
 .mac-shell {

@@ -152,10 +152,16 @@ interface UpgradeGateCardV2LiveProps {
   icon?: string;
   brand?: string;
   initial?: string;
+  cta?: string;
+  note?: string | null;
   onLearnMore?: () => void;
   onUpgrade?: () => void;
 }
-export function UpgradeGateCardV2Live({ title, desc, eyebrow, icon, brand, initial, onLearnMore, onUpgrade }: UpgradeGateCardV2LiveProps) {
+export function UpgradeGateCardV2Live({
+  title, desc, eyebrow, icon, brand, initial,
+  cta = 'Start trial', note = 'Included in Grain Business · free for 14 days',
+  onLearnMore, onUpgrade,
+}: UpgradeGateCardV2LiveProps) {
   return (
     <div className="gate-v2">
       {(brand || icon) && (
@@ -171,7 +177,8 @@ export function UpgradeGateCardV2Live({ title, desc, eyebrow, icon, brand, initi
       <h2 className="gate-v2__title">{title}</h2>
       <p className="gate-v2__desc">{desc}</p>
       <div className="gate-v2__actions">
-        <button className="btn-v2 btn-v2--primary btn-v2--lg btn-v2--full" onClick={onUpgrade}>Upgrade</button>
+        <button className="btn-v2 btn-v2--primary btn-v2--lg btn-v2--full" onClick={onUpgrade}>{cta}</button>
+        {note && <div className="gate-v2__note">{note}</div>}
         <button className="gate-v2__link" onClick={onLearnMore}><Icon name="ext" size={13} /> Learn more</button>
       </div>
     </div>

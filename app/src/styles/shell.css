@@ -494,8 +494,8 @@
   padding: 7px 13px; border-radius: 8px; white-space: nowrap;
   transition: background var(--dur-fast), color var(--dur-fast);
 }
-.view-tab:hover { background: var(--bg-alt); color: var(--fg-2); }
-.view-tab.is-active { background: var(--bg-alt); color: var(--fg-1); font-weight: 600; }
+.view-tab:hover { color: var(--fg-2); }
+.view-tab.is-active { color: var(--fg-1); font-weight: 600; }
 .view-tabs__sep { width: 1px; height: 18px; background: var(--border-strong); margin: 0 9px; flex: 0 0 auto; }
 .view-tabs__add {
   appearance: none; border: 0; background: transparent; cursor: pointer;
@@ -580,7 +580,7 @@
 /* ── Trial bento step (modal) ──────────────────────────────────
    Mirrors the onboarding ObTrial bento, laid out inside a modal so the
    "Start trial" entry points outside first-run setup open the same screen. */
-.trial-bento { padding: 44px 36px 8px; text-align: center; }
+.trial-bento { padding: 60px 36px 8px; text-align: center; }
 .trial-bento__close { position: absolute; top: 18px; right: 18px; }
 .trial-bento__title {
   font-family: var(--font-display); font-weight: 700; letter-spacing: -0.01em;
