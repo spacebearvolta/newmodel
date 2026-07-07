@@ -5,6 +5,7 @@ import { Modal } from '../primitives/Modal';
 import { Toast } from '../shell/Toast';
 import { Replay } from '../shell/Replay';
 import { UpgradePlanModal, CheckoutModal } from '../upgrade/UpgradeModal';
+import { readShowParam } from '../tweaks/TweaksPanel';
 import {
   RecordingLimitModalV2Live, HistoryLockBannerV2Live, LockedMeetingModalV2Live, TeamValueModalV2Live,
   TrialExpiredInterstitialV2Live, TrialEndedCardV2Live, TrialWidgetV2Live, TeammateNudgeV2Live, TrialCountdownV2Live,
@@ -82,6 +83,20 @@ export function CreatorApp({
       return next;
     });
   };
+
+  // Deep-link: gallery "View in prototype" links pass ?show=<hook> to auto-open
+  // the matching modal on mount (tweaks like trial-over come in via ?tw=).
+  useEffect(() => {
+    const show = readShowParam();
+    if (!show) return;
+    if (show === 'invite') setTeamValue('invite');
+    else if (show === 'share') setTeamValue('share');
+    else if (show === 'record') setRecordLimit('record');
+    else if (show === 'upload') setRecordLimit('upload');
+    else if (show === 'locked') setLockedMeeting({ title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' } as Meeting);
+    else if (show === 'trialPopup') setTrialPopupDay(trialDays);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const persistOrg = (created: boolean, name?: string) => {
     try {

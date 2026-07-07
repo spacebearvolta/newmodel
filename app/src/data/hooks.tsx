@@ -29,6 +29,10 @@ export interface HookEntry {
   kind: 'modal' | 'inline';
   states?: string[];
   render: (s: number) => ReactNode;
+  // Where this hook lives in the running prototype. Powers the gallery's
+  // "View in prototype" deep-link: route + tweak-state (?tw=) + optional
+  // modal trigger (?show=).
+  context?: { route: string; tweaks?: Record<string, unknown>; show?: string };
 }
 
 export const HG_HOOKS: HookEntry[] = [
@@ -242,3 +246,20 @@ export const HG_HOOKS: HookEntry[] = [
     ),
   },
 ];
+
+// "View in prototype" targets, keyed by hook title. Only hooks with a real
+// in-context home get a link; the rest stay gallery-only (see handoff notes).
+const VIEW_CONTEXT: Record<string, HookEntry['context']> = {
+  'Recording length wall': { route: '/', show: 'record' },
+  'History approaching 30-day lock': { route: '/' },
+  'Locked meeting (past 30 days)': { route: '/', show: 'locked' },
+  'Invite / Share value modal': { route: '/', show: 'invite' },
+  'Feature / integration upgrade gate': { route: '/integrations', tweaks: { plan: 'free' } },
+  'Trial expired: interstitial': { route: '/', tweaks: { trialOver: true } },
+  'Trial-ended widget (grace countdown)': { route: '/', tweaks: { trialOver: true } },
+  'Teammate engagement nudge': { route: '/', tweaks: { teammateNudge: true } },
+  'Media-player locked overlay': { route: '/record', tweaks: { state: 'limit' } },
+  'Locked recording (inline)': { route: '/record', tweaks: { state: 'locked-card' } },
+  'Locked menu item (upgrade pill)': { route: '/record', tweaks: { actionsOpen: true, state: 'normal' } },
+};
+HG_HOOKS.forEach((h) => { if (VIEW_CONTEXT[h.title]) h.context = VIEW_CONTEXT[h.title]; });

@@ -28,3 +28,8 @@
 .hg-state { border: 0; background: transparent; color: rgba(255,255,255,.62); font: 600 12px var(--font-sans); padding: 6px 12px; border-radius: 7px; cursor: pointer; transition: background var(--dur-fast); }
 .hg-state:hover { color: #fff; }
 .hg-state.is-on { background: #fff; color: #111; }
+
+/* "View in prototype" deep-link in the gallery footer */
+.hg-view { color: #34D399; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 3px; }
+.hg-view:hover { color: #6EE7B7; }
+.hg-view svg { width: 13px; height: 13px; }

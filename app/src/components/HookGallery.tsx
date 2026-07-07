@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Icon } from './primitives/Icon';
 import { HG_HOOKS } from '../data/hooks';
+import { buildViewUrl } from './tweaks/TweaksPanel';
 
 // A reviewer slideshow of every upgrade/trial hook in the app. Renders each
 // hook one at a time on a dark stage (a faint app silhouette behind for
@@ -81,7 +82,17 @@ export function HookGallery({ open, onClose }: HookGalleryProps) {
 
       <div className="hg-bottom">
         <span className="hg-bottom__tag">{hook.tag}</span>
-        <div className="hg-bottom__title">{hook.title}</div>
+        <div className="hg-bottom__title">
+          {hook.title}
+          {hook.context && (
+            <>
+              {' — '}
+              <a className="hg-view" href={buildViewUrl(hook.context.route, hook.context.tweaks, hook.context.show)}>
+                View in prototype <Icon name="arrowRight" size={13} />
+              </a>
+            </>
+          )}
+        </div>
         <p className="hg-bottom__desc">{hook.trigger}</p>
         {hook.states && (
           <div className="hg-states" role="tablist" aria-label="States">

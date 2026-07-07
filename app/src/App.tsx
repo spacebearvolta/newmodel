@@ -6,6 +6,7 @@ import { IntegrationsApp } from './components/integrations/IntegrationsApp';
 import { OrgAdminApp } from './components/orgadmin/OrgAdminApp';
 import { HookGalleryRoute } from './routes/HookGalleryRoute';
 import { EmailMocksRoute } from './routes/EmailMocksRoute';
+import { RecordApp } from './components/record/RecordApp';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/settings" element={<SettingsApp />} />
         <Route path="/integrations" element={<IntegrationsApp />} />
         <Route path="/org-admin" element={<OrgAdminApp />} />
+        <Route path="/record" element={<RecordApp />} />
         <Route path="/hook-gallery" element={<HookGalleryRoute />} />
         <Route path="/trial-emails" element={<EmailMocksRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />

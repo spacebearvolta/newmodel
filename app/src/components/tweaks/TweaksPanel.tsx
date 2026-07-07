@@ -64,9 +64,38 @@ const TWEAKS_STYLE = `
   .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
 `;
 
-// ── useTweaks: single source of truth for tweak values (in-memory only) ────
+// ── Deep-link helpers ───────────────────────────────────────────────────────
+// The gallery's "View in prototype" links carry the target surface's tweak
+// state in a `?tw=` param (JSON, only keys the surface knows) plus an optional
+// `?show=` trigger for modal hooks. useTweaks reads `?tw=` on mount so the
+// Tweaks panel opens already in the right state; surfaces read `?show=` to
+// auto-open the relevant modal.
+function mergeTweaksFromURL<T extends object>(defaults: T): T {
+  try {
+    const raw = new URLSearchParams(window.location.search).get('tw');
+    if (!raw) return defaults;
+    const parsed = JSON.parse(raw);
+    const merged = { ...defaults } as Record<string, unknown>;
+    for (const k of Object.keys(defaults)) if (k in parsed) merged[k] = parsed[k];
+    return merged as T;
+  } catch { return defaults; }
+}
+export function readShowParam(): string | null {
+  try { return new URLSearchParams(window.location.search).get('show'); } catch { return null; }
+}
+export function buildViewUrl(route: string, tweaks?: object, show?: string): string {
+  const p = new URLSearchParams();
+  if (tweaks && Object.keys(tweaks).length) p.set('tw', JSON.stringify(tweaks));
+  if (show) p.set('show', show);
+  if (route === '/') p.set('app', '1'); // bypass the onboarding gate on deep-link
+  const qs = p.toString();
+  return qs ? `${route}?${qs}` : route;
+}
+
+// ── useTweaks: single source of truth for tweak values ──────────────────────
+// Seeds from `?tw=` on mount (deep-link), otherwise the provided defaults.
 export function useTweaks<T extends object>(defaults: T) {
-  const [values, setValues] = useState<T>(defaults);
+  const [values, setValues] = useState<T>(() => mergeTweaksFromURL(defaults));
   const setTweak = useCallback(<K extends keyof T>(keyOrEdits: K | Partial<T>, val?: T[K]) => {
     const edits = (typeof keyOrEdits === 'object' && keyOrEdits !== null)
       ? keyOrEdits as Partial<T>
