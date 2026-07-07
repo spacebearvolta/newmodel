@@ -62,10 +62,14 @@ export const HG_HOOKS: HookEntry[] = [
   {
     tag: 'H4 · H5',
     title: 'Invite / Share value modal',
-    trigger: 'A free user clicks Invite, or tries to share a recording with a colleague.',
+    trigger: 'Invite / Share gate. CTA is state-driven: free → Start trial, trial ended → Upgrade.',
     kind: 'modal',
-    states: ['Invite', 'Share'],
-    render: (s) => <TeamValueModalV2Live trigger={s === 1 ? 'share' : 'invite'} onClose={NOOP} onStartTrial={NOOP} />,
+    states: ['Invite · free', 'Share · free', 'Invite · trial over', 'Share · trial over'],
+    render: (s) => {
+      const trigger = s % 2 === 1 ? 'share' : 'invite';
+      const state = s >= 2 ? 'trial-over' : 'free';
+      return <TeamValueModalV2Live trigger={trigger} state={state} onClose={NOOP} onStartTrial={NOOP} />;
+    },
   },
   {
     tag: 'H6',
@@ -102,9 +106,8 @@ export const HG_HOOKS: HookEntry[] = [
     title: 'Trial expired: interstitial',
     trigger: 'Shown once on the first login after the Business trial ends.',
     kind: 'modal',
-    states: ['30 days', '7 days', '3 days', '1 day'],
-    render: (s) => (
-      <TrialExpiredInterstitialV2Live open orgName="Acme" graceDays={[30, 7, 3, 1][s]} onUpgrade={NOOP} onContinueFree={NOOP} />
+    render: () => (
+      <TrialExpiredInterstitialV2Live open orgName="Acme" onUpgrade={NOOP} onContinueFree={NOOP} />
     ),
   },
   {

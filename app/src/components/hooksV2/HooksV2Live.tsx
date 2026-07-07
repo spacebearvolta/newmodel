@@ -87,8 +87,8 @@ export function LockedMeetingModalV2Live({ meeting, onClose, onStartTrial }: Loc
 
 // ── H4 / H5 ───────────────────────────────────────────────────────────────
 const TEAM_MODAL_COPY_V2 = {
-  invite: { title: 'Work is better, together.', sub: 'Invite your whole team: everyone’s shared meetings build one searchable, AI-ready memory.', cta: 'Start free trial to invite' },
-  share: { title: 'Share this meeting with your team', sub: 'Give your team the full context of every call, not just the parts they were in.', cta: 'Start free trial to share' },
+  invite: { title: 'Work is better, together.', sub: 'Invite your whole team: everyone’s shared meetings build one searchable, AI-ready memory.', verb: 'invite' },
+  share: { title: 'Share this meeting with your team', sub: 'Give your team the full context of every call, not just the parts they were in.', verb: 'share' },
 };
 const TEAM_PREVIEW_TITLES = [
   'Q2 planning offsite — day 1', 'Discovery call — Quest.io', 'Weekly sync — Product',
@@ -96,11 +96,16 @@ const TEAM_PREVIEW_TITLES = [
 ];
 interface TeamValueModalV2LiveProps {
   trigger: 'invite' | 'share' | null;
+  // State-driven CTA: a free user (no trial yet) starts a trial; a user whose
+  // trial has ended upgrades. (Business members who've joined an org aren't
+  // gated at all, so this modal simply isn't shown for them.)
+  state?: 'free' | 'trial-over';
   onClose?: () => void;
   onStartTrial?: () => void;
 }
-export function TeamValueModalV2Live({ trigger, onClose, onStartTrial }: TeamValueModalV2LiveProps) {
+export function TeamValueModalV2Live({ trigger, state = 'free', onClose, onStartTrial }: TeamValueModalV2LiveProps) {
   const copy = trigger ? TEAM_MODAL_COPY_V2[trigger] : TEAM_MODAL_COPY_V2.invite;
+  const cta = state === 'trial-over' ? `Upgrade to ${copy.verb}` : `Start free trial to ${copy.verb}`;
   return (
     <Modal open={!!trigger} onClose={onClose} bare>
       <div className="h45-v2" style={{ width: 620 }}>
@@ -115,7 +120,7 @@ export function TeamValueModalV2Live({ trigger, onClose, onStartTrial }: TeamVal
               <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="plug" size={13} /></span> Integrations & API: HubSpot, Salesforce, Slack</li>
             </ul>
             <div className="h1-v2__foot" style={{ padding: 0, marginTop: 22 }}>
-              <button className="btn-v2 btn-v2--primary btn-v2--lg btn-v2--full" onClick={onStartTrial}>{copy.cta}</button>
+              <button className="btn-v2 btn-v2--primary btn-v2--lg btn-v2--full" onClick={onStartTrial}>{cta}</button>
               <button className="h1-v2__link" onClick={onClose}>Not now</button>
             </div>
           </div>
@@ -285,17 +290,19 @@ export function PlansModalV2Live({ open, currentPlan = 'free', onClose, onUpgrad
   );
 }
 
-// ── H7 interstitial ───────────────────────────────────────────────────────
-const H7_MEETINGS_V2 = [
-  { title: 'Weekly sync — Product', minutes: 34, locksInDays: 5 },
-  { title: 'Q2 planning offsite — day 1', minutes: 52, locksInDays: 12 },
-  { title: 'Discovery call — Quest.io', minutes: 38, locksInDays: 12 },
-  { title: '1:1 with Jordan', minutes: 22, locksInDays: 20 },
-  { title: 'Customer renewal — Northwind', minutes: 30, daysOld: 32 },
-  { title: 'Onboarding — new hire', minutes: 28, daysOld: 38 },
-  { title: 'Sprint retro', minutes: 61, daysOld: 45 },
-] as { title: string; minutes: number; locksInDays?: number; daysOld?: number }[];
-
+// ── H7 interstitial (deck #1) ───────────────────────────────────────────────
+// Shown once on the first login after the Business trial ends. Deck design:
+// single-column card, value checklist in a tinted panel, "Remain on Free"
+// (secondary) + "Upgrade" (green primary). orgName/graceDays are accepted for
+// caller compatibility; the deck copy intentionally omits the grace-days line
+// (flag: add back a reassurance line if churn testing wants it).
+const H7_VALUES_V2 = [
+  { icon: 'video', text: <><strong>Unlimited recordings</strong>, transcripts, and AI notes with no time or storage limits.</> },
+  { icon: 'workflow', text: <>Automate your CRM updates with <strong>CRM integrations</strong> and AI insight property mapping.</> },
+  { icon: 'users', text: <>Automatically organize and share meetings with the right people using <strong>Teams</strong>.</> },
+  { icon: 'plug', text: <>Make every meeting available to your AI through <strong>advanced MCP access</strong> and the Workspace API.</> },
+  { icon: 'sparkles', text: <>Improve your team meetings with <strong>AI coaching</strong>, Trackers, and Scorecards.</> },
+];
 interface TrialExpiredInterstitialV2LiveProps {
   open: boolean;
   orgName?: string;
@@ -303,46 +310,20 @@ interface TrialExpiredInterstitialV2LiveProps {
   onUpgrade?: () => void;
   onContinueFree?: () => void;
 }
-export function TrialExpiredInterstitialV2Live({ open, orgName = 'Acme', graceDays = 30, onUpgrade, onContinueFree }: TrialExpiredInterstitialV2LiveProps) {
+export function TrialExpiredInterstitialV2Live({ open, onUpgrade, onContinueFree }: TrialExpiredInterstitialV2LiveProps) {
   return (
     <Modal open={open} dismissible={false} bare>
-      <div className="modal-v2 card-v2 h45-v2__inner" style={{ width: 620 }}>
-        <div>
-          <h2 style={{ font: '700 26px/1.25 var(--font-sans)', color: 'var(--fg-1)', margin: '0 0 10px' }}>Your Grain Business trial has ended</h2>
-          <p style={{ fontSize: 14.5, lineHeight: 1.6, color: 'var(--fg-4)', margin: 0 }}>
-            Nothing's gone. {orgName}'s shared meetings are saved for {graceDays} days. Reactivate to switch everything back on.
-          </p>
-          <ul className="h45-v2__values">
-            <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="infinity" size={13} /></span> No 45-minute recording cap</li>
-            <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="history" size={13} /></span> Unlimited meeting history</li>
-            <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="users" size={13} /></span> Your team's shared meeting library, back on</li>
-          </ul>
-          <div className="h1-v2__foot" style={{ padding: 0, marginTop: 22 }}>
-            <button className="btn-v2 btn-v2--primary btn-v2--lg btn-v2--full" onClick={onUpgrade}><Icon name="gem" size={14} /> Upgrade now</button>
-            <button className="h1-v2__link" onClick={onContinueFree}>Continue with free account</button>
-          </div>
+      <div className="modal-v2 card-v2 h7-v2">
+        <h2 className="h7-v2__title">Your Grain Business trial has ended</h2>
+        <p className="h7-v2__sub">Upgrade to turn your team's meetings into shared knowledge.</p>
+        <div className="h7-v2__panel">
+          {H7_VALUES_V2.map((v, i) => (
+            <div key={i} className="h7-v2__row"><Icon name={v.icon} size={18} /><span>{v.text}</span></div>
+          ))}
         </div>
-        <div className="card-v2 h45-v2__preview" style={{ background: 'var(--bg-alt)', padding: 12 }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--fg-4)', display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}><Icon name="users" size={13} /> Team meetings</span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {H7_MEETINGS_V2.map((m) => {
-              const isOld = m.daysOld != null;
-              const isLockingSoon = m.locksInDays != null && m.locksInDays < 7;
-              const flagged = m.minutes > 45 || isLockingSoon || isOld;
-              const statusText = isOld ? `${m.daysOld} days old` : `locking in ${m.locksInDays} days`;
-              return (
-                <div key={m.title} className="card-v2" style={{ padding: '8px 10px', display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
-                  <span style={{ width: 30, height: 30, borderRadius: 6, background: 'var(--fg-4)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Icon name="video" size={14} />
-                  </span>
-                  <span style={{ minWidth: 0, flex: 1 }}>
-                    <span style={{ display: 'block', fontSize: 12.5, fontWeight: 500, color: 'var(--fg-2)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.title}</span>
-                    <span style={{ display: 'block', fontSize: 11, color: flagged ? 'var(--fg-3)' : 'var(--fg-5)' }}>{m.minutes} min · {statusText}</span>
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+        <div className="h7-v2__foot">
+          <button className="btn-v2 btn-v2--secondary" onClick={onContinueFree}>Remain on Free</button>
+          <button className="btn-v2 btn-v2--primary" onClick={onUpgrade}>Upgrade</button>
         </div>
       </div>
     </Modal>
