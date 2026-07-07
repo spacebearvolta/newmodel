@@ -580,7 +580,11 @@
 /* ── Trial bento step (modal) ──────────────────────────────────
    Mirrors the onboarding ObTrial bento, laid out inside a modal so the
    "Start trial" entry points outside first-run setup open the same screen. */
-.trial-bento { padding: 60px 36px 8px; text-align: center; }
+/* Compound selector: the element is `.modal__body.trial-bento`, and plain
+   `.modal__body` (padding: 20px 24px) is declared later in this file, so a
+   single-class `.trial-bento` rule loses the cascade. This keeps the title
+   clearly below the close X. */
+.modal__body.trial-bento { padding: 56px 36px 8px; text-align: center; }
 .trial-bento__close { position: absolute; top: 18px; right: 18px; }
 .trial-bento__title {
   font-family: var(--font-display); font-weight: 700; letter-spacing: -0.01em;

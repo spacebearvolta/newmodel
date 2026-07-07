@@ -183,7 +183,7 @@ export function CreatorApp({
         onOrgAdmin={orgActive ? onOrgAdmin : orgInactive ? openReactivate : start}
         onUpgrade={openReactivate}
         onStartTrial={start}
-        onInvite={orgExists ? undefined : () => setTeamValue('invite')}
+        onInvite={orgActive ? undefined : () => setTeamValue('invite')}
         onIntegrations={onIntegrations}
         onNew={orgExists ? undefined : (id) => setRecordLimit(id === 'upload' ? 'upload' : 'record')}
         promoCard={orgInactive
@@ -281,8 +281,9 @@ export function CreatorApp({
       />
       <TeamValueModalV2Live
         trigger={teamValue}
+        state={orgInactive ? 'trial-over' : 'free'}
         onClose={() => setTeamValue(null)}
-        onStartTrial={() => { setTeamValue(null); launchTrial(); }}
+        onStartTrial={() => { setTeamValue(null); (orgInactive ? openReactivate : launchTrial)(); }}
       />
       <CheckoutModal open={checkoutOpen} onClose={() => setCheckoutOpen(false)} billingEmail={USER.email} onPaid={completeReactivation} />
       <Modal open={claudeHandoff} onClose={() => setClaudeHandoff(false)} size="md">
