@@ -171,8 +171,8 @@ export function UpgradeGateCardV2Live({ title, desc, eyebrow, icon, brand, initi
       <h2 className="gate-v2__title">{title}</h2>
       <p className="gate-v2__desc">{desc}</p>
       <div className="gate-v2__actions">
-        <button className="btn-v2 btn-v2--secondary" onClick={onLearnMore}><Icon name="ext" size={13} /> Learn more</button>
-        <button className="btn-v2 btn-v2--primary" onClick={onUpgrade}>Upgrade</button>
+        <button className="btn-v2 btn-v2--primary btn-v2--lg btn-v2--full" onClick={onUpgrade}>Upgrade</button>
+        <button className="gate-v2__link" onClick={onLearnMore}><Icon name="ext" size={13} /> Learn more</button>
       </div>
     </div>
   );

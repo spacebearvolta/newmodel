@@ -74,7 +74,7 @@ export function WorkspaceSwitcher({
           )}
 
           <button className="ws-menu-pop__item" role="menuitem" onClick={() => { setOpen(false); onIntegrations?.(); }}>
-            <Icon name="package" />
+            <Icon name="layoutGrid" />
             <span>Integrations</span>
           </button>
 

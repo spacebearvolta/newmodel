@@ -388,6 +388,13 @@ button.ms-cell--click:hover svg { color: var(--fg-1); }
 .ms-claude-banner__title { font-size: 14.5px; font-weight: 600; color: var(--fg-1); }
 .ms-claude-banner__body { font-size: 12.5px; color: var(--fg-5); margin-top: 3px; line-height: 1.45; text-wrap: pretty; }
 .ms-claude-banner__actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.ms-claude-banner__close {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 7px; border: 0;
+  background: transparent; color: var(--fg-5); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.ms-claude-banner__close:hover { background: rgba(0,0,0,.05); color: var(--fg-2); }
 
 /* ── Ask anything pill ───────────────────────────────────────── */
 .ms-ask {

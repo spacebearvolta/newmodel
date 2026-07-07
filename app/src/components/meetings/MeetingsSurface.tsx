@@ -255,9 +255,7 @@ function SoloAllGate({ gate, onCta }: { gate?: { title?: string; desc?: string; 
         <span className="ms-gate__icon"><Icon name="globe" /></span>
         <div className="ms-gate__title">{title}</div>
         <div className="ms-gate__desc">{desc}</div>
-        <button className="btn btn--dark btn--pill btn--lg" onClick={onCta}>
-          <span className="btn-label">{cta}</span>
-        </button>
+        <button className="btn-v2 btn-v2--primary btn-v2--lg" onClick={onCta}>{cta}</button>
         {note && <div className="ms-gate__note">{note}</div>}
       </div>
     </div>

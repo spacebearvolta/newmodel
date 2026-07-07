@@ -15,8 +15,8 @@ export function ClaudeMeetingBanner({ onConnect, onDismiss }: { onConnect?: () =
       </div>
       <div className="ms-claude-banner__actions">
         <button className="btn btn--dark btn--pill" onClick={onConnect}><span className="btn-label">Connect in Claude</span></button>
-        <button className="btn btn--ghost btn--pill" onClick={onDismiss}><span className="btn-label">Dismiss</span></button>
       </div>
+      <button className="ms-claude-banner__close" aria-label="Dismiss" onClick={onDismiss}><Icon name="close" size={16} /></button>
     </div>
   );
 }

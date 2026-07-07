@@ -100,6 +100,11 @@ const ICONS: Record<string, React.ReactNode> = {
   // replace generic sparkles for AI/growth-moment accents. Approximated
   // 8-point burst; swap for the real exported asset if one exists.
   starburst:  <polygon points="12.00,2.00 13.38,8.67 19.07,4.93 15.33,10.62 22.00,12.00 15.33,13.38 19.07,19.07 13.38,15.33 12.00,22.00 10.62,15.33 4.93,19.07 8.67,13.38 2.00,12.00 8.67,10.62 4.93,4.93 10.62,8.67" />,
+
+  // Upgrade-touchpoints round additions (Grain product mappings, per Alex):
+  // Integrations → LayoutGrid, Coaching → Megaphone.
+  layoutGrid: <><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /></>,
+  megaphone:  <><path d="m3 11 18-5v12L3 14v-3z" /><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" /></>,
 };
 
 interface IconProps {

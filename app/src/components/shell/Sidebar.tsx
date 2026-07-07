@@ -20,7 +20,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'meetings', label: 'Meetings', icon: 'video', active: true },
   { id: 'playlists', label: 'Playlists', icon: 'layers', gapBefore: true },
   { id: 'stories', label: 'Stories', icon: 'circlePlay' },
-  { id: 'coaching', label: 'Coaching', icon: 'graduationCap', badge: '4' },
+  { id: 'coaching', label: 'Coaching', icon: 'megaphone', badge: '4' },
 ];
 
 interface SidebarProps {
