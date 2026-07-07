@@ -550,3 +550,64 @@ export function LockedRecordingCardV2Live({ onStartTrial }: LockedRecordingCardV
     </div>
   );
 }
+
+// ── Invite form + "Grain for Teams" upsell (deck #6) ─────────────────────────
+// The real invite dialog (email + seat type + team) with an attached upsell
+// card. Upsell CTA is state-driven like H4/H5: free -> Start trial, trial
+// ended -> Upgrade.
+interface InviteUpsellModalV2LiveProps {
+  open: boolean;
+  workspace?: string;
+  state?: 'free' | 'trial-over';
+  onClose?: () => void;
+  onSend?: () => void;
+  onUpgrade?: () => void;
+  onLearnMore?: () => void;
+}
+export function InviteUpsellModalV2Live({ open, workspace = 'Sample', state = 'free', onClose, onSend, onUpgrade, onLearnMore }: InviteUpsellModalV2LiveProps) {
+  const cta = state === 'trial-over' ? 'Upgrade' : 'Start trial';
+  return (
+    <Modal open={open} onClose={onClose} bare>
+      <div className="iu-modal">
+        <div className="modal-v2 card-v2 iu-modal__card">
+          <div className="iu-modal__head">
+            <span className="iu-modal__ws">{workspace[0]}</span>
+            <span className="iu-modal__title">Invite to {workspace} workspace</span>
+            <button className="iu-modal__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
+          </div>
+          <label className="iu-field">
+            <span className="iu-field__label">Email</span>
+            <input className="iu-field__input" placeholder="Enter email address to invite" />
+          </label>
+          <label className="iu-field">
+            <span className="iu-field__label">Seat type</span>
+            <span className="iu-field__select">Free notetaker seat <Icon name="chevDown" size={15} /></span>
+          </label>
+          <label className="iu-field">
+            <span className="iu-field__label">Team</span>
+            <span className="iu-field__select iu-field__select--muted">No team <Icon name="chevDown" size={15} /></span>
+          </label>
+          <div className="iu-modal__foot">
+            <span className="iu-modal__linkline"><Icon name="ext" size={14} /> Free notetaker seat invite link</span>
+            <button className="btn-v2 btn-v2--dark" onClick={onSend}>Send invites</button>
+          </div>
+        </div>
+        <div className="card-v2 iu-upsell">
+          <div className="iu-upsell__body">
+            <div className="iu-upsell__title">Grain for Teams</div>
+            <p className="iu-upsell__desc">Automatically share and organize meetings by team.</p>
+            <div className="iu-upsell__actions">
+              <button className="btn-v2 btn-v2--secondary" onClick={onLearnMore}>Learn more</button>
+              <button className="btn-v2 btn-v2--primary" onClick={onUpgrade}>{cta}</button>
+            </div>
+          </div>
+          <div className="iu-upsell__preview" aria-hidden="true">
+            <div className="iu-upsell__tabs"><span>My meetings</span><span className="is-on">My team: Sales</span></div>
+            <div className="iu-upsell__prow"><span className="iu-upsell__dot"><Icon name="video" size={11} /></span> Acme Co. Renewal</div>
+            <div className="iu-upsell__prow"><span className="iu-upsell__dot"><Icon name="video" size={11} /></span> Weekly sync — Product</div>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+}

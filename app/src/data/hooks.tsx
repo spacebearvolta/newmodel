@@ -17,6 +17,7 @@ import {
   TrialStatusChipV2Live,
   MediaLockOverlayV2Live,
   LockedRecordingCardV2Live,
+  InviteUpsellModalV2Live,
 } from '../components/hooksV2/HooksV2Live';
 
 const NOOP = () => {};
@@ -235,6 +236,14 @@ export const HG_HOOKS: HookEntry[] = [
     ),
   },
   {
+    tag: 'H5b',
+    title: 'Invite form + Teams upsell',
+    trigger: 'The real invite dialog (email / seat / team) with an attached “Grain for Teams” upsell card.',
+    kind: 'modal',
+    states: ['Free', 'Trial over'],
+    render: (s) => <InviteUpsellModalV2Live open workspace="Acme" state={s === 1 ? 'trial-over' : 'free'} onClose={NOOP} onSend={NOOP} onUpgrade={NOOP} onLearnMore={NOOP} />,
+  },
+  {
     tag: '#12',
     title: 'Locked recording (inline)',
     trigger: 'Opening a locked recording — inline card in the record body (sibling of H3).',
@@ -254,6 +263,7 @@ const VIEW_CONTEXT: Record<string, HookEntry['context']> = {
   'History approaching 30-day lock': { route: '/' },
   'Locked meeting (past 30 days)': { route: '/', show: 'locked' },
   'Invite / Share value modal': { route: '/', show: 'invite' },
+  'Invite form + Teams upsell': { route: '/', show: 'inviteForm' },
   'Feature / integration upgrade gate': { route: '/integrations', tweaks: { plan: 'free' } },
   'Trial expired: interstitial': { route: '/', tweaks: { trialOver: true } },
   'Trial-ended widget (grace countdown)': { route: '/', tweaks: { trialOver: true } },

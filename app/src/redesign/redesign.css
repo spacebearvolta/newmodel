@@ -259,3 +259,30 @@ body { overflow: auto !important; }
 .h7-v2__row svg { width: 18px; height: 18px; color: var(--fg-4); flex-shrink: 0; margin-top: 1px; }
 .h7-v2__row strong { color: var(--fg-1); font-weight: 600; }
 .h7-v2__foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+
+/* ── Invite form + Grain-for-Teams upsell (deck #6) ──────────────────────── */
+.iu-modal { width: 460px; max-width: 94vw; display: flex; flex-direction: column; gap: 12px; }
+.iu-modal__card { padding: 22px 22px 18px; }
+.iu-modal__head { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.iu-modal__ws { width: 26px; height: 26px; border-radius: 6px; background: var(--fg-1); color: #fff; font: 700 12px/1 var(--font-sans); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.iu-modal__title { font: 700 16px/1.2 var(--font-sans); color: var(--fg-1); flex: 1; }
+.iu-modal__close { width: 30px; height: 30px; border: 0; border-radius: var(--r-btn); background: transparent; color: var(--fg-5); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.iu-modal__close:hover { background: var(--bg-alt); color: var(--fg-1); }
+.iu-field { display: block; margin-bottom: 14px; }
+.iu-field__label { display: block; font: 600 12.5px/1 var(--font-sans); color: var(--fg-2); margin-bottom: 6px; }
+.iu-field__input { width: 100%; box-sizing: border-box; height: 38px; padding: 0 12px; border: 1px solid var(--green-500); border-radius: var(--r-btn); font: 400 14px var(--font-sans); color: var(--fg-1); outline: none; }
+.iu-field__input::placeholder { color: var(--fg-5); }
+.iu-field__select { display: flex; align-items: center; justify-content: space-between; height: 38px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--r-btn); font: 400 14px var(--font-sans); color: var(--fg-1); }
+.iu-field__select--muted { color: var(--fg-5); }
+.iu-modal__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 6px; }
+.iu-modal__linkline { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--fg-4); }
+.iu-upsell { display: grid; grid-template-columns: 1fr 0.85fr; gap: 14px; padding: 16px; align-items: center; }
+.iu-upsell__title { font: 700 14px/1.2 var(--font-sans); color: var(--fg-1); margin-bottom: 4px; }
+.iu-upsell__desc { font-size: 12.5px; color: var(--fg-5); line-height: 1.45; margin: 0 0 14px; }
+.iu-upsell__actions { display: flex; gap: 8px; }
+.iu-upsell__actions .btn-v2 { padding: 7px 12px; font-size: 13px; }
+.iu-upsell__preview { background: var(--bg-alt); border-radius: var(--r-btn); padding: 10px; overflow: hidden; }
+.iu-upsell__tabs { display: flex; gap: 8px; font-size: 10px; color: var(--fg-5); margin-bottom: 8px; }
+.iu-upsell__tabs .is-on { color: var(--fg-1); font-weight: 600; }
+.iu-upsell__prow { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--fg-3); padding: 5px 0; }
+.iu-upsell__dot { width: 20px; height: 20px; border-radius: 5px; background: var(--fg-4); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }

@@ -9,6 +9,7 @@ import { readShowParam } from '../tweaks/TweaksPanel';
 import {
   RecordingLimitModalV2Live, HistoryLockBannerV2Live, LockedMeetingModalV2Live, TeamValueModalV2Live,
   TrialExpiredInterstitialV2Live, TrialEndedCardV2Live, TrialWidgetV2Live, TeammateNudgeV2Live, TrialCountdownV2Live,
+  InviteUpsellModalV2Live,
 } from '../hooksV2/HooksV2Live';
 import {
   ClaudeMeetingBanner, ClaudeHandoff, StartTrialPromo, TrialBentoStep, ExistingOrgStep, RequestSentStep,
@@ -63,6 +64,7 @@ export function CreatorApp({
   const [historyDismissed, setHistoryDismissed] = useState(false); // H2
   const [lockedMeeting, setLockedMeeting] = useState<Meeting | null>(null); // H3
   const [teamValue, setTeamValue] = useState<null | 'invite' | 'share'>(null); // H4/H5
+  const [inviteForm, setInviteForm] = useState(false); // deck #6 invite form + upsell
   const [expiryDismissed, setExpiryDismissed] = useState(false); // H7 interstitial
   const [teammateDismissed, setTeammateDismissed] = useState(false); // H9
   const [teammateAuto, setTeammateAuto] = useState(false);
@@ -95,6 +97,7 @@ export function CreatorApp({
     else if (show === 'upload') setRecordLimit('upload');
     else if (show === 'locked') setLockedMeeting({ title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' } as Meeting);
     else if (show === 'trialPopup') setTrialPopupDay(trialDays);
+    else if (show === 'inviteForm') setInviteForm(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -299,6 +302,15 @@ export function CreatorApp({
         state={orgInactive ? 'trial-over' : 'free'}
         onClose={() => setTeamValue(null)}
         onStartTrial={() => { setTeamValue(null); (orgInactive ? openReactivate : launchTrial)(); }}
+      />
+      <InviteUpsellModalV2Live
+        open={inviteForm}
+        workspace={orgExists ? orgName : 'Acme'}
+        state={orgInactive ? 'trial-over' : 'free'}
+        onClose={() => setInviteForm(false)}
+        onSend={() => setInviteForm(false)}
+        onUpgrade={() => { setInviteForm(false); (orgInactive ? openReactivate : launchTrial)(); }}
+        onLearnMore={() => {}}
       />
       <CheckoutModal open={checkoutOpen} onClose={() => setCheckoutOpen(false)} billingEmail={USER.email} onPaid={completeReactivation} />
       <Modal open={claudeHandoff} onClose={() => setClaudeHandoff(false)} size="md">
