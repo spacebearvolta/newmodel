@@ -508,3 +508,64 @@ export function TrialCountdownV2Live({ daysLeft, orgName = 'Acme', onUpgrade, on
     </Modal>
   );
 }
+
+// ── Inline settings upgrade (deck #2 Bot capture, #4 Templates, #20 Billing) ──
+// Small in-context affordance beside a locked setting/plan row. Two variants:
+// a solid button (sits next to a neutral action like "Customize") and a text
+// link (sits inline next to a locked checkbox/label).
+interface InlineUpgradeV2LiveProps { variant?: 'button' | 'link'; label?: string; onUpgrade?: () => void }
+export function InlineUpgradeV2Live({ variant = 'button', label = 'Upgrade', onUpgrade }: InlineUpgradeV2LiveProps) {
+  if (variant === 'link') return <button className="iu-v2__link" onClick={onUpgrade}>{label}</button>;
+  return <button className="btn-v2 btn-v2--primary iu-v2__btn" onClick={onUpgrade}>{label}</button>;
+}
+
+// ── Upgrade pill for locked menu items (deck #9 actions menu, #10 player) ─────
+interface UpgradeBadgeV2LiveProps { label?: string; onClick?: () => void }
+export function UpgradeBadgeV2Live({ label = 'Upgrade', onClick }: UpgradeBadgeV2LiveProps) {
+  return <button className="ubadge-v2" onClick={onClick}>{label}</button>;
+}
+
+// ── Trial-status header chip (deck #22 — meetings header, below the menu) ─────
+interface TrialStatusChipV2LiveProps { text?: string; daysLeft?: number; onUpgrade?: () => void }
+export function TrialStatusChipV2Live({ text, daysLeft = 1, onUpgrade }: TrialStatusChipV2LiveProps) {
+  const label = text ?? `Teams expires in ${daysLeft} day${daysLeft === 1 ? '' : 's'}`;
+  return (
+    <span className="tchip-v2">
+      <Icon name="alert" size={13} />
+      <span className="tchip-v2__text">{label}</span>
+      <button className="tchip-v2__cta" onClick={onUpgrade}>Upgrade</button>
+    </span>
+  );
+}
+
+// ── Media-player locked overlay (deck #10 bot-capture, #11 local-capture) ─────
+// Absolutely positioned over a blurred player frame (parent must be relative).
+interface MediaLockOverlayV2LiveProps { kind?: 'limit' | 'locked'; onUpgrade?: () => void }
+export function MediaLockOverlayV2Live({ kind = 'limit', onUpgrade }: MediaLockOverlayV2LiveProps) {
+  const msg = kind === 'locked'
+    ? 'This recording is locked, upgrade to view recording.'
+    : 'Recording limit reached, upgrade to view recording.';
+  return (
+    <div className="mlock-v2">
+      <span className="mlock-v2__icon"><Icon name="lock" size={22} /></span>
+      <p className="mlock-v2__msg">{msg}</p>
+      <button className="btn-v2 btn-v2--primary" onClick={onUpgrade}>Upgrade</button>
+    </div>
+  );
+}
+
+// ── Locked recording card, inline in the transcript (deck #12) ───────────────
+// Inline sibling of H3's modal — same intent, but rendered in the record body
+// rather than as an overlay. No duplication of H3's modal design.
+interface LockedRecordingCardV2LiveProps { onStartTrial?: () => void }
+export function LockedRecordingCardV2Live({ onStartTrial }: LockedRecordingCardV2LiveProps) {
+  return (
+    <div className="lrec-v2">
+      <span className="lrec-v2__icon"><Icon name="lock" size={20} /></span>
+      <div className="lrec-v2__title">This recording is locked</div>
+      <p className="lrec-v2__desc">Start a Business trial to unlock this meeting and keep every meeting you record, for good.</p>
+      <button className="btn-v2 btn-v2--primary btn-v2--lg" onClick={onStartTrial}>Start trial to unlock</button>
+      <div className="lrec-v2__note">Included in Grain Business · free for 14 days</div>
+    </div>
+  );
+}

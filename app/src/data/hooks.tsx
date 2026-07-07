@@ -12,6 +12,11 @@ import {
   TeammateNudgeV2Live,
   TrialWidgetV2Live,
   TrialCountdownV2Live,
+  InlineUpgradeV2Live,
+  UpgradeBadgeV2Live,
+  TrialStatusChipV2Live,
+  MediaLockOverlayV2Live,
+  LockedRecordingCardV2Live,
 } from '../components/hooksV2/HooksV2Live';
 
 const NOOP = () => {};
@@ -154,5 +159,83 @@ export const HG_HOOKS: HookEntry[] = [
     kind: 'modal',
     states: ['8 days', '3 days', '1 day'],
     render: (s) => <TrialCountdownV2Live daysLeft={[8, 3, 1][s]} orgName="Acme" onUpgrade={NOOP} onClose={NOOP} />,
+  },
+  {
+    tag: 'C',
+    title: 'Inline settings upgrade',
+    trigger: 'Beside a locked setting/plan row — Bot capture, Templates, Billing.',
+    kind: 'inline',
+    states: ['Button', 'Link'],
+    render: (s) => (
+      <div style={{ width: 560, background: '#fff', border: '1px solid var(--border)', borderRadius: 10, padding: '18px 20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+          <span>
+            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--fg-1)' }}>Bot display settings</div>
+            <div style={{ fontSize: 12.5, color: 'var(--fg-5)', marginTop: 2 }}>Customize how the Grain Bot appears and behaves in meetings.</div>
+          </span>
+          {s === 1
+            ? <span style={{ fontSize: 13, color: 'var(--fg-4)' }}>Only auto-capture if I am the event organizer <InlineUpgradeV2Live variant="link" onUpgrade={NOOP} /></span>
+            : <span style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+                <button className="btn-v2 btn-v2--secondary iu-v2__btn" onClick={NOOP}>Customize</button>
+                <InlineUpgradeV2Live variant="button" onUpgrade={NOOP} />
+              </span>}
+        </div>
+      </div>
+    ),
+  },
+  {
+    tag: 'D',
+    title: 'Locked menu item (upgrade pill)',
+    trigger: 'A Business-only action in a menu — Send to HubSpot / Salesforce / Slack.',
+    kind: 'inline',
+    render: () => (
+      <div style={{ width: 260, background: '#fff', border: '1px solid var(--border)', borderRadius: 10, padding: 6, boxShadow: 'var(--shadow-v2-md)' }}>
+        {[
+          { label: 'Send to Slack', locked: false },
+          { label: 'Send to HubSpot', locked: true },
+          { label: 'Send to Salesforce', locked: true },
+        ].map((r) => (
+          <div key={r.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '9px 10px', borderRadius: 8, color: r.locked ? 'var(--fg-5)' : 'var(--fg-1)', fontSize: 14 }}>
+            <span>{r.label}</span>
+            {r.locked && <UpgradeBadgeV2Live onClick={NOOP} />}
+          </div>
+        ))}
+      </div>
+    ),
+  },
+  {
+    tag: 'D',
+    title: 'Trial-status header chip',
+    trigger: 'Meetings header, below the menu icon — trial/Teams expiry with an upgrade link.',
+    kind: 'inline',
+    states: ['1 day', '3 days'],
+    render: (s) => (
+      <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 18px' }}>
+        <TrialStatusChipV2Live daysLeft={[1, 3][s]} onUpgrade={NOOP} />
+      </div>
+    ),
+  },
+  {
+    tag: 'E',
+    title: 'Media-player locked overlay',
+    trigger: 'On the recording player when the recording is over the free limit or locked.',
+    kind: 'inline',
+    states: ['Limit reached', 'Locked'],
+    render: (s) => (
+      <div style={{ position: 'relative', width: 480, height: 270, borderRadius: 12, overflow: 'hidden', background: 'linear-gradient(135deg, #2b2f36, #1a1d22)' }}>
+        <MediaLockOverlayV2Live kind={s === 1 ? 'locked' : 'limit'} onUpgrade={NOOP} />
+      </div>
+    ),
+  },
+  {
+    tag: '#12',
+    title: 'Locked recording (inline)',
+    trigger: 'Opening a locked recording — inline card in the record body (sibling of H3).',
+    kind: 'inline',
+    render: () => (
+      <div style={{ width: 560, background: '#fff', borderRadius: 10, padding: '48px 24px' }}>
+        <LockedRecordingCardV2Live onStartTrial={NOOP} />
+      </div>
+    ),
   },
 ];
