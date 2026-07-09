@@ -297,4 +297,29 @@ body { overflow: auto !important; }
 .iu-upsell__prow { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--fg-3); padding: 5px 0; }
 .iu-upsell__dot { width: 20px; height: 20px; border-radius: 5px; background: var(--fg-4); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
+/* Invite modal — new-model copy blocks */
+.iu-grant { font-size: 12.5px; line-height: 1.5; color: var(--fg-4); margin: 0 0 12px; }
+.iu-domnote, .iu-seqnote { display: flex; align-items: flex-start; gap: 6px; font-size: 12px; line-height: 1.45; color: var(--fg-5); margin: 0 0 12px; }
+.iu-domnote svg, .iu-seqnote svg { color: var(--fg-5); flex-shrink: 0; margin-top: 1px; }
+.iu-viewlink { display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; padding: 0; font: 600 12.5px var(--font-sans); color: var(--fg-2); cursor: pointer; }
+.iu-viewlink:hover { color: var(--fg-1); text-decoration: underline; }
+
+/* State A — Share (view-only link) modal */
+.sl-modal { width: 460px; max-width: 94vw; padding: 22px 22px 20px; }
+.sl-modal__head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.sl-modal__title { font: 700 16px/1.3 var(--font-sans); color: var(--fg-1); flex: 1; }
+.sl-linkrow { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: var(--r-btn); padding: 5px 5px 5px 11px; }
+.sl-linkrow__icon { color: var(--fg-4); display: inline-flex; flex-shrink: 0; }
+.sl-linkrow__input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; font: 400 13.5px var(--font-sans); color: var(--fg-2); }
+.sl-linkrow__copy { flex-shrink: 0; padding: 7px 14px; }
+.sl-note { display: flex; align-items: flex-start; gap: 7px; font-size: 12.5px; line-height: 1.5; color: var(--fg-4); margin: 12px 0 0; }
+.sl-note svg { color: var(--green-600); flex-shrink: 0; margin-top: 2px; }
+.sl-note strong { color: var(--fg-1); font-weight: 600; }
+.sl-divider { height: 1px; background: var(--border); margin: 18px 0; }
+.sl-collab { display: flex; align-items: center; gap: 14px; }
+.sl-collab__text { flex: 1; }
+.sl-collab__title { font: 600 13.5px/1.3 var(--font-sans); color: var(--fg-1); }
+.sl-collab__desc { font-size: 12.5px; line-height: 1.45; color: var(--fg-5); margin-top: 2px; }
+.sl-collab .btn-v2 { flex-shrink: 0; }
+
 .h9-v2__avatar { width: 46px; height: 46px; border-radius: 9999px; object-fit: cover; flex-shrink: 0; }

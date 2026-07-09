@@ -2,6 +2,7 @@
 // by the live app (Meetings, sidebar, Integrations) and the Hook Gallery
 // dev-review tool at /hook-gallery, so there is exactly one version of each
 // hook's design anywhere in the app.
+import { useState } from 'react';
 import { Icon } from '../primitives/Icon';
 import { Modal } from '../primitives/Modal';
 
@@ -541,54 +542,135 @@ export function LockedRecordingCardV2Live({ onStartTrial }: LockedRecordingCardV
   );
 }
 
-// ── Invite form + "Grain for Teams" upsell (deck #6) ─────────────────────────
-// The real invite dialog (email + seat type + team) with an attached upsell
-// card. Upsell CTA is state-driven like H4/H5: free -> Start trial, trial
-// ended -> Upgrade.
+// ── State A — Share (view-only link) modal ───────────────────────────────────
+// Core principle: link-sharing is NEVER gated. Anyone can copy a public
+// view-only link for free; collaboration (edit/comment/highlight) is the paid
+// unlock, handed off to the invite-to-collaborate flow.
+// NOTE: all copy here is TODO-copy — direction only, wording pending Jeff.
+interface ShareLinkModalV2LiveProps {
+  open: boolean;
+  meetingTitle?: string;
+  link?: string;
+  onClose?: () => void;
+  onCollaborate?: () => void; // hands off to the invite (start-trial) flow
+}
+export function ShareLinkModalV2Live({
+  open, meetingTitle = 'Product Coordination Meeting',
+  link = 'https://grain.com/share/9f2c14b7-view', onClose, onCollaborate,
+}: ShareLinkModalV2LiveProps) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <Modal open={open} onClose={onClose} bare>
+      <div className="sl-modal modal-v2 card-v2">
+        <div className="sl-modal__head">
+          {/* TODO-copy */}
+          <span className="sl-modal__title">Share “{meetingTitle}”</span>
+          <button className="iu-modal__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
+        </div>
+
+        {/* Free, ungated view-only link */}
+        <div className="sl-linkrow">
+          <span className="sl-linkrow__icon"><Icon name="share2" size={15} /></span>
+          <input className="sl-linkrow__input" readOnly value={link} onFocus={(e) => e.currentTarget.select()} />
+          <button className="btn-v2 btn-v2--dark sl-linkrow__copy" onClick={() => setCopied(true)}>
+            {copied ? 'Copied' : 'Copy link'}
+          </button>
+        </div>
+        {/* TODO-copy: make view-only explicit */}
+        <p className="sl-note">
+          <Icon name="globe" size={13} />
+          <span>Anyone with the link can <strong>view</strong> this meeting — they can’t edit, comment, or add highlights. It’s free to share, and they can sign up on their own.</span>
+        </p>
+
+        <div className="sl-divider" />
+
+        {/* Collaboration = the paid unlock (hands off to invite / start trial) */}
+        <div className="sl-collab">
+          <div className="sl-collab__text">
+            {/* TODO-copy */}
+            <div className="sl-collab__title">Want them to collaborate?</div>
+            <div className="sl-collab__desc">Invite them into your workspace to edit, comment, and build a shared meeting repository together.</div>
+          </div>
+          <button className="btn-v2 btn-v2--primary" onClick={onCollaborate}><Icon name="users" size={15} /> Invite to collaborate</button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+// ── States B/C/D/E — Invite (to collaborate) modal ───────────────────────────
+// Inviting a teammate grants workspace access + collaboration + future
+// meetings, which requires a trial (B/D free) or reactivation (E trial-over).
+// A view-only link (State C) is always offered as the ungated alternative.
+// The trial is provisioned BEFORE the invite — you can't invite into a
+// workspace that doesn't exist yet. All copy is TODO-copy (pending Jeff).
 interface InviteUpsellModalV2LiveProps {
   open: boolean;
   workspace?: string;
   state?: 'free' | 'trial-over';
+  userDomain?: string;
+  seedEmail?: string;                  // gallery/demo: pre-fill the email field
   onClose?: () => void;
-  onSend?: () => void;
-  onUpgrade?: () => void;
+  onPrimary?: (email: string) => void; // start-trial-&-invite (free) / upgrade-&-invite (trial-over)
+  onViewLink?: () => void;             // State C — send a view-only link instead
   onLearnMore?: () => void;
 }
-export function InviteUpsellModalV2Live({ open, workspace = 'Sample', state = 'free', onClose, onSend, onUpgrade, onLearnMore }: InviteUpsellModalV2LiveProps) {
-  const cta = state === 'trial-over' ? 'Upgrade' : 'Start trial';
+export function InviteUpsellModalV2Live({
+  open, workspace = 'your workspace', state = 'free', userDomain = 'acme.com', seedEmail = '',
+  onClose, onPrimary, onViewLink, onLearnMore,
+}: InviteUpsellModalV2LiveProps) {
+  const [email, setEmail] = useState(seedEmail);
+  const trimmed = email.trim().toLowerCase();
+  const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+  const external = hasEmail && !trimmed.endsWith('@' + userDomain);
+  const isOver = state === 'trial-over';
+  const cta = isOver ? 'Upgrade & invite' : 'Start trial & invite';
   return (
     <Modal open={open} onClose={onClose} bare>
       <div className="iu-modal">
         <div className="modal-v2 card-v2 iu-modal__card">
           <div className="iu-modal__head">
-            <span className="iu-modal__ws">{workspace[0]}</span>
-            <span className="iu-modal__title">Invite to {workspace} workspace</span>
+            <span className="iu-modal__ws"><Icon name="users" size={14} /></span>
+            {/* TODO-copy */}
+            <span className="iu-modal__title">{isOver ? `Invite to ${workspace}` : 'Invite a teammate to collaborate'}</span>
             <button className="iu-modal__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
           </div>
           <label className="iu-field">
             <span className="iu-field__label">Email</span>
-            <input className="iu-field__input" placeholder="Enter email address to invite" />
+            <input
+              className="iu-field__input"
+              placeholder="Enter a teammate’s email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </label>
-          <label className="iu-field">
-            <span className="iu-field__label">Seat type</span>
-            <span className="iu-field__select">Free notetaker seat <Icon name="chevDown" size={15} /></span>
-          </label>
-          <label className="iu-field">
-            <span className="iu-field__label">Team</span>
-            <span className="iu-field__select iu-field__select--muted">No team <Icon name="chevDown" size={15} /></span>
-          </label>
+          {/* TODO-copy: what inviting grants (collaborate + repository + future meetings) */}
+          <p className="iu-grant">
+            Teammates you invite can edit, comment, and collaborate — and every shared meeting builds your team’s searchable repository.
+          </p>
+          {external && (
+            /* State D — external recipient. Same trial hook for now. TODO-copy */
+            <p className="iu-domnote"><Icon name="info" size={13} /> <span>Outside {userDomain} — they’ll join as an independent user.</span></p>
+          )}
+          {hasEmail && !isOver && (
+            /* Sequencing: trial (workspace) is provisioned first, then the invite. TODO-copy */
+            <p className="iu-seqnote"><Icon name="info" size={13} /> <span>Starting your trial creates your workspace — then {trimmed}’s invite goes out.</span></p>
+          )}
           <div className="iu-modal__foot">
-            <span className="iu-modal__linkline"><Icon name="ext" size={14} /> Free notetaker seat invite link</span>
-            <button className="btn-v2 btn-v2--dark" onClick={onSend}>Send invites</button>
+            {/* State C — ungated view-only link alternative */}
+            <button className="iu-viewlink" onClick={onViewLink}><Icon name="share2" size={14} /> Or send a view-only link</button>
+            <button className={`btn-v2 ${isOver ? 'btn-v2--primary' : 'btn-v2--dark'}`} onClick={() => onPrimary?.(trimmed)}>
+              <Icon name={isOver ? 'gem' : 'users'} size={14} /> {cta}
+            </button>
           </div>
         </div>
         <div className="card-v2 iu-upsell">
           <div className="iu-upsell__body">
+            {/* TODO-copy */}
             <div className="iu-upsell__title">Grain for Teams</div>
-            <p className="iu-upsell__desc">Automatically share and organize meetings by team.</p>
+            <p className="iu-upsell__desc">Every teammate’s meetings feed one shared, searchable repository — organized by team.</p>
             <div className="iu-upsell__actions">
               <button className="btn-v2 btn-v2--secondary" onClick={onLearnMore}>Learn more</button>
-              <button className="btn-v2 btn-v2--primary" onClick={onUpgrade}>{cta}</button>
             </div>
           </div>
           <div className="iu-upsell__preview" aria-hidden="true">

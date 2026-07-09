@@ -8,9 +8,9 @@ import { UpgradePlanModal, CheckoutModal } from '../upgrade/UpgradeModal';
 import { readShowParam } from '../tweaks/TweaksPanel';
 import mayaPhoto from '../../assets/maya.jpg';
 import {
-  RecordingLimitModalV2Live, HistoryLockBannerV2Live, LockedMeetingModalV2Live, TeamValueModalV2Live,
+  RecordingLimitModalV2Live, HistoryLockBannerV2Live, LockedMeetingModalV2Live,
   TrialExpiredInterstitialV2Live, TrialEndedCardV2Live, TrialWidgetV2Live, TeammateNudgeV2Live, TrialCountdownV2Live,
-  InviteUpsellModalV2Live, PlansModalV2Live,
+  InviteUpsellModalV2Live, ShareLinkModalV2Live, PlansModalV2Live,
 } from '../hooksV2/HooksV2Live';
 import {
   ClaudeMeetingBanner, ClaudeHandoff, StartTrialPromo, TrialBentoStep, ExistingOrgStep, RequestSentStep,
@@ -66,8 +66,9 @@ export function CreatorApp({
   const [recordLimit, setRecordLimit] = useState<null | 'record' | 'upload'>(null); // H1
   const [historyDismissed, setHistoryDismissed] = useState(false); // H2
   const [lockedMeeting, setLockedMeeting] = useState<Meeting | null>(null); // H3
-  const [teamValue, setTeamValue] = useState<null | 'invite' | 'share'>(null); // H4/H5
-  const [inviteForm, setInviteForm] = useState(false); // deck #6 invite form + upsell
+  const [shareLink, setShareLink] = useState(false); // State A — view-only link modal
+  const [inviteForm, setInviteForm] = useState(false); // States B/C/D/E — invite-to-collaborate modal
+  const [pendingInviteEmail, setPendingInviteEmail] = useState<string | null>(null); // carried into org-creation invite step
   const [expiryDismissed, setExpiryDismissed] = useState(false); // H7 interstitial
   const [teammateDismissed, setTeammateDismissed] = useState(false); // H9
   const [teammateAuto, setTeammateAuto] = useState(false);
@@ -94,13 +95,12 @@ export function CreatorApp({
   useEffect(() => {
     const show = readShowParam();
     if (!show) return;
-    if (show === 'invite') setTeamValue('invite');
-    else if (show === 'share') setTeamValue('share');
+    if (show === 'invite' || show === 'inviteForm') setInviteForm(true);
+    else if (show === 'share') setShareLink(true);
     else if (show === 'record') setRecordLimit('record');
     else if (show === 'upload') setRecordLimit('upload');
     else if (show === 'locked') setLockedMeeting({ title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' } as Meeting);
     else if (show === 'trialPopup') setTrialPopupDay(trialDays);
-    else if (show === 'inviteForm') setInviteForm(true);
     else if (show === 'plans') setPlansOpen(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -180,6 +180,16 @@ export function CreatorApp({
     setTimeout(() => setToast(null), 2800);
   };
 
+  // Once the workspace is provisioned and we reach the invite step, pre-select
+  // the teammate the user set out to invite (a domain peer gets checked; a
+  // non-peer address rides in via CreatorInviteStep's initialEmails chip).
+  useEffect(() => {
+    if (step === 'invite' && pendingInviteEmail && invitePeers.some((p) => p.email === pendingInviteEmail)) {
+      setSelectedInvites((prev) => new Set(prev).add(pendingInviteEmail));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
   const onFeatureUse = (f: string) => {
     const FEATURE_LABELS: Record<string, string> = { share: 'Sharing to a team', ai: 'AI actions on shared meetings', integration: 'Workspace integrations' };
     const label = FEATURE_LABELS[f] || 'This';
@@ -216,7 +226,7 @@ export function CreatorApp({
         onOrgAdmin={orgActive ? onOrgAdmin : orgInactive ? openReactivate : start}
         onUpgrade={openReactivate}
         onStartTrial={start}
-        onInvite={orgActive ? undefined : () => setTeamValue('invite')}
+        onInvite={orgActive ? undefined : () => setInviteForm(true)}
         onIntegrations={onIntegrations}
         onNew={orgExists ? undefined : (id) => setRecordLimit(id === 'upload' ? 'upload' : 'record')}
         promoCard={orgInactive
@@ -253,7 +263,7 @@ export function CreatorApp({
             onUpgrade={() => setUpgradeOpen(true)}
             onRecordAttempt={() => setRecordLimit('record')}
             onLockedClick={(m) => setLockedMeeting(m)}
-            onShareAttempt={() => setTeamValue('share')}
+            onShareAttempt={() => setShareLink(true)}
           />
         )}
       </main>
@@ -284,6 +294,7 @@ export function CreatorApp({
             orgName={orgName}
             peers={invitePeers}
             selected={selectedInvites}
+            initialEmails={pendingInviteEmail ? [pendingInviteEmail] : []}
             onToggle={toggleInvite}
             onSelectAll={() => setSelectedInvites(new Set(invitePeers.map((p) => p.email)))}
             onClear={() => setSelectedInvites(new Set())}
@@ -320,19 +331,25 @@ export function CreatorApp({
         onClose={() => setLockedMeeting(null)}
         onStartTrial={() => { setLockedMeeting(null); launchTrial(); }}
       />
-      <TeamValueModalV2Live
-        trigger={teamValue}
-        state={orgInactive ? 'trial-over' : 'free'}
-        onClose={() => setTeamValue(null)}
-        onStartTrial={() => { setTeamValue(null); (orgInactive ? openReactivate : launchTrial)(); }}
+      <ShareLinkModalV2Live
+        open={shareLink}
+        onClose={() => setShareLink(false)}
+        onCollaborate={() => { setShareLink(false); setInviteForm(true); }}
       />
       <InviteUpsellModalV2Live
         open={inviteForm}
-        workspace={orgExists ? orgName : 'Acme'}
+        workspace={orgExists ? orgName : 'your workspace'}
         state={orgInactive ? 'trial-over' : 'free'}
+        userDomain={USER.domain}
         onClose={() => setInviteForm(false)}
-        onSend={() => setInviteForm(false)}
-        onUpgrade={() => { setInviteForm(false); (orgInactive ? openReactivate : launchTrial)(); }}
+        onViewLink={() => { setInviteForm(false); setShareLink(true); }}
+        onPrimary={(emailAddr) => {
+          setInviteForm(false);
+          if (orgInactive) { openReactivate(); return; }
+          // Trial-first: provision the workspace, carrying the invitee forward.
+          setPendingInviteEmail(emailAddr || null);
+          start();
+        }}
         onLearnMore={() => {}}
       />
       <CheckoutModal open={checkoutOpen} onClose={() => setCheckoutOpen(false)} billingEmail={USER.email} onPaid={completeReactivation} />

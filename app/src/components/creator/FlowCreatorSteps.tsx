@@ -284,13 +284,16 @@ export function CreatingStep({ orgName }: { orgName: string }) {
   );
 }
 
-export function CreatorInviteStep({ orgName, peers, selected, onToggle, onSelectAll, onClear, onSkip, onNext, onClose }: {
-  orgName: string; peers: Peer[]; selected: Set<string>;
+export function CreatorInviteStep({ orgName, peers, selected, initialEmails, onToggle, onSelectAll, onClear, onSkip, onNext, onClose }: {
+  orgName: string; peers: Peer[]; selected: Set<string>; initialEmails?: string[];
   onToggle: (email: string) => void; onSelectAll: () => void; onClear: () => void;
   onSkip?: () => void; onNext?: () => void; onClose?: () => void;
 }) {
   const [emailDraft, setEmailDraft] = useState('');
-  const [extraEmails, setExtraEmails] = useState<string[]>([]);
+  // Seed any email carried in from the invite-to-collaborate modal (the person
+  // the user set out to invite, provisioned once the workspace is created).
+  const [extraEmails, setExtraEmails] = useState<string[]>(() =>
+    (initialEmails ?? []).filter((e) => !peers.some((p) => p.email === e)));
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailDraft.trim());
   const addEmail = () => {
     const v = emailDraft.trim().toLowerCase();

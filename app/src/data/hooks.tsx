@@ -18,6 +18,7 @@ import {
   MediaLockOverlayV2Live,
   LockedRecordingCardV2Live,
   InviteUpsellModalV2Live,
+  ShareLinkModalV2Live,
 } from '../components/hooksV2/HooksV2Live';
 
 const NOOP = () => {};
@@ -69,8 +70,8 @@ export const HG_HOOKS: HookEntry[] = [
   },
   {
     tag: 'H4 · H5',
-    title: 'Invite / Share value modal',
-    trigger: 'Invite / Share gate. CTA is state-driven: free → Start trial, trial ended → Upgrade.',
+    title: 'Invite / Share value modal (superseded)',
+    trigger: 'SUPERSEDED by the Share-link + Invite-to-collaborate modals below. Kept for reference — this gated sharing, which the new account model deliberately does not.',
     kind: 'modal',
     states: ['Invite · free', 'Share · free', 'Invite · trial over', 'Share · trial over'],
     render: (s) => {
@@ -78,6 +79,13 @@ export const HG_HOOKS: HookEntry[] = [
       const state = s >= 2 ? 'trial-over' : 'free';
       return <TeamValueModalV2Live trigger={trigger} state={state} onClose={NOOP} onStartTrial={NOOP} />;
     },
+  },
+  {
+    tag: 'Share',
+    title: 'Share link (view-only)',
+    trigger: 'State A — clicking Share. A free, ungated public view-only link; collaboration is the paid unlock, handed off to the invite flow.',
+    kind: 'modal',
+    render: () => <ShareLinkModalV2Live open onClose={NOOP} onCollaborate={NOOP} />,
   },
   {
     tag: 'H6',
@@ -236,11 +244,23 @@ export const HG_HOOKS: HookEntry[] = [
   },
   {
     tag: 'H5b',
-    title: 'Invite form + Teams upsell',
-    trigger: 'The real invite dialog (email / seat / team) with an attached “Grain for Teams” upsell card.',
+    title: 'Invite to collaborate',
+    trigger: 'States B/C/D/E — clicking Invite. Inviting grants workspace access + collaboration (requires trial); a view-only link is always offered. Trial is provisioned before the invite.',
     kind: 'modal',
-    states: ['Free', 'Trial over'],
-    render: (s) => <InviteUpsellModalV2Live open workspace="Acme" state={s === 1 ? 'trial-over' : 'free'} onClose={NOOP} onSend={NOOP} onUpgrade={NOOP} onLearnMore={NOOP} />,
+    states: ['In-domain', 'External', 'Trial over'],
+    render: (s) => (
+      <InviteUpsellModalV2Live
+        open
+        workspace="Acme"
+        userDomain="acme.com"
+        state={s === 2 ? 'trial-over' : 'free'}
+        seedEmail={s === 1 ? 'jordan@quest.io' : 'devon@acme.com'}
+        onClose={NOOP}
+        onViewLink={NOOP}
+        onPrimary={NOOP}
+        onLearnMore={NOOP}
+      />
+    ),
   },
   {
     tag: '#12',
@@ -261,8 +281,8 @@ const VIEW_CONTEXT: Record<string, HookEntry['context']> = {
   'Recording length wall': { route: '/', show: 'record' },
   'History approaching 30-day lock': { route: '/' },
   'Locked meeting (past 30 days)': { route: '/', show: 'locked' },
-  'Invite / Share value modal': { route: '/', show: 'invite' },
-  'Invite form + Teams upsell': { route: '/', show: 'inviteForm' },
+  'Share link (view-only)': { route: '/', show: 'share' },
+  'Invite to collaborate': { route: '/', show: 'inviteForm', tweaks: { paidOrgOnDomain: false, emptyDomain: false } },
   'Feature / integration upgrade gate': { route: '/integrations', tweaks: { plan: 'free' } },
   'Plans / pricing modal': { route: '/', show: 'plans' },
   'Trial expired: interstitial': { route: '/', tweaks: { trialOver: true } },

@@ -131,6 +131,18 @@ For the full 1,468-icon catalog use the **Grain Icon Catalog skill** in Cowork (
 ### Brand gradient
 - Do **not** use the green→white gradient (reads as the default Claude Design gradient). Use `--grad-brand` (Alex's supplied subtle white→pale-mint). Swap the token when a final brand gradient asset lands.
 
+### Invite / Share model (Jul 2026 — Alex/Jeff)
+- **Never gate link-sharing behind payment.** Free view-only link-sharing is how Grain grows; we charge for workspace access + collaboration, not viewing.
+- **Two access levels (Google-Docs style):**
+  - **View (public link)** — see the meeting page; can't edit, comment, highlight, or collaborate. Free, ungated, shareable; recipients can sign up independently.
+  - **Collaborate / workspace access** — edit, comment, highlight, and carry into future meetings. Requires a trial or upgrade.
+- **Share button → free view-only link** (State A). Collaboration is offered as the paid unlock, handed off to the invite flow.
+- **Invite button → invite-to-collaborate** (States B/D). Inviting grants workspace access + repository + future meetings → requires a trial (free) or upgrade (post-trial, State E). An ungated "view-only link" is always offered as the alternative (State C). External invitees behave the same for now.
+- **Trial is provisioned before the invite.** You can't invite someone into a workspace that doesn't exist yet — "Start trial & invite" creates the workspace first, carrying the invitee forward into the org-creation invite step.
+- **Removed:** the old unlimited free note-taker / "pro" seat invite — that's the broken status quo the new model replaces.
+- Copy across these surfaces is **not finalized** (pending Jeff) — prototype uses `TODO-copy` placeholders reflecting direction only.
+- Keep the **view-vs-collaborate split legible** everywhere — the surface most likely to confuse if the distinction isn't clean.
+
 ### Behavior
 - **History-lock banner (H2)** is dismissible and **reappears every 14 days** (this pre/post-trial banner has its own cadence — separate from the in-trial, days-left-based dismissibility rules). *(Prototype notes the cadence; time-based reappearance isn't simulated.)*
 - **Start-trial button icon = the team/people icon** (E1). Reserved off the two "unlock this old meeting" CTAs (H3/#12), where a team icon misreads.
