@@ -344,7 +344,7 @@ export function TrialEndedCardV2Live({ orgName = 'Acme', graceDays, onUpgrade, o
   return (
     <div className="tec-v2" style={{ width: '100%' }}>
       <div className="tec-v2__title">Trial ended</div>
-      <p className="tec-v2__desc">Everything stays saved. Meetings shared by teammates unlock when {orgName} is active again.</p>
+      <p className="tec-v2__desc">Everything stays saved. Teammates' shared meetings unlock when {orgName} is active.</p>
       {urgent && (
         <p style={{ margin: '0 0 10px', fontSize: 12, fontWeight: 600, color: 'var(--fg-3)', display: 'flex', alignItems: 'center', gap: 6 }}>
           <Icon name="alert" size={13} /> {graceDays} {graceDays === 1 ? 'day' : 'days'} until history is deleted
