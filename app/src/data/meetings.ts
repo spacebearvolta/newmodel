@@ -57,7 +57,8 @@ export const MS_MINE_GROUPS: MeetingGroup[] = [
 export const MS_MINE_ALL: Meeting[] = MS_MINE_GROUPS.flatMap((g) => g.rows);
 
 export const MS_OLDER_LOCKED: Meeting[] = [
-  { id: 'o1', title: 'Q2 planning offsite — day 1', date: 'Recorded May 8', mine: true },
+  { id: 'o1', title: 'Q2 planning offsite — day 1', when: 'May 8 · 10:00 AM', dur: '58m', kind: 'Internal', recorders: 4, people: 11, mine: true },
+  { id: 'o2', title: 'Roadmap review with design', when: 'May 2 · 2:00 PM', dur: '44m', kind: 'Internal', recorders: 2, people: 6, mine: true },
 ];
 
 export const MS_ALL_SHARED: Meeting[] = [

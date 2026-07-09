@@ -6,6 +6,7 @@ import { MyMeetingsNew } from './MyMeetingsNew';
 import { Preferences } from './Preferences';
 import { DesktopNotifications } from './Desktop';
 import { EmailNotifications } from './Email';
+import { TweaksPanel, TweakSection, TweakButton } from '../tweaks/TweaksPanel';
 
 export function SettingsApp() {
   const navigate = useNavigate();
@@ -36,6 +37,11 @@ export function SettingsApp() {
           </div>
         </div>
       </div>
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Review">
+          <TweakButton label="▶ Hook gallery" onClick={() => { window.location.href = '/hook-gallery'; }} />
+        </TweakSection>
+      </TweaksPanel>
     </div>
   );
 }

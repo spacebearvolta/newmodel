@@ -123,6 +123,7 @@ For the full 1,468-icon catalog use the **Grain Icon Catalog skill** in Cowork (
 - **Not boxed by default.** Only wrap an icon in a background box when it would otherwise free-float without structure (e.g. a lone glyph in a large empty header). Prefer a bare glyph inline with text. *(Tighter definition pending the boxed-icon audit.)*
 
 ### Copy
+- **All subcopy: 2 lines max.** Every hook's supporting line (modal sub, banner body, card desc) wraps to at most 2 lines at its rendered width. If a message needs more, cut it — don't shrink type or widen the container. Lead with the consequence, then the value; drop restating what the title already says.
 - **H2 (history-lock banner) subcopy: 2 lines max.**
 - Lock messaging states the reason (meeting older than the 30-day free history window) and reinforces the value ("unlock your meeting history — forever").
 - **45-min = recording/upload cap; 30-day = meeting-history lock. Never conflate them.** Hitting 45 min stops the recording but you keep the meeting (recording variant is a *cap*, not a block). Uploading a file over 45 min is genuinely blocked.

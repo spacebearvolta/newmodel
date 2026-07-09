@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../primitives/Icon';
 import { UpgradeGateCardV2Live } from '../hooksV2/HooksV2Live';
-import { TweaksPanel, TweakSection, TweakRadio, TweakSelect, TweakToggle, useTweaks } from '../tweaks/TweaksPanel';
+import { TweaksPanel, TweakSection, TweakButton, TweakRadio, TweakSelect, TweakToggle, useTweaks } from '../tweaks/TweaksPanel';
 
 interface NavRow {
   id: string;
@@ -190,6 +190,9 @@ export function IntegrationsApp() {
       )}
 
       <TweaksPanel title="Tweaks">
+        <TweakSection label="Review">
+          <TweakButton label="▶ Hook gallery" onClick={() => { window.location.href = '/hook-gallery'; }} />
+        </TweakSection>
         <TweakSection label="State">
           <TweakRadio
             label="Plan"

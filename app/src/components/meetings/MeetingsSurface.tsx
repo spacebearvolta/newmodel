@@ -269,6 +269,7 @@ export interface MeetingsSurfaceProps {
   firstMeetingOnly?: boolean;
   initialView?: string;
   trialPill?: React.ReactNode;
+  headerChip?: React.ReactNode;
   banner?: React.ReactNode;
   onUpgrade?: () => void;
   onStartTrial?: () => void;
@@ -283,7 +284,7 @@ export interface MeetingsSurfaceProps {
 
 export function MeetingsSurface({
   mode = 'org', orgName = 'Acme', hasMeetings = true, firstMeetingOnly = false, initialView = 'mine',
-  trialPill = null, banner = null, onUpgrade, onStartTrial, gate, onRecordAttempt, onLockedClick,
+  trialPill = null, headerChip = null, banner = null, onUpgrade, onStartTrial, gate, onRecordAttempt, onLockedClick,
   onShareAttempt, myMeetingsBanner, businessTrialDays, onFeatureUse,
 }: MeetingsSurfaceProps) {
   const solo = mode === 'solo';
@@ -327,6 +328,7 @@ export function MeetingsSurface({
           {trialPill && <span className="ms-head__pill">{trialPill}</span>}
         </div>
         <div className="ms-head__right">
+          {headerChip}
           <label className="ms-filter">
             <input placeholder="Filter by title" value={filter} onChange={(e) => setFilter(e.target.value)} />
           </label>
@@ -406,16 +408,13 @@ export function MeetingsSurface({
                 <Thumb locked />
                 <div className="ms-row__main">
                   <div className="ms-row__title">{m.title}</div>
-                  <div className="ms-row__lockmeta">
-                    <Icon name="lock" />
-                    <span>{m.date} · the free plan keeps your last 30 days</span>
+                  <div className="ms-row__meta">
+                    <span>{m.when}</span>
+                    {m.dur ? <><span className="ms-dot">·</span><span>{m.dur}</span></> : null}
+                    <span className="ms-dot">·</span><span>{m.kind}</span>
                   </div>
                 </div>
-                <div style={{ gridColumn: '3 / -1', display: 'flex', justifyContent: 'flex-end' }}>
-                  <button className="ms-unlock" onClick={(e) => { e.stopPropagation(); onUpgrade?.(); }}>
-                    <Icon name="upgradeCircle" /> Upgrade to unlock
-                  </button>
-                </div>
+                <MetaCells m={m} solo />
               </div>
             ))}
           </div>

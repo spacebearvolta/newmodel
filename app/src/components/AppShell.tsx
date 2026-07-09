@@ -9,6 +9,7 @@ interface Defaults {
   persona: 'creator' | 'joiner';
   joinerInOrg: boolean;
   trialDays: number;
+  trialActive: boolean;
   trialOver: boolean;
   hasMeetings: boolean;
   wrapInMacChrome: boolean;
@@ -24,6 +25,7 @@ const DEFAULTS: Defaults = {
   persona: 'creator',
   joinerInOrg: false,
   trialDays: 5,
+  trialActive: false,
   trialOver: false,
   hasMeetings: true,
   wrapInMacChrome: true,
@@ -82,6 +84,7 @@ export function AppShell() {
         key="creator"
         trialDays={t.trialDays}
         hasMeetings={t.hasMeetings}
+        trialActive={t.trialActive}
         trialOver={t.trialOver}
         paidOrgOnDomain={t.paidOrgOnDomain}
         emptyDomain={t.emptyDomain}
@@ -139,7 +142,8 @@ export function AppShell() {
                   { value: 1, label: '1 day left' },
                 ]}
               />
-              <TweakToggle label="Trial over (org inactive)" value={t.trialOver} onChange={(v) => setT('trialOver', v)} />
+              <TweakToggle label="Trial active (org created)" value={t.trialActive} onChange={(v) => setT(v ? { trialActive: true, trialOver: false } : { trialActive: false })} />
+              <TweakToggle label="Trial over (org inactive)" value={t.trialOver} onChange={(v) => setT(v ? { trialOver: true, trialActive: false } : { trialOver: false })} />
               {t.trialOver && (
                 <TweakSelect
                   label="Grace: days left (H7)"

@@ -4,7 +4,6 @@
 // hook's design anywhere in the app.
 import { Icon } from '../primitives/Icon';
 import { Modal } from '../primitives/Modal';
-import grainLogo from '../../assets/grain-logo.png';
 
 // ── H1 ────────────────────────────────────────────────────────────────────
 interface RecordingLimitModalV2LiveProps {
@@ -25,7 +24,7 @@ export function RecordingLimitModalV2Live({ open, kind = 'record', onClose, onSt
           <p className="h1-v2__sub">
             {isUpload
               ? 'Start a Business trial to upload and transcribe meetings of any length.'
-              : 'We stop recording at 45 min, but your meeting is saved and yours to keep. Start a trial to record full-length recordings.'}
+              : 'Recordings stop at 45 min, but your meeting is saved. Start a trial to record full-length.'}
           </p>
           <ul className="h1-v2__values">
             <li><span className="mark-v2"><Icon name="infinity" size={13} /></span> No 45-minute recording cap</li>
@@ -121,7 +120,9 @@ export function TeamValueModalV2Live({ trigger, state = 'free', onClose, onStart
               <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="plug" size={13} /></span> Integrations & API: HubSpot, Salesforce, Slack</li>
             </ul>
             <div className="h1-v2__foot" style={{ padding: 0, marginTop: 22 }}>
-              <button className="btn-v2 btn-v2--primary btn-v2--lg btn-v2--full" onClick={onStartTrial}>{cta}</button>
+              <button className={`btn-v2 ${state === 'trial-over' ? 'btn-v2--primary' : 'btn-v2--dark'} btn-v2--lg btn-v2--full`} onClick={onStartTrial}>
+                <Icon name={state === 'trial-over' ? 'gem' : 'users'} size={15} /> {cta}
+              </button>
               <button className="h1-v2__link" onClick={onClose}>Not now</button>
             </div>
           </div>
@@ -324,7 +325,7 @@ export function TrialExpiredInterstitialV2Live({ open, onUpgrade, onContinueFree
         </div>
         <div className="h7-v2__foot">
           <button className="btn-v2 btn-v2--secondary" onClick={onContinueFree}>Remain on Free</button>
-          <button className="btn-v2 btn-v2--primary" onClick={onUpgrade}>Upgrade</button>
+          <button className="btn-v2 btn-v2--primary btn-v2--lg" style={{ minWidth: 200 }} onClick={onUpgrade}><Icon name="gem" size={15} /> Upgrade</button>
         </div>
       </div>
     </Modal>
@@ -458,13 +459,16 @@ export function TrialCountdownV2Live({ daysLeft, orgName = 'Acme', onUpgrade, on
         </button>
         <div className="tc-v2__hero">
           <span className="trial-pop__core">
-            <img src={grainLogo} alt="Grain" onError={(e) => { (e.target as HTMLImageElement).outerHTML = '<span class="trial-pop__coreMark">G</span>'; }} />
+            <Icon name="users" size={30} />
           </span>
         </div>
         <div className="tc-v2__body">
           <h2 className="tc-v2__days">{(daysLeft ?? 0) <= 1 ? 'Last day of your trial' : `${daysLeft} days left on trial`}</h2>
+          {/* TODO-copy: shared-repository framing (Jeff, B1) — pending final value-prop sign-off */}
           <p className="tc-v2__sub">
-            {urgent ? `Upgrade before your trial ends to keep ${orgName} and your shared meeting context.` : 'Upgrade to keep using Grain with your team.'}
+            {urgent
+              ? `Upgrade before your trial ends to keep ${orgName}'s shared repository — your team's AI memory.`
+              : 'Every meeting your team records feeds one shared repository the whole team can search.'}
           </p>
           <div className="tc-v2__bar"><span style={{ width: `${pct}%`, background: urgent ? '#C1542A' : undefined }} /></div>
           <div className="tc-v2__meta">Day {dayNum} of {TOTAL} · {orgName} · Grain Business</div>
@@ -518,7 +522,7 @@ export function MediaLockOverlayV2Live({ kind = 'limit', onUpgrade }: MediaLockO
     <div className="mlock-v2">
       <span className="mlock-v2__icon"><Icon name="lock" size={22} /></span>
       <p className="mlock-v2__msg">{msg}</p>
-      <button className="btn-v2 btn-v2--primary" onClick={onUpgrade}>Upgrade</button>
+      <button className="btn-v2 btn-v2--primary" onClick={onUpgrade}><Icon name="gem" size={14} /> Upgrade</button>
     </div>
   );
 }

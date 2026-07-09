@@ -9,7 +9,7 @@ import {
   LockedRecordingCardV2Live,
   UpgradeBadgeV2Live,
 } from '../hooksV2/HooksV2Live';
-import { TweaksPanel, TweakSection, TweakSelect, TweakToggle, useTweaks } from '../tweaks/TweaksPanel';
+import { TweaksPanel, TweakSection, TweakButton, TweakSelect, TweakToggle, useTweaks } from '../tweaks/TweaksPanel';
 
 type PlayerState = 'normal' | 'limit' | 'locked' | 'locked-card';
 interface Tweaks { state: PlayerState; actionsOpen: boolean; wrapInMacChrome: boolean }
@@ -94,6 +94,9 @@ export function RecordApp() {
         <div style={{ height: '100vh', overflow: 'auto' }}>{inner}</div>
       )}
       <TweaksPanel title="Tweaks">
+        <TweakSection label="Review">
+          <TweakButton label="▶ Hook gallery" onClick={() => { window.location.href = '/hook-gallery'; }} />
+        </TweakSection>
         <TweakSection label="State">
           <TweakSelect
             label="Recording state"

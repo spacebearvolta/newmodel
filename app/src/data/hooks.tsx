@@ -85,8 +85,8 @@ export const HG_HOOKS: HookEntry[] = [
     states: ['Trackers', 'Coaching', 'HubSpot', 'Slack'],
     render: (s) => {
       const gate = [
-        { eyebrow: 'Grain Trackers', title: 'Upgrade your plan to access Trackers', desc: 'Track and be automatically alerted of key words or phrases in your meetings.' },
-        { eyebrow: 'Grain Coaching', title: 'Upgrade your plan to access Coaching', desc: 'Automate performance scores for effective coaching and personal improvement.' },
+        { title: 'Upgrade your plan to access Trackers', desc: 'Track and be automatically alerted of key words or phrases in your meetings.' },
+        { title: 'Upgrade your plan to access Coaching', desc: 'Automate performance scores for effective coaching and personal improvement.' },
         { title: 'Upgrade your plan to connect HubSpot', desc: 'Skip the manual data entry, auto-sync AI notes to HubSpot Contact and Meeting objects.' },
         { title: 'Upgrade your plan to connect Slack', desc: 'Send meeting notes, clips, and Trackers captured by Grain to Slack channels.' },
       ][s];
@@ -266,9 +266,15 @@ const VIEW_CONTEXT: Record<string, HookEntry['context']> = {
   'Invite / Share value modal': { route: '/', show: 'invite' },
   'Invite form + Teams upsell': { route: '/', show: 'inviteForm' },
   'Feature / integration upgrade gate': { route: '/integrations', tweaks: { plan: 'free' } },
+  'Plans / pricing modal': { route: '/', show: 'plans' },
   'Trial expired: interstitial': { route: '/', tweaks: { trialOver: true } },
   'Trial-ended widget (grace countdown)': { route: '/', tweaks: { trialOver: true } },
+  'Feature-usage nudge': { route: '/', tweaks: { trialActive: true }, show: 'teamMeetings' },
   'Teammate engagement nudge': { route: '/', tweaks: { teammateNudge: true } },
+  'Trial countdown widget': { route: '/', tweaks: { trialActive: true } },
+  'Trial countdown popup': { route: '/', tweaks: { trialActive: true }, show: 'trialPopup' },
+  'Inline settings upgrade': { route: '/settings' },
+  'Trial-status header chip': { route: '/', tweaks: { trialActive: true, trialDays: 1 } },
   'Media-player locked overlay': { route: '/record', tweaks: { state: 'limit' } },
   'Locked recording (inline)': { route: '/record', tweaks: { state: 'locked-card' } },
   'Locked menu item (upgrade pill)': { route: '/record', tweaks: { actionsOpen: true, state: 'normal' } },

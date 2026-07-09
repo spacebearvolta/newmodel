@@ -10,7 +10,7 @@ import mayaPhoto from '../../assets/maya.jpg';
 import {
   RecordingLimitModalV2Live, HistoryLockBannerV2Live, LockedMeetingModalV2Live, TeamValueModalV2Live,
   TrialExpiredInterstitialV2Live, TrialEndedCardV2Live, TrialWidgetV2Live, TeammateNudgeV2Live, TrialCountdownV2Live,
-  InviteUpsellModalV2Live,
+  InviteUpsellModalV2Live, PlansModalV2Live, TrialStatusChipV2Live,
 } from '../hooksV2/HooksV2Live';
 import {
   ClaudeMeetingBanner, ClaudeHandoff, StartTrialPromo, TrialBentoStep, ExistingOrgStep, RequestSentStep,
@@ -29,6 +29,7 @@ export interface CreatorAppProps {
   onIntegrations?: () => void;
   trialDays?: number;
   hasMeetings?: boolean;
+  trialActive?: boolean;
   trialOver?: boolean;
   paidOrgOnDomain?: boolean;
   showClaudeBanner?: boolean;
@@ -41,7 +42,7 @@ const TRIAL_TOTAL = 14;
 
 export function CreatorApp({
   onSettings, onOrgAdmin, onIntegrations,
-  trialDays = TRIAL_TOTAL, hasMeetings = true, trialOver = false, paidOrgOnDomain = false,
+  trialDays = TRIAL_TOTAL, hasMeetings = true, trialActive = false, trialOver = false, paidOrgOnDomain = false,
   showClaudeBanner = false, emptyDomain = false, graceDays = 30, teammateNudge = false,
 }: CreatorAppProps) {
   const meetingCount = hasMeetings ? MS_MY_MEETING_COUNT : 0;
@@ -57,6 +58,7 @@ export function CreatorApp({
     try { return localStorage.getItem('grain.orgCreated') === '1'; } catch { return false; }
   });
   const [promoDismissed, setPromoDismissed] = useState(false);
+  const [plansOpen, setPlansOpen] = useState(false); // Plans / pricing modal (v2)
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -99,8 +101,13 @@ export function CreatorApp({
     else if (show === 'locked') setLockedMeeting({ title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' } as Meeting);
     else if (show === 'trialPopup') setTrialPopupDay(trialDays);
     else if (show === 'inviteForm') setInviteForm(true);
+    else if (show === 'plans') setPlansOpen(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Deep-link: `?show=teamMeetings` (H8 feature-usage nudge) lands on the Team
+  // meetings tab, where the nudge chip lives, instead of the default My meetings.
+  const orgInitialView = readShowParam() === 'teamMeetings' ? 'all' : 'mine';
 
   const persistOrg = (created: boolean, name?: string) => {
     try {
@@ -150,7 +157,7 @@ export function CreatorApp({
     setStep('done');
   };
 
-  const orgExists = orgCreated || trialOver;
+  const orgExists = orgCreated || trialOver || trialActive;
   const orgInactive = trialOver;
   const orgActive = orgExists && !orgInactive;
   const openReactivate = () => setCheckoutOpen(true);
@@ -221,9 +228,12 @@ export function CreatorApp({
             mode={orgInactive ? 'expired' : 'org'}
             orgName={orgName}
             hasMeetings={hasMeetings}
-            initialView="mine"
+            initialView={orgInitialView}
             banner={orgInactive ? null : claudeBanner}
             businessTrialDays={orgActive ? trialDays : null}
+            headerChip={orgActive && trialDays <= 3
+              ? <TrialStatusChipV2Live daysLeft={trialDays} onUpgrade={() => setUpgradeOpen(true)} />
+              : null}
             onFeatureUse={orgActive ? onFeatureUse : undefined}
             onUpgrade={openReactivate}
           />
@@ -283,9 +293,16 @@ export function CreatorApp({
       </Modal>
 
       {toast && <Toast>{toast}</Toast>}
-      {orgCreated && (
+      {(orgCreated || trialActive) && (
         <TrialCountdownV2Live daysLeft={trialPopupDay} orgName={orgName} onUpgrade={() => { setTrialPopupDay(null); setUpgradeOpen(true); }} onClose={closeTrial} />
       )}
+      <PlansModalV2Live
+        open={plansOpen}
+        currentPlan="free"
+        onClose={() => setPlansOpen(false)}
+        onUpgrade={() => { setPlansOpen(false); setUpgradeOpen(true); }}
+        onBookDemo={talkToSales}
+      />
       <UpgradePlanModal open={upgradeOpen} onClose={() => setUpgradeOpen(false)} reactivate={orgInactive} onTalkToSales={talkToSales} />
       <RecordingLimitModalV2Live
         open={!!recordLimit}

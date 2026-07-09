@@ -56,7 +56,7 @@ export function StartTrialPromo({ orgCreated, onClick, onDismiss }: { orgCreated
       <button className="stp-v2__dismiss" aria-label="Dismiss" title="Dismiss" onClick={(e) => { e.stopPropagation(); onDismiss?.(); }}>
         <Icon name="close" size={13} stroke={2.25} />
       </button>
-      <span className="mark-v2" style={{ width: 40, height: 40, marginBottom: 10 }}><Icon name="gem" size={18} /></span>
+      <span className="mark-v2" style={{ width: 40, height: 40, marginBottom: 10 }}><Icon name="users" size={18} /></span>
       <p className="stp-v2__title">Work with your team</p>
       <p className="stp-v2__desc">Try Grain Business to get the power of shared meeting context.</p>
       <button className="btn-v2 btn-v2--dark btn-v2--full" onClick={(e) => { e.stopPropagation(); onClick?.(); }}><Icon name="users" size={15} /> Start trial</button>
