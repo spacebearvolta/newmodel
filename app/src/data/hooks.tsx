@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import mayaPhoto from '../assets/maya.jpg';
 import {
   RecordingLimitModalV2Live,
   HistoryLockBannerV2Live,
@@ -146,7 +147,7 @@ export const HG_HOOKS: HookEntry[] = [
     title: 'Teammate engagement nudge',
     trigger: 'A teammate’s first meeting is captured in the trial workspace.',
     kind: 'inline',
-    render: () => <TeammateNudgeV2Live name="Maya Chen" daysLeft={8} onView={NOOP} onClose={NOOP} />,
+    render: () => <TeammateNudgeV2Live name="Maya Chen" avatarSrc={mayaPhoto} daysLeft={8} onView={NOOP} onClose={NOOP} />,
   },
   {
     tag: 'Trial',

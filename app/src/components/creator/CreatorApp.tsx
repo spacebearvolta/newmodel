@@ -6,6 +6,7 @@ import { Toast } from '../shell/Toast';
 import { Replay } from '../shell/Replay';
 import { UpgradePlanModal, CheckoutModal } from '../upgrade/UpgradeModal';
 import { readShowParam } from '../tweaks/TweaksPanel';
+import mayaPhoto from '../../assets/maya.jpg';
 import {
   RecordingLimitModalV2Live, HistoryLockBannerV2Live, LockedMeetingModalV2Live, TeamValueModalV2Live,
   TrialExpiredInterstitialV2Live, TrialEndedCardV2Live, TrialWidgetV2Live, TeammateNudgeV2Live, TrialCountdownV2Live,
@@ -325,7 +326,7 @@ export function CreatorApp({
         onContinueFree={() => setExpiryDismissed(true)}
       />
       {showTeammateNudge && (
-        <TeammateNudgeV2Live name="Maya Chen" daysLeft={trialDays} onView={() => setTeammateDismissed(true)} onClose={() => setTeammateDismissed(true)} />
+        <TeammateNudgeV2Live name="Maya Chen" avatarSrc={mayaPhoto} daysLeft={trialDays} onView={() => setTeammateDismissed(true)} onClose={() => setTeammateDismissed(true)} />
       )}
     </div>
   );
