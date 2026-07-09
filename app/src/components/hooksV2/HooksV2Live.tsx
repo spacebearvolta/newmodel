@@ -20,11 +20,12 @@ export function RecordingLimitModalV2Live({ open, kind = 'record', onClose, onSt
       <div className="modal-v2 card-v2" style={{ width: 440, position: 'relative' }}>
         <div className="h1-v2">
           <h2 className="h1-v2__title">
-            {isUpload ? 'This recording is longer than 45 minutes' : 'Free recordings stop at 45 minutes'}
+            {isUpload ? 'This recording is longer than 45 minutes' : 'Free recordings cap at 45 minutes'}
           </h2>
           <p className="h1-v2__sub">
-            Start a Business trial to {isUpload ? 'upload and transcribe' : 'capture'} meetings of any length. Every
-            conversation captured end to end.
+            {isUpload
+              ? 'Start a Business trial to upload and transcribe meetings of any length.'
+              : 'We stop recording at 45 min, but your meeting is saved and yours to keep. Start a trial to record full-length recordings.'}
           </p>
           <ul className="h1-v2__values">
             <li><span className="mark-v2"><Icon name="infinity" size={13} /></span> No 45-minute recording cap</li>
@@ -33,7 +34,7 @@ export function RecordingLimitModalV2Live({ open, kind = 'record', onClose, onSt
           </ul>
         </div>
         <div className="h1-v2__foot">
-          <button className="btn-v2 btn-v2--dark btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial</button>
+          <button className="btn-v2 btn-v2--dark btn-v2--full btn-v2--lg" onClick={onStartTrial}><Icon name="users" size={15} /> Start free trial</button>
           <button className="h1-v2__link" onClick={onClose}>Maybe later</button>
         </div>
       </div>
@@ -182,7 +183,7 @@ export function UpgradeGateCardV2Live({
       <h2 className="gate-v2__title">{title}</h2>
       <p className="gate-v2__desc">{desc}</p>
       <div className="gate-v2__actions">
-        <button className="btn-v2 btn-v2--dark btn-v2--lg btn-v2--full" onClick={onUpgrade}>{cta}</button>
+        <button className="btn-v2 btn-v2--dark btn-v2--lg btn-v2--full" onClick={onUpgrade}><Icon name="users" size={15} /> {cta}</button>
         {note && <div className="gate-v2__note">{note}</div>}
         <button className="gate-v2__link" onClick={onLearnMore}><Icon name="ext" size={13} /> Learn more</button>
       </div>
@@ -422,7 +423,7 @@ export function TrialWidgetV2Live({ daysLeft = 14, onUpgrade, onOpen }: TrialWid
   return (
     <div className="tw-v2" style={{ width: '100%' }}>
       <button className="tw-v2__top" onClick={onOpen}>
-        <span className="tw-v2__badge" style={urgent ? { background: '#FBE7DC', color: '#C1542A' } : undefined}>
+        <span className="tw-v2__badge" style={urgent ? { color: '#C1542A' } : undefined}>
           <Icon name={urgent ? 'alert' : 'clock'} size={14} />
         </span>
         <span>
@@ -438,13 +439,6 @@ export function TrialWidgetV2Live({ daysLeft = 14, onUpgrade, onOpen }: TrialWid
 }
 
 // ── Trial countdown popup ───────────────────────────────────────────────────
-const TRIAL_NODES_V2 = [
-  { icon: 'video', pos: 'tl' },
-  { icon: 'sparkles', pos: 'tr' },
-  { icon: 'users', pos: 'bl' },
-  { icon: 'settings', pos: 'br' },
-] as { icon: string; pos: 'tl' | 'tr' | 'bl' | 'br' }[];
-
 interface TrialCountdownV2LiveProps {
   daysLeft: number | null;
   orgName?: string;
@@ -463,22 +457,9 @@ export function TrialCountdownV2Live({ daysLeft, orgName = 'Acme', onUpgrade, on
           <Icon name="close" size={16} stroke={2.25} />
         </button>
         <div className="tc-v2__hero">
-          <div className="trial-pop__net">
-            <svg className="trial-pop__links" aria-hidden="true">
-              <line x1="50%" y1="50%" x2="13%" y2="26%" />
-              <line x1="50%" y1="50%" x2="87%" y2="26%" />
-              <line x1="50%" y1="50%" x2="13%" y2="74%" />
-              <line x1="50%" y1="50%" x2="87%" y2="74%" />
-            </svg>
-            <span className="trial-pop__core">
-              <img src={grainLogo} alt="Grain" onError={(e) => { (e.target as HTMLImageElement).outerHTML = '<span class="trial-pop__coreMark">G</span>'; }} />
-            </span>
-            {TRIAL_NODES_V2.map((n) => (
-              <span key={n.pos} className={`trial-pop__node trial-pop__node--${n.pos}`}>
-                <Icon name={n.icon} size={18} />
-              </span>
-            ))}
-          </div>
+          <span className="trial-pop__core">
+            <img src={grainLogo} alt="Grain" onError={(e) => { (e.target as HTMLImageElement).outerHTML = '<span class="trial-pop__coreMark">G</span>'; }} />
+          </span>
         </div>
         <div className="tc-v2__body">
           <h2 className="tc-v2__days">{(daysLeft ?? 0) <= 1 ? 'Last day of your trial' : `${daysLeft} days left on trial`}</h2>
@@ -549,7 +530,7 @@ interface LockedRecordingCardV2LiveProps { onStartTrial?: () => void }
 export function LockedRecordingCardV2Live({ onStartTrial }: LockedRecordingCardV2LiveProps) {
   return (
     <div className="lrec-v2">
-      <span className="lrec-v2__icon"><Icon name="lock" size={20} /></span>
+      <span className="lrec-v2__icon"><Icon name="lock" size={30} /></span>
       <div className="lrec-v2__title">This recording is locked</div>
       <p className="lrec-v2__desc">It’s older than the 30 days of meeting history included on the free plan. Upgrade to unlock your meeting history — forever.</p>
       <button className="btn-v2 btn-v2--dark btn-v2--lg" onClick={onStartTrial}>Start trial to unlock</button>

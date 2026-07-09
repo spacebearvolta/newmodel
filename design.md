@@ -129,3 +129,7 @@ For the full 1,468-icon catalog use the **Grain Icon Catalog skill** in Cowork (
 
 ### Brand gradient
 - Do **not** use the green→white gradient (reads as the default Claude Design gradient). Use `--grad-brand` (Alex's supplied subtle white→pale-mint). Swap the token when a final brand gradient asset lands.
+
+### Behavior
+- **History-lock banner (H2)** is dismissible and **reappears every 14 days** (this pre/post-trial banner has its own cadence — separate from the in-trial, days-left-based dismissibility rules). *(Prototype notes the cadence; time-based reappearance isn't simulated.)*
+- **Start-trial button icon = the team/people icon** (E1). Reserved off the two "unlock this old meeting" CTAs (H3/#12), where a team icon misreads.

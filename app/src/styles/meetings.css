@@ -364,11 +364,10 @@ button.ms-cell--click:hover svg { color: var(--fg-1); }
 }
 .ms-gate__icon {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 40px; height: 40px; border-radius: 12px;
-  background: var(--bg-2, #F5F5F5); color: var(--fg-3);
-  margin-bottom: 14px;
+  color: var(--fg-3);
+  margin-bottom: 12px;
 }
-.ms-gate__icon svg { width: 19px; height: 19px; }
+.ms-gate__icon svg { width: 26px; height: 26px; }
 .ms-gate__title { font: 600 16px/1.3 var(--font-sans); color: var(--fg-1); margin-bottom: 7px; }
 .ms-gate__desc { font: 400 13.5px/1.55 var(--font-sans); color: var(--fg-5); text-wrap: pretty; margin-bottom: 18px; }
 .ms-gate__note { font: 400 12.5px/1.4 var(--font-sans); color: var(--fg-6); margin-top: 12px; }
