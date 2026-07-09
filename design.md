@@ -104,3 +104,28 @@ Sizes: 12px dense · **16px ★ default** · 20px sidebar/headers · 24px promin
 **Inline chips**: Calendar *(date)* · LockKeyhole *(team/workspace)*
 
 For the full 1,468-icon catalog use the **Grain Icon Catalog skill** in Cowork (download from the Icons section of the design system guide).
+
+---
+
+## Account-model additions (Jul 2026 review — Alex/Jeff)
+
+### Commercial buttons
+- **Start-trial buttons are black** (`btn-v2--dark`) — black is our commercial color.
+- If a screen already has a permanent black commercial button, render start-trial in **brand-secondary** so two blacks don't compete. *(Secondary spec pending Brad — until it lands, such screens are flagged, not guessed.)*
+- **Upgrade / Reactivate stay green** (`btn-v2--primary`). Green remains brand-primary / product actions (Record, Share clip, etc.).
+
+### Icons
+- **Diamond (gem) = upgrade scenario only.** Never on start-trial.
+- **Never use the up-arrow** as a generic accent — it reads as "upload."
+- **Team/shared contexts use the team (two-people) icon, not the globe.**
+
+### Icons in a box
+- **Not boxed by default.** Only wrap an icon in a background box when it would otherwise free-float without structure (e.g. a lone glyph in a large empty header). Prefer a bare glyph inline with text. *(Tighter definition pending the boxed-icon audit.)*
+
+### Copy
+- **H2 (history-lock banner) subcopy: 2 lines max.**
+- Lock messaging states the reason (meeting older than the 30-day free history window) and reinforces the value ("unlock your meeting history — forever").
+- **45-min = recording/upload cap; 30-day = meeting-history lock. Never conflate them.** Hitting 45 min stops the recording but you keep the meeting (recording variant is a *cap*, not a block). Uploading a file over 45 min is genuinely blocked.
+
+### Brand gradient
+- Do **not** use the green→white gradient (reads as the default Claude Design gradient). Use `--grad-brand` (Alex's supplied subtle white→pale-mint). Swap the token when a final brand gradient asset lands.

@@ -54,7 +54,7 @@ export function HistoryLockBannerV2Live({ daysLeft = 5, onStartTrial, onDismiss 
       <span className="h2-v2__text">
         <span className="h2-v2__title">Some of your meetings will lock in {daysLeft} day{daysLeft === 1 ? '' : 's'}</span>
         <span className="h2-v2__body">
-          Try <button className="ms-history-banner__link" onClick={onStartTrial}>Grain Business</button> to keep your meeting history searchable, forever.
+          Free plans keep 30 days of meeting history. <button className="ms-history-banner__link" onClick={onStartTrial}>Grain Business</button> unlocks it forever.
         </span>
       </span>
       <button className="h2-v2__close" aria-label="Dismiss" onClick={onDismiss}><Icon name="close" size={14} /></button>
@@ -74,7 +74,7 @@ export function LockedMeetingModalV2Live({ meeting, onClose, onStartTrial }: Loc
       <div className="modal-v2 card-v2" style={{ width: 440 }}>
         <div className="h3-v2">
           <h2 className="h3-v2__title">This meeting is locked</h2>
-          <p className="h3-v2__sub">Start a Business trial to unlock this meeting and keep every meeting you record, for good.</p>
+          <p className="h3-v2__sub">It’s older than the 30 days of meeting history included on the free plan. Upgrade to unlock your meeting history — forever.</p>
         </div>
         <div className="h1-v2__foot" style={{ paddingTop: 0 }}>
           <button className="btn-v2 btn-v2--dark btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial to unlock</button>
@@ -376,16 +376,22 @@ export function FeatureNudgeChipV2Live({ feature, daysLeft, onDismiss }: Feature
 }
 
 // ── H9 ────────────────────────────────────────────────────────────────────
-interface TeammateNudgeV2LiveProps { name?: string; daysLeft?: number; onView?: () => void; onClose?: () => void }
-export function TeammateNudgeV2Live({ name = 'Maya Chen', daysLeft, onView, onClose }: TeammateNudgeV2LiveProps) {
+// avatarSrc: pass a real profile image (e.g. Maya's photo) to replace the
+// initials placeholder — falls back to initials until the asset is provided.
+interface TeammateNudgeV2LiveProps { name?: string; avatarSrc?: string; daysLeft?: number; onView?: () => void; onClose?: () => void }
+export function TeammateNudgeV2Live({ name = 'Maya Chen', avatarSrc, daysLeft, onView, onClose }: TeammateNudgeV2LiveProps) {
   const first = name.split(' ')[0];
   return (
     <div className="h9-v2" style={{ position: 'fixed', right: 24, bottom: 84, zIndex: 40 }}>
       <button className="h9-v2__close" aria-label="Dismiss" onClick={onClose}><Icon name="close" size={14} /></button>
       <div className="h9-v2__head">
-        <span className="mark-v2" style={{ width: 46, height: 46, borderRadius: 9999, fontWeight: 700, fontSize: 16, flexShrink: 0 }}>
-          {name.split(' ').map((p) => p[0]).slice(0, 2).join('')}
-        </span>
+        {avatarSrc ? (
+          <img className="h9-v2__avatar" src={avatarSrc} alt={name} />
+        ) : (
+          <span className="mark-v2" style={{ width: 46, height: 46, borderRadius: 9999, fontWeight: 700, fontSize: 16, flexShrink: 0 }}>
+            {name.split(' ').map((p) => p[0]).slice(0, 2).join('')}
+          </span>
+        )}
         <div>
           <div className="h9-v2__eyebrow">
             <Icon name="clock" size={13} />
@@ -394,8 +400,9 @@ export function TeammateNudgeV2Live({ name = 'Maya Chen', daysLeft, onView, onCl
           <div className="h9-v2__title">{first} just captured their first meeting</div>
         </div>
       </div>
+      {/* TODO-copy: 2nd sentence pending Jeff (B1 — team value-prop wording). */}
       <p className="h9-v2__body">
-        {first}'s meeting just landed in your workspace. That's shared context your whole team can search and build on.
+        {first}'s meeting just landed in your workspace. That's more context feeding your team's AI — sharper answers and a memory that builds with every conversation.
       </p>
       <div className="h9-v2__actions">
         <button className="btn-v2 btn-v2--ghost" onClick={onClose}>Not now</button>
@@ -544,7 +551,7 @@ export function LockedRecordingCardV2Live({ onStartTrial }: LockedRecordingCardV
     <div className="lrec-v2">
       <span className="lrec-v2__icon"><Icon name="lock" size={20} /></span>
       <div className="lrec-v2__title">This recording is locked</div>
-      <p className="lrec-v2__desc">Start a Business trial to unlock this meeting and keep every meeting you record, for good.</p>
+      <p className="lrec-v2__desc">It’s older than the 30 days of meeting history included on the free plan. Upgrade to unlock your meeting history — forever.</p>
       <button className="btn-v2 btn-v2--dark btn-v2--lg" onClick={onStartTrial}>Start trial to unlock</button>
       <div className="lrec-v2__note">Included in Grain Business · free for 14 days</div>
     </div>
