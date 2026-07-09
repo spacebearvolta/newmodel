@@ -100,6 +100,16 @@
 .ms-join svg { width: 15px; height: 15px; }
 .ms-join__sep { width: 1px; height: 16px; background: var(--border); }
 .ms-join svg:last-child { width: 13px; height: 13px; }
+/* Decision aid: 4 up-next join-button styles, cycled on click. --green-50 is
+   the light green from the audio-thumb bg the reviewer referenced. */
+.ms-join--vA { background: #fff; border-color: var(--green-50); color: var(--green-600); }
+.ms-join--vB { background: #fff; border-color: var(--green-50); color: var(--fg-1); }
+.ms-join--vC { background: var(--green-50); border-color: var(--green-100); color: var(--green-600); }
+.ms-join--vD { background: #fff; border-color: var(--green-500); color: var(--green-600); }
+/* keep resting bg on hover so cycling shows the true variant */
+.ms-join--vA:hover, .ms-join--vB:hover, .ms-join--vD:hover { background: #fff; }
+.ms-join--vC:hover { background: var(--green-50); }
+.ms-join-cap { margin-left: 10px; font: 500 11px/1 var(--font-sans); color: var(--fg-6); }
 
 /* ── Section headers ("Today", "Older than 30 days") ─────────── */
 .ms-section {

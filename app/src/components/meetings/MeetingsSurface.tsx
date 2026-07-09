@@ -157,9 +157,11 @@ function AccessPopover({ expired, orgName, onUpgrade, onClose, anchorRef, onFeat
   );
 }
 
-function UpNextRow({ m, solo, expired, orgName, onUpgrade, onRecordAttempt, onFeatureUse }: {
+const JOIN_VARIANTS = ['A', 'B', 'C', 'D'];
+function UpNextRow({ m, solo, expired, orgName, onUpgrade, onRecordAttempt, onFeatureUse, joinVariant = 0, onCycleJoin }: {
   m: Meeting; solo?: boolean; expired?: boolean; orgName?: string; onUpgrade?: () => void;
   onRecordAttempt?: () => void; onFeatureUse?: (f: string) => void;
+  joinVariant?: number; onCycleJoin?: () => void;
 }) {
   const [accessOpen, setAccessOpen] = useState(false);
   const anchorRef = useRef<HTMLSpanElement>(null);
@@ -196,7 +198,11 @@ function UpNextRow({ m, solo, expired, orgName, onUpgrade, onRecordAttempt, onFe
       <span className="ms-cell ms-cell--rec"><Icon name="video" /><span>{m.recorders} {m.recorders === 1 ? 'recorder' : 'recorders'}</span></span>
       <span className="ms-cell ms-cell--people"><Icon name="users" /><span>{m.people}</span></span>
       <span className="ms-row__action">
-        <button className="ms-join" title="Join and record" onClick={solo && onRecordAttempt ? onRecordAttempt : undefined}>
+        <button
+          className={`ms-join ms-join--v${JOIN_VARIANTS[joinVariant]}`}
+          title={`Join button style ${JOIN_VARIANTS[joinVariant]} — click to cycle A/B/C/D`}
+          onClick={onCycleJoin || (solo && onRecordAttempt ? onRecordAttempt : undefined)}
+        >
           <Icon name="video" />
           <span className="ms-join__sep" />
           <Icon name="chevDown" />
@@ -293,6 +299,7 @@ export function MeetingsSurface({
   const [filter, setFilter] = useState('');
   const [showAll, setShowAll] = useState(false);
   const [teamChipDismissed, setTeamChipDismissed] = useState(false);
+  const [joinVariant, setJoinVariant] = useState(0); // decision aid: cycle up-next join-button styles
 
   const upNext = showAll ? [...MS_UP_NEXT, ...MS_UP_NEXT_MORE] : MS_UP_NEXT;
   const isMine = view === 'mine';
@@ -347,10 +354,14 @@ export function MeetingsSurface({
 
       {isMine && (
         <div className="ms-upnext">
-          <div className="ms-upnext__label"><Icon name="clock" /> Up next</div>
+          <div className="ms-upnext__label">
+            <Icon name="clock" /> Up next
+            <span className="ms-join-cap">join button style {JOIN_VARIANTS[joinVariant]} · click the join button to cycle</span>
+          </div>
           <div className="ms-list">
             {upNext.map((m) => (
-              <UpNextRow key={m.id} m={m} solo={solo} expired={expired} orgName={orgName} onUpgrade={onUpgrade} onRecordAttempt={onRecordAttempt} onFeatureUse={onFeatureUse} />
+              <UpNextRow key={m.id} m={m} solo={solo} expired={expired} orgName={orgName} onUpgrade={onUpgrade} onRecordAttempt={onRecordAttempt} onFeatureUse={onFeatureUse}
+                joinVariant={joinVariant} onCycleJoin={() => setJoinVariant((v) => (v + 1) % JOIN_VARIANTS.length)} />
             ))}
           </div>
           <button className={`ms-showall ${showAll ? 'is-open' : ''}`} onClick={() => setShowAll(!showAll)}>

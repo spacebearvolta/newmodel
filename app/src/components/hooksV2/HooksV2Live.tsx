@@ -630,7 +630,6 @@ export function InviteUpsellModalV2Live({
       <div className="iu-modal">
         <div className="modal-v2 card-v2 iu-modal__card">
           <div className="iu-modal__head">
-            <span className="iu-modal__ws"><Icon name="users" size={14} /></span>
             {/* TODO-copy */}
             <span className="iu-modal__title">{isOver ? `Invite to ${workspace}` : 'Invite a teammate to collaborate'}</span>
             <button className="iu-modal__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
@@ -658,7 +657,7 @@ export function InviteUpsellModalV2Live({
           )}
           <div className="iu-modal__foot">
             {/* State C — ungated view-only link alternative */}
-            <button className="iu-viewlink" onClick={onViewLink}><Icon name="share2" size={14} /> Or send a view-only link</button>
+            <button className="iu-viewlink" onClick={onViewLink}><Icon name="share2" size={14} /> Send a view-only link</button>
             <button className={`btn-v2 ${isOver ? 'btn-v2--primary' : 'btn-v2--dark'}`} onClick={() => onPrimary?.(trimmed)}>
               <Icon name={isOver ? 'gem' : 'users'} size={14} /> {cta}
             </button>
