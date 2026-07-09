@@ -15,7 +15,6 @@ import {
   TrialCountdownV2Live,
   InlineUpgradeV2Live,
   UpgradeBadgeV2Live,
-  TrialStatusChipV2Live,
   MediaLockOverlayV2Live,
   LockedRecordingCardV2Live,
   InviteUpsellModalV2Live,
@@ -35,6 +34,9 @@ export interface HookEntry {
   // "View in prototype" deep-link: route + tweak-state (?tw=) + optional
   // modal trigger (?show=).
   context?: { route: string; tweaks?: Record<string, unknown>; show?: string };
+  // Per-state override: when a hook's states each live at a different spot in
+  // the prototype, contexts[stateIndex] wins over the shared `context`.
+  contexts?: Array<{ route: string; tweaks?: Record<string, unknown>; show?: string }>;
 }
 
 export const HG_HOOKS: HookEntry[] = [
@@ -134,6 +136,14 @@ export const HG_HOOKS: HookEntry[] = [
     trigger: 'Mid-trial use of a Business-only feature: team meetings, sharing, AI actions, integrations.',
     kind: 'inline',
     states: ['Team meetings', 'Sharing', 'AI actions', 'Integrations'],
+    // Each state opens its own nudge in the live meetings surface (the chip
+    // carries the feature-specific copy).
+    contexts: [
+      { route: '/', tweaks: { trialActive: true }, show: 'nudge-teamMeetings' },
+      { route: '/', tweaks: { trialActive: true }, show: 'nudge-sharing' },
+      { route: '/', tweaks: { trialActive: true }, show: 'nudge-ai' },
+      { route: '/', tweaks: { trialActive: true }, show: 'nudge-integrations' },
+    ],
     render: (s) => (
       <FeatureNudgeChipV2Live
         feature={['Team meetings', 'Sharing to a team', 'AI actions on shared meetings', 'Workspace integrations'][s]}
@@ -213,18 +223,6 @@ export const HG_HOOKS: HookEntry[] = [
     ),
   },
   {
-    tag: 'D',
-    title: 'Trial-status header chip',
-    trigger: 'Meetings header, below the menu icon — trial/Teams expiry with an upgrade link.',
-    kind: 'inline',
-    states: ['1 day', '3 days'],
-    render: (s) => (
-      <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 18px' }}>
-        <TrialStatusChipV2Live daysLeft={[1, 3][s]} onUpgrade={NOOP} />
-      </div>
-    ),
-  },
-  {
     tag: 'E',
     title: 'Media-player locked overlay',
     trigger: 'On the recording player when the recording is over the free limit or locked.',
@@ -269,12 +267,10 @@ const VIEW_CONTEXT: Record<string, HookEntry['context']> = {
   'Plans / pricing modal': { route: '/', show: 'plans' },
   'Trial expired: interstitial': { route: '/', tweaks: { trialOver: true } },
   'Trial-ended widget (grace countdown)': { route: '/', tweaks: { trialOver: true } },
-  'Feature-usage nudge': { route: '/', tweaks: { trialActive: true }, show: 'teamMeetings' },
   'Teammate engagement nudge': { route: '/', tweaks: { teammateNudge: true } },
   'Trial countdown widget': { route: '/', tweaks: { trialActive: true } },
   'Trial countdown popup': { route: '/', tweaks: { trialActive: true }, show: 'trialPopup' },
   'Inline settings upgrade': { route: '/settings' },
-  'Trial-status header chip': { route: '/', tweaks: { trialActive: true, trialDays: 1 } },
   'Media-player locked overlay': { route: '/record', tweaks: { state: 'limit' } },
   'Locked recording (inline)': { route: '/record', tweaks: { state: 'locked-card' } },
   'Locked menu item (upgrade pill)': { route: '/record', tweaks: { actionsOpen: true, state: 'normal' } },

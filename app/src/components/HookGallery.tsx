@@ -82,17 +82,22 @@ export function HookGallery({ open, onClose }: HookGalleryProps) {
 
       <div className="hg-bottom">
         <span className="hg-bottom__tag">{hook.tag}</span>
-        <div className="hg-bottom__title">
-          {hook.title}
-          {hook.context && (
-            <>
-              {' — '}
-              <a className="hg-view" href={buildViewUrl(hook.context.route, hook.context.tweaks, hook.context.show)}>
-                View in prototype <Icon name="arrowRight" size={13} />
-              </a>
-            </>
-          )}
-        </div>
+        {(() => {
+          const ctx = (hook.contexts && hook.contexts[s]) || hook.context;
+          return (
+            <div className="hg-bottom__title">
+              {hook.title}
+              {ctx && (
+                <>
+                  {' — '}
+                  <a className="hg-view" href={buildViewUrl(ctx.route, ctx.tweaks, ctx.show)}>
+                    View in prototype <Icon name="arrowRight" size={13} />
+                  </a>
+                </>
+              )}
+            </div>
+          );
+        })()}
         <p className="hg-bottom__desc">{hook.trigger}</p>
         {hook.states && (
           <div className="hg-states" role="tablist" aria-label="States">

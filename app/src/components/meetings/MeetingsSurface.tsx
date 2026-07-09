@@ -269,7 +269,6 @@ export interface MeetingsSurfaceProps {
   firstMeetingOnly?: boolean;
   initialView?: string;
   trialPill?: React.ReactNode;
-  headerChip?: React.ReactNode;
   banner?: React.ReactNode;
   onUpgrade?: () => void;
   onStartTrial?: () => void;
@@ -279,13 +278,14 @@ export interface MeetingsSurfaceProps {
   onShareAttempt?: () => void;
   myMeetingsBanner?: React.ReactNode;
   businessTrialDays?: number | null;
+  nudgeFeature?: string | null;
   onFeatureUse?: (f: string) => void;
 }
 
 export function MeetingsSurface({
   mode = 'org', orgName = 'Acme', hasMeetings = true, firstMeetingOnly = false, initialView = 'mine',
-  trialPill = null, headerChip = null, banner = null, onUpgrade, onStartTrial, gate, onRecordAttempt, onLockedClick,
-  onShareAttempt, myMeetingsBanner, businessTrialDays, onFeatureUse,
+  trialPill = null, banner = null, onUpgrade, onStartTrial, gate, onRecordAttempt, onLockedClick,
+  onShareAttempt, myMeetingsBanner, businessTrialDays, nudgeFeature, onFeatureUse,
 }: MeetingsSurfaceProps) {
   const solo = mode === 'solo';
   const expired = mode === 'expired';
@@ -328,7 +328,6 @@ export function MeetingsSurface({
           {trialPill && <span className="ms-head__pill">{trialPill}</span>}
         </div>
         <div className="ms-head__right">
-          {headerChip}
           <label className="ms-filter">
             <input placeholder="Filter by title" value={filter} onChange={(e) => setFilter(e.target.value)} />
           </label>
@@ -343,7 +342,7 @@ export function MeetingsSurface({
       {banner}
       {isMine && myMeetingsBanner}
       {!solo && !expired && businessTrialDays != null && view === 'all' && !teamChipDismissed && (
-        <FeatureNudgeChipV2Live feature="Team meetings" daysLeft={businessTrialDays} onDismiss={() => setTeamChipDismissed(true)} />
+        <FeatureNudgeChipV2Live feature={nudgeFeature || 'Team meetings'} daysLeft={businessTrialDays} onDismiss={() => setTeamChipDismissed(true)} />
       )}
 
       {isMine && (

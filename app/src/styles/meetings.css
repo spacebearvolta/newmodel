@@ -92,11 +92,11 @@
 .ms-join {
   display: inline-flex; align-items: center; gap: 7px;
   height: 34px; padding: 0 11px;
-  background: #ECECEA; color: var(--fg-1);
-  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+  background: #fff; color: var(--fg-1);
+  border: 1px solid var(--green-500); border-radius: 8px; cursor: pointer;
   transition: background var(--dur-fast);
 }
-.ms-join:hover { background: #E2E2DF; }
+.ms-join:hover { background: #F4FBF7; }
 .ms-join svg { width: 15px; height: 15px; }
 .ms-join__sep { width: 1px; height: 16px; background: var(--border); }
 .ms-join svg:last-child { width: 13px; height: 13px; }

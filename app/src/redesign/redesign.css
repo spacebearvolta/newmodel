@@ -102,6 +102,7 @@ body { overflow: auto !important; }
 .h45-v2__sub { font-size: 14px; line-height: 1.55; color: var(--fg-4); margin: 0; }
 .h45-v2__values { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .h45-v2__values li { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--fg-2); }
+.h45-v2__vicon { display: inline-flex; align-items: center; justify-content: center; width: 20px; flex-shrink: 0; color: var(--green-600); }
 /* Fixed height + bottom fade so the last row cuts off mid-card, implying
    more meetings below — same mask-image technique the original hook-preview
    used, just applied over real rows instead of placeholder bars. */
@@ -129,7 +130,9 @@ body { overflow: auto !important; }
 
 /* ── H9 v2 — teammate nudge ──────────────────────────────────────────────
    Loom inspo: bold black stat-style headline (their Insights cards). */
-.h9-v2 { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-card); box-shadow: var(--shadow-v2-lg); padding: 16px; width: 390px; position: relative; }
+/* Very subtle brand expression: pale-mint pooled in the bottom-right corner,
+   top-left stays white so the moment isn't overpowered. */
+.h9-v2 { background: radial-gradient(115% 115% at 100% 100%, #E6F3F2 0%, #F3FAF7 42%, #FFFFFF 72%); border: 1px solid var(--border-strong); border-radius: var(--r-card); box-shadow: var(--shadow-v2-lg); padding: 16px; width: 390px; position: relative; }
 .h9-v2__close { position: absolute; top: 10px; right: 10px; width: 26px; height: 26px; border: 0; border-radius: var(--r-btn); background: transparent; color: var(--fg-5); cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .h9-v2__close:hover { background: var(--bg-alt); }
 .h9-v2__eyebrow { display: inline-flex; align-items: center; gap: 5px; font: 600 11.5px var(--font-sans); color: var(--green-700); margin-bottom: 6px; }
@@ -140,6 +143,10 @@ body { overflow: auto !important; }
 
 /* ── Trial widget v2 ──────────────────────────────────────────────────── */
 .tw-v2 { border: 1px solid var(--green-100); border-radius: var(--r-card); padding: 13px; background: linear-gradient(180deg, #F4FBF7 0%, #FFFFFF 72%); }
+/* Urgent (≤3 days / last day): amber stroke, flat white — no green tint, no
+   amber gradient. The badge/bar amber is set inline in the component. */
+.tw-v2--urgent { border-color: #C1542A; background: #fff; }
+.tw-v2--urgent .tw-v2__badge { color: #C1542A; }
 .tw-v2__top { display: flex; align-items: center; gap: 9px; width: 100%; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
 .tw-v2__badge { flex: none; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: transparent; color: var(--green-700); }
 .tw-v2__days { font-size: 13.5px; font-weight: 600; color: var(--fg-1); display: block; }
@@ -205,7 +212,7 @@ body { overflow: auto !important; }
 /* Business (Popular) tier — same green-tinted hero gradient as the trial
    bento's "Organization workspace" cell, so the highlighted plan reads as
    the recommended one. */
-.plans-v2__col--popular { border-color: var(--fg-1); background: var(--grad-brand); box-shadow: 0 0 0 1px var(--fg-1); }
+.plans-v2__col--popular { border-color: var(--green-500); background: var(--grad-brand); box-shadow: 0 0 0 1px var(--green-500); }
 .plans-v2__badge { position: absolute; top: 16px; right: 16px; background: var(--green-50); color: var(--green-700); font: 600 11px/1 var(--font-sans); padding: 4px 8px; border-radius: var(--r-full); }
 .plans-v2__name { font: 700 16px/1.2 var(--font-sans); color: var(--fg-1); }
 .plans-v2__tag { font-size: 12.5px; color: var(--fg-5); margin: 4px 0 16px; min-height: 34px; line-height: 1.4; }
@@ -259,7 +266,7 @@ body { overflow: auto !important; }
 .h7-v2__sub { font-size: 14px; line-height: 1.55; color: var(--fg-4); margin: 0 0 20px; }
 .h7-v2__panel { background: var(--bg-alt); border-radius: var(--r-card); padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 16px; }
 .h7-v2__row { display: flex; gap: 12px; align-items: flex-start; font-size: 13.5px; line-height: 1.45; color: var(--fg-3); }
-.h7-v2__row svg { width: 18px; height: 18px; color: var(--fg-4); flex-shrink: 0; margin-top: 1px; }
+.h7-v2__row svg { width: 18px; height: 18px; color: var(--green-500); flex-shrink: 0; margin-top: 1px; }
 .h7-v2__row strong { color: var(--fg-1); font-weight: 600; }
 .h7-v2__foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
 

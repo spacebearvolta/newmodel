@@ -10,7 +10,7 @@ import mayaPhoto from '../../assets/maya.jpg';
 import {
   RecordingLimitModalV2Live, HistoryLockBannerV2Live, LockedMeetingModalV2Live, TeamValueModalV2Live,
   TrialExpiredInterstitialV2Live, TrialEndedCardV2Live, TrialWidgetV2Live, TeammateNudgeV2Live, TrialCountdownV2Live,
-  InviteUpsellModalV2Live, PlansModalV2Live, TrialStatusChipV2Live,
+  InviteUpsellModalV2Live, PlansModalV2Live,
 } from '../hooksV2/HooksV2Live';
 import {
   ClaudeMeetingBanner, ClaudeHandoff, StartTrialPromo, TrialBentoStep, ExistingOrgStep, RequestSentStep,
@@ -105,9 +105,16 @@ export function CreatorApp({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Deep-link: `?show=teamMeetings` (H8 feature-usage nudge) lands on the Team
-  // meetings tab, where the nudge chip lives, instead of the default My meetings.
-  const orgInitialView = readShowParam() === 'teamMeetings' ? 'all' : 'mine';
+  // Deep-link: H8 feature-usage nudge states land on the Team meetings tab
+  // (where the nudge chip lives) with the chip carrying that feature's copy.
+  const NUDGE_FEATURES: Record<string, string> = {
+    'nudge-teamMeetings': 'Team meetings',
+    'nudge-sharing': 'Sharing to a team',
+    'nudge-ai': 'AI actions on shared meetings',
+    'nudge-integrations': 'Workspace integrations',
+  };
+  const nudgeFeature = NUDGE_FEATURES[readShowParam() || ''] ?? null;
+  const orgInitialView = nudgeFeature ? 'all' : 'mine';
 
   const persistOrg = (created: boolean, name?: string) => {
     try {
@@ -231,9 +238,7 @@ export function CreatorApp({
             initialView={orgInitialView}
             banner={orgInactive ? null : claudeBanner}
             businessTrialDays={orgActive ? trialDays : null}
-            headerChip={orgActive && trialDays <= 3
-              ? <TrialStatusChipV2Live daysLeft={trialDays} onUpgrade={() => setUpgradeOpen(true)} />
-              : null}
+            nudgeFeature={nudgeFeature}
             onFeatureUse={orgActive ? onFeatureUse : undefined}
             onUpgrade={openReactivate}
           />

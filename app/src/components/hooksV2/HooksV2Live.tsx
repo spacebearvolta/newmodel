@@ -50,7 +50,6 @@ interface HistoryLockBannerV2LiveProps {
 export function HistoryLockBannerV2Live({ daysLeft = 5, onStartTrial, onDismiss }: HistoryLockBannerV2LiveProps) {
   return (
     <div className="h2-v2">
-      <span className="h2-v2__icon"><Icon name="history" size={16} /></span>
       <span className="h2-v2__text">
         <span className="h2-v2__title">Some of your meetings will lock in {daysLeft} day{daysLeft === 1 ? '' : 's'}</span>
         <span className="h2-v2__body">
@@ -114,10 +113,10 @@ export function TeamValueModalV2Live({ trigger, state = 'free', onClose, onStart
             <h2 className="h45-v2__title">{copy.title}</h2>
             <p className="h45-v2__sub">{copy.sub}</p>
             <ul className="h45-v2__values">
-              <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="infinity" size={13} /></span> No 45-minute recording cap</li>
-              <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="history" size={13} /></span> Unlimited meeting history</li>
-              <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="users" size={13} /></span> A shared library your whole team can search</li>
-              <li><span className="mark-v2" style={{ width: 26, height: 26, borderRadius: 6 }}><Icon name="plug" size={13} /></span> Integrations & API: HubSpot, Salesforce, Slack</li>
+              <li><span className="h45-v2__vicon"><Icon name="infinity" size={16} /></span> No 45-minute recording cap</li>
+              <li><span className="h45-v2__vicon"><Icon name="history" size={16} /></span> Unlimited meeting history</li>
+              <li><span className="h45-v2__vicon"><Icon name="users" size={16} /></span> A shared library your whole team can search</li>
+              <li><span className="h45-v2__vicon"><Icon name="plug" size={16} /></span> Integrations & API: HubSpot, Salesforce, Slack</li>
             </ul>
             <div className="h1-v2__foot" style={{ padding: 0, marginTop: 22 }}>
               <button className={`btn-v2 ${state === 'trial-over' ? 'btn-v2--primary' : 'btn-v2--dark'} btn-v2--lg btn-v2--full`} onClick={onStartTrial}>
@@ -131,7 +130,7 @@ export function TeamValueModalV2Live({ trigger, state = 'free', onClose, onStart
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {TEAM_PREVIEW_TITLES.map((title) => (
                 <div key={title} className="card-v2" style={{ padding: '8px 10px', display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
-                  <span style={{ width: 30, height: 30, borderRadius: 6, background: 'var(--fg-4)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ width: 30, height: 30, borderRadius: 6, background: 'var(--green-100)', color: 'var(--green-700)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Icon name="video" size={14} />
                   </span>
                   <span style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--fg-2)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</span>
@@ -384,7 +383,7 @@ interface TeammateNudgeV2LiveProps { name?: string; avatarSrc?: string; daysLeft
 export function TeammateNudgeV2Live({ name = 'Maya Chen', avatarSrc, daysLeft, onView, onClose }: TeammateNudgeV2LiveProps) {
   const first = name.split(' ')[0];
   return (
-    <div className="h9-v2" style={{ position: 'fixed', right: 24, bottom: 84, zIndex: 40 }}>
+    <div className="h9-v2" style={{ position: 'fixed', right: 24, bottom: 76, zIndex: 40 }}>
       <button className="h9-v2__close" aria-label="Dismiss" onClick={onClose}><Icon name="close" size={14} /></button>
       <div className="h9-v2__head">
         {avatarSrc ? (
@@ -421,7 +420,7 @@ export function TrialWidgetV2Live({ daysLeft = 14, onUpgrade, onOpen }: TrialWid
   const dayNum = TOTAL - daysLeft;
   const pct = Math.max(3, Math.min(100, (dayNum / TOTAL) * 100));
   return (
-    <div className="tw-v2" style={{ width: '100%' }}>
+    <div className={`tw-v2${urgent ? ' tw-v2--urgent' : ''}`} style={{ width: '100%' }}>
       <button className="tw-v2__top" onClick={onOpen}>
         <span className="tw-v2__badge" style={urgent ? { color: '#C1542A' } : undefined}>
           <Icon name={urgent ? 'alert' : 'clock'} size={14} />
@@ -433,7 +432,7 @@ export function TrialWidgetV2Live({ daysLeft = 14, onUpgrade, onOpen }: TrialWid
       </button>
       <div className="tw-v2__bar"><span style={{ width: `${pct}%`, background: urgent ? '#C1542A' : undefined }} /></div>
       <div className="tw-v2__meta">Day {dayNum} of {TOTAL}</div>
-      <button className={`btn-v2 ${urgent ? 'btn-v2--warn' : 'btn-v2--primary'} btn-v2--full`} onClick={onUpgrade}><Icon name="gem" size={13} /> Upgrade now</button>
+      <button className={`btn-v2 ${urgent ? 'btn-v2--warn' : 'btn-v2--dark'} btn-v2--full`} onClick={onUpgrade}><Icon name="gem" size={13} /> Upgrade now</button>
     </div>
   );
 }
