@@ -129,6 +129,9 @@
 }
 .ws-menu-pop__trial:hover { background: var(--green-600, #0F8A4F); }
 .ws-menu-pop__trial:active { transform: scale(0.98); }
+/* Start-trial is the commercial (black) action; Upgrade stays green. */
+.ws-menu-pop__trial--dark { background: #111; }
+.ws-menu-pop__trial--dark:hover { background: #000; }
 
 /* Workspace dropdown — old version (kept for reference, unused) */
 .ws-menu {
@@ -613,7 +616,7 @@
   padding: 18px; display: flex; flex-direction: column; overflow: hidden;
 }
 .ob-cell--wide { grid-column: span 3; }
-.ob-cell--hero { background: linear-gradient(180deg, #F4FBF7 0%, #FFFFFF 70%); border-color: var(--green-100); }
+.ob-cell--hero { background: var(--grad-brand); border-color: var(--green-100); }
 .ob-cell__title { font-size: 14.5px; font-weight: 600; color: var(--fg-1); margin-bottom: 5px; }
 .ob-cell__desc { font-size: 12.5px; color: var(--fg-5); line-height: 1.45; }
 .ob-cell__tag { font: 500 11px/1 var(--font-mono, monospace); text-transform: uppercase; letter-spacing: .06em; color: var(--green-600); margin-top: 10px; }

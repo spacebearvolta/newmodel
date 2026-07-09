@@ -18,6 +18,11 @@
   --shadow-v2-xl: 0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
   --focus-ring-v2: 0 0 0 3px rgba(10,10,10,.30);
 
+  /* Brand gradient — subtle white → pale mint (per Alex's supplied gradient,
+     replacing the old green→white which read as the default Claude gradient).
+     Swap here if a final brand gradient asset lands. */
+  --grad-brand: linear-gradient(135deg, #FCFEFD 0%, #EFF8F4 55%, #E6F3F2 100%);
+
   /* Motion — DESIGN.md motion scale */
   --dur-v2-fast: 150ms;
   --dur-v2-base: 200ms;

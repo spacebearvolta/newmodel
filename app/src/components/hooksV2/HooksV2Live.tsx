@@ -33,7 +33,7 @@ export function RecordingLimitModalV2Live({ open, kind = 'record', onClose, onSt
           </ul>
         </div>
         <div className="h1-v2__foot">
-          <button className="btn-v2 btn-v2--primary btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial</button>
+          <button className="btn-v2 btn-v2--dark btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial</button>
           <button className="h1-v2__link" onClick={onClose}>Maybe later</button>
         </div>
       </div>
@@ -77,7 +77,7 @@ export function LockedMeetingModalV2Live({ meeting, onClose, onStartTrial }: Loc
           <p className="h3-v2__sub">Start a Business trial to unlock this meeting and keep every meeting you record, for good.</p>
         </div>
         <div className="h1-v2__foot" style={{ paddingTop: 0 }}>
-          <button className="btn-v2 btn-v2--primary btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial to unlock</button>
+          <button className="btn-v2 btn-v2--dark btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial to unlock</button>
           <button className="h1-v2__link" onClick={onClose}>Maybe later</button>
         </div>
       </div>
@@ -182,7 +182,7 @@ export function UpgradeGateCardV2Live({
       <h2 className="gate-v2__title">{title}</h2>
       <p className="gate-v2__desc">{desc}</p>
       <div className="gate-v2__actions">
-        <button className="btn-v2 btn-v2--primary btn-v2--lg btn-v2--full" onClick={onUpgrade}>{cta}</button>
+        <button className="btn-v2 btn-v2--dark btn-v2--lg btn-v2--full" onClick={onUpgrade}>{cta}</button>
         {note && <div className="gate-v2__note">{note}</div>}
         <button className="gate-v2__link" onClick={onLearnMore}><Icon name="ext" size={13} /> Learn more</button>
       </div>
@@ -545,7 +545,7 @@ export function LockedRecordingCardV2Live({ onStartTrial }: LockedRecordingCardV
       <span className="lrec-v2__icon"><Icon name="lock" size={20} /></span>
       <div className="lrec-v2__title">This recording is locked</div>
       <p className="lrec-v2__desc">Start a Business trial to unlock this meeting and keep every meeting you record, for good.</p>
-      <button className="btn-v2 btn-v2--primary btn-v2--lg" onClick={onStartTrial}>Start trial to unlock</button>
+      <button className="btn-v2 btn-v2--dark btn-v2--lg" onClick={onStartTrial}>Start trial to unlock</button>
       <div className="lrec-v2__note">Included in Grain Business · free for 14 days</div>
     </div>
   );

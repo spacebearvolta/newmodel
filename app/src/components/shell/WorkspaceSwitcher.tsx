@@ -66,7 +66,7 @@ export function WorkspaceSwitcher({
                 </button>
               )}
               {!hasOrg && onStartTrial && (
-                <button className="ws-menu-pop__trial" onClick={(e) => { e.stopPropagation(); setOpen(false); onStartTrial(); }}>
+                <button className="ws-menu-pop__trial ws-menu-pop__trial--dark" onClick={(e) => { e.stopPropagation(); setOpen(false); onStartTrial(); }}>
                   <span className="btn-label">Start trial</span>
                 </button>
               )}

@@ -59,7 +59,7 @@ export function StartTrialPromo({ orgCreated, onClick, onDismiss }: { orgCreated
       <span className="mark-v2" style={{ width: 40, height: 40, marginBottom: 10 }}><Icon name="gem" size={18} /></span>
       <p className="stp-v2__title">Work with your team</p>
       <p className="stp-v2__desc">Try Grain Business to get the power of shared meeting context.</p>
-      <button className="btn-v2 btn-v2--primary btn-v2--full" onClick={(e) => { e.stopPropagation(); onClick?.(); }}>Start trial</button>
+      <button className="btn-v2 btn-v2--dark btn-v2--full" onClick={(e) => { e.stopPropagation(); onClick?.(); }}>Start trial</button>
     </div>
   );
 }
@@ -96,7 +96,7 @@ export function TrialBentoStep({ onStart, onSelf, onClose }: { onStart?: () => v
         </div>
       </div>
       <div className="modal__foot trial-bento__foot">
-        <button className="btn-v2 btn-v2--primary btn-v2--lg trial-bento__cta" onClick={onStart}>Start trial</button>
+        <button className="btn-v2 btn-v2--dark btn-v2--lg trial-bento__cta" onClick={onStart}>Start trial</button>
         <button className="trial-bento__self" onClick={onSelf}>Use Grain by myself</button>
       </div>
     </>
