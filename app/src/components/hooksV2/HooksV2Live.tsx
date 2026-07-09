@@ -74,7 +74,7 @@ export function LockedMeetingModalV2Live({ meeting, onClose, onStartTrial }: Loc
       <div className="modal-v2 card-v2" style={{ width: 440 }}>
         <div className="h3-v2">
           <h2 className="h3-v2__title">This meeting is locked</h2>
-          <p className="h3-v2__sub">It’s older than the 30 days of meeting history included on the free plan. Upgrade to unlock your meeting history — forever.</p>
+          <p className="h3-v2__sub">The free plan only includes 30 days of meeting history. Upgrade to unlock your meeting history, forever.</p>
         </div>
         <div className="h1-v2__foot" style={{ paddingTop: 0 }}>
           <button className="btn-v2 btn-v2--dark btn-v2--full btn-v2--lg" onClick={onStartTrial}>Start free trial to unlock</button>
@@ -87,7 +87,7 @@ export function LockedMeetingModalV2Live({ meeting, onClose, onStartTrial }: Loc
 
 // ── H4 / H5 ───────────────────────────────────────────────────────────────
 const TEAM_MODAL_COPY_V2 = {
-  invite: { title: 'Work is better, together.', sub: 'Invite your whole team: everyone’s shared meetings build one searchable, AI-ready memory.', verb: 'invite' },
+  invite: { title: 'Work is better, together.', sub: 'Invite your team so every shared meeting builds one searchable, AI-ready memory.', verb: 'invite' },
   share: { title: 'Share this meeting with your team', sub: 'Give your team the full context of every call, not just the parts they were in.', verb: 'share' },
 };
 const TEAM_PREVIEW_TITLES = [
@@ -402,9 +402,8 @@ export function TeammateNudgeV2Live({ name = 'Maya Chen', avatarSrc, daysLeft, o
           <div className="h9-v2__title">{first} just captured their first meeting</div>
         </div>
       </div>
-      {/* TODO-copy: 2nd sentence pending Jeff (B1 — team value-prop wording). */}
       <p className="h9-v2__body">
-        {first}'s meeting just landed in your workspace. That's more context feeding your team's AI — sharper answers and a memory that builds with every conversation.
+        {first}'s first meeting just landed. Every shared meeting builds one searchable, AI-ready memory for the whole team.
       </p>
       <div className="h9-v2__actions">
         <button className="btn-v2 btn-v2--ghost" onClick={onClose}>Not now</button>
@@ -536,7 +535,7 @@ export function LockedRecordingCardV2Live({ onStartTrial }: LockedRecordingCardV
     <div className="lrec-v2">
       <span className="lrec-v2__icon"><Icon name="lock" size={30} /></span>
       <div className="lrec-v2__title">This recording is locked</div>
-      <p className="lrec-v2__desc">It’s older than the 30 days of meeting history included on the free plan. Upgrade to unlock your meeting history — forever.</p>
+      <p className="lrec-v2__desc">The free plan only includes 30 days of meeting history. Upgrade to unlock your meeting history, forever.</p>
       <button className="btn-v2 btn-v2--dark btn-v2--lg" onClick={onStartTrial}>Start trial to unlock</button>
       <div className="lrec-v2__note">Included in Grain Business · free for 14 days</div>
     </div>
