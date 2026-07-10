@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Icon } from '../components/primitives/Icon';
 import mayaPhoto from '../assets/maya.jpg';
 import {
   RecordingLimitModalV2Live,
@@ -156,9 +157,10 @@ export const HG_HOOKS: HookEntry[] = [
     render: (s) => {
       if (s === 0) return <FeatureNudgeChipV2Live feature="Team meetings" daysLeft={8} onDismiss={NOOP} />;
       const label = ['', 'Sharing to a team', 'AI actions on shared meetings', 'Workspace integrations'][s];
+      const iconName = ['', 'share2', 'sparkles', 'plug'][s];
       return (
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#111', color: '#fff', padding: '10px 16px', borderRadius: 10, fontSize: 13, boxShadow: 'var(--shadow-v2-lg)' }}>
-          <span style={{ color: 'var(--green-300, #5CC88D)', fontWeight: 700 }}>✓</span>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 9, background: '#fff', color: 'var(--fg-1)', border: '1px solid var(--border-strong)', padding: '11px 15px', borderRadius: 12, fontSize: 13, fontWeight: 500, boxShadow: 'var(--shadow-v2-lg)' }}>
+          <span style={{ color: 'var(--green-600)', display: 'inline-flex' }}><Icon name={iconName} size={15} /></span>
           {`${label} is a Grain Business feature: 8 days left in your trial.`}
         </div>
       );

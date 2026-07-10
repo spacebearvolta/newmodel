@@ -61,7 +61,7 @@ export function CreatorApp({
   const [plansOpen, setPlansOpen] = useState(false); // Plans / pricing modal (v2)
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ msg: string; icon: string } | null>(null);
 
   const [recordLimit, setRecordLimit] = useState<null | 'record' | 'upload'>(null); // H1
   const [historyDismissed, setHistoryDismissed] = useState(false); // H2
@@ -163,7 +163,7 @@ export function CreatorApp({
   const sendInvites = () => {
     if (selectedInvites.size > 0) {
       const n = selectedInvites.size;
-      setToast(`${n} invite${n === 1 ? '' : 's'} sent`);
+      setToast({ msg: `${n} invite${n === 1 ? '' : 's'} sent`, icon: 'check' });
       setTimeout(() => setToast(null), 2200);
     }
     setStep('done');
@@ -176,12 +176,12 @@ export function CreatorApp({
   const talkToSales = () => {
     setUpgradeOpen(false);
     setCheckoutOpen(false);
-    setToast('Thanks. Our team will reach out about reactivating your trial.');
+    setToast({ msg: 'Thanks. Our team will reach out about reactivating your trial.', icon: 'check' });
     setTimeout(() => setToast(null), 2600);
   };
   const completeReactivation = () => {
     setCheckoutOpen(false);
-    setToast(`Payment received. ${orgName} is active again.`);
+    setToast({ msg: `Payment received. ${orgName} is active again.`, icon: 'check' });
     setTimeout(() => setToast(null), 2800);
   };
 
@@ -197,8 +197,9 @@ export function CreatorApp({
 
   const onFeatureUse = (f: string) => {
     const FEATURE_LABELS: Record<string, string> = { share: 'Sharing to a team', ai: 'AI actions on shared meetings', integration: 'Workspace integrations' };
+    const FEATURE_ICONS: Record<string, string> = { share: 'share2', ai: 'sparkles', integration: 'plug' };
     const label = FEATURE_LABELS[f] || 'This';
-    setToast(`${label} is a Grain Business feature: ${trialDays} ${trialDays === 1 ? 'day' : 'days'} left in your trial.`);
+    setToast({ msg: `${label} is a Grain Business feature: ${trialDays} ${trialDays === 1 ? 'day' : 'days'} left in your trial.`, icon: FEATURE_ICONS[f] || 'sparkles' });
     setTimeout(() => setToast(null), 3400);
   };
 
@@ -313,7 +314,7 @@ export function CreatorApp({
         )}
       </Modal>
 
-      {toast && <Toast>{toast}</Toast>}
+      {toast && <Toast icon={toast.icon}>{toast.msg}</Toast>}
       {(orgCreated || trialActive) && (
         <TrialCountdownV2Live daysLeft={trialPopupDay} orgName={orgName} onUpgrade={() => { setTrialPopupDay(null); setUpgradeOpen(true); }} onClose={closeTrial} />
       )}

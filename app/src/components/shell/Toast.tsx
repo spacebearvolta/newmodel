@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 import { Icon } from '../primitives/Icon';
 
-export function Toast({ children }: { children: ReactNode }) {
+export function Toast({ children, icon = 'check' }: { children: ReactNode; icon?: string }) {
   return (
     <div className="toast">
-      <Icon name="check" size={14} /> {children}
+      <span className="toast__icon"><Icon name={icon} size={15} /></span> {children}
     </div>
   );
 }

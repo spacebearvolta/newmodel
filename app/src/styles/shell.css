@@ -1319,18 +1319,21 @@
 
 /* Toast */
 .toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: #111; color: #fff;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 13px;
-  display: inline-flex; align-items: center; gap: 8px;
-  box-shadow: var(--shadow-float);
+  position: fixed; right: 24px; bottom: 24px;
+  background: #fff; color: var(--fg-1);
+  border: 1px solid var(--border-strong);
+  padding: 11px 15px;
+  border-radius: 12px;
+  font-size: 13px; font-weight: 500;
+  max-width: 360px;
+  display: inline-flex; align-items: center; gap: 9px;
+  box-shadow: var(--shadow-v2-lg);
   z-index: 60;
   animation: toastIn 220ms var(--ease);
 }
-.toast svg { width: 14px; height: 14px; color: var(--green-300, #5CC88D); }
-@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.toast__icon { display: inline-flex; flex-shrink: 0; color: var(--green-600); }
+.toast svg { width: 15px; height: 15px; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Utility */
 .row { display: flex; gap: 12px; align-items: center; }

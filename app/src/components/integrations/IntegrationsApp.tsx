@@ -201,7 +201,7 @@ export function IntegrationsApp() {
       ) : (
         <div style={{ height: '100vh' }}>{inner}</div>
       )}
-      {toast && <Toast>{toast}</Toast>}
+      {toast && <Toast icon="plug">{toast}</Toast>}
 
       <TweaksPanel title="Tweaks">
         <TweakSection label="Review">
