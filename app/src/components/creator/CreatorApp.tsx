@@ -102,18 +102,15 @@ export function CreatorApp({
     else if (show === 'locked') setLockedMeeting({ title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' } as Meeting);
     else if (show === 'trialPopup') setTrialPopupDay(trialDays);
     else if (show === 'plans') setPlansOpen(true);
+    // H8 contextual nudges fire as toasts, triggered by the action itself.
+    else if (show === 'toast-share') onFeatureUse('share');
+    else if (show === 'toast-ai') onFeatureUse('ai');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Deep-link: H8 feature-usage nudge states land on the Team meetings tab
-  // (where the nudge chip lives) with the chip carrying that feature's copy.
-  const NUDGE_FEATURES: Record<string, string> = {
-    'nudge-teamMeetings': 'Team meetings',
-    'nudge-sharing': 'Sharing to a team',
-    'nudge-ai': 'AI actions on shared meetings',
-    'nudge-integrations': 'Workspace integrations',
-  };
-  const nudgeFeature = NUDGE_FEATURES[readShowParam() || ''] ?? null;
+  // Deep-link: the H8 "Team meetings" nudge lands on the Team meetings tab
+  // where its chip lives. (Sharing / AI / integrations nudge as toasts instead.)
+  const nudgeFeature = readShowParam() === 'nudge-teamMeetings' ? 'Team meetings' : null;
   const orgInitialView = nudgeFeature ? 'all' : 'mine';
 
   const persistOrg = (created: boolean, name?: string) => {
@@ -138,6 +135,14 @@ export function CreatorApp({
     setOrgName(orgNameFromDomain(USER.domain));
     setSelectedInvites(new Set());
     setStep(paidOrgOnDomain ? 'existing' : 'trial');
+  };
+  // Invite always creates the user's OWN workspace and sends the invite, even
+  // when a paid org exists on the domain — the "request to join" nudge belongs
+  // to the sidebar set-up-org path, not to "invite your team".
+  const startInviteFlow = () => {
+    setOrgName(orgNameFromDomain(USER.domain));
+    setSelectedInvites(new Set());
+    setStep('trial');
   };
   const startFromBento = () => setStep('name');
   const close = () => setStep(null);
@@ -346,9 +351,9 @@ export function CreatorApp({
         onPrimary={(emailAddr) => {
           setInviteForm(false);
           if (orgInactive) { openReactivate(); return; }
-          // Trial-first: provision the workspace, carrying the invitee forward.
+          // Trial-first: provision the user's workspace, carrying the invitee forward.
           setPendingInviteEmail(emailAddr || null);
-          start();
+          startInviteFlow();
         }}
         onLearnMore={() => {}}
       />

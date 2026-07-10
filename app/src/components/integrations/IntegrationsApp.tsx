@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '../primitives/Icon';
 import { UpgradeGateCardV2Live } from '../hooksV2/HooksV2Live';
-import { TweaksPanel, TweakSection, TweakButton, TweakRadio, TweakSelect, TweakToggle, useTweaks } from '../tweaks/TweaksPanel';
+import { Toast } from '../shell/Toast';
+import { TweaksPanel, TweakSection, TweakButton, TweakRadio, TweakSelect, TweakToggle, useTweaks, readShowParam } from '../tweaks/TweaksPanel';
 
 interface NavRow {
   id: string;
@@ -74,8 +75,8 @@ function IntgGlyph({ row, size = 18 }: { row?: NavRow; size?: number }) {
   return <Icon name={row.icon || 'wrench'} size={16} />;
 }
 
-function IntegrationsSettings({ plan, initial, onStartTrial, onBack }: {
-  plan: 'free' | 'business'; initial: string; onStartTrial: () => void; onBack: () => void;
+function IntegrationsSettings({ plan, initial, onStartTrial, onBack, onConnect }: {
+  plan: 'free' | 'business'; initial: string; onStartTrial: () => void; onBack: () => void; onConnect?: () => void;
 }) {
   const [active, setActive] = useState(initial);
   useEffect(() => { setActive(initial); }, [initial]);
@@ -106,7 +107,7 @@ function IntegrationsSettings({ plan, initial, onStartTrial, onBack }: {
         <div className="intg-trial-chip"><Icon name="sparkles" size={14} /> Workspace integrations are a Business feature. Connect {paidInfo.name} while your trial is active.</div>
         <div className="intg-card__actions">
           <a className="intg-card__learn" href="#" onClick={(e) => e.preventDefault()}>Learn more</a>
-          <button className="gr-btn gr-btn--primary gr-btn--md" onClick={(e) => e.preventDefault()}>Connect {paidInfo.name}</button>
+          <button className="gr-btn gr-btn--primary gr-btn--md" onClick={(e) => { e.preventDefault(); onConnect?.(); }}>Connect {paidInfo.name}</button>
         </div>
       </div>
     );
@@ -171,7 +172,19 @@ export function IntegrationsApp() {
   const startTrial = () => navigate('/');
   const goBack = () => navigate('/');
 
-  const inner = <IntegrationsSettings plan={t.plan} initial={t.integration} onStartTrial={startTrial} onBack={goBack} />;
+  // H8 feature-usage nudge: connecting an integration during the trial fires a
+  // contextual toast (same shape as sharing / AI-action nudges).
+  const [toast, setToast] = useState<string | null>(null);
+  const fireConnectToast = () => {
+    setToast('Workspace integrations are a Grain Business feature — full access during your trial.');
+    setTimeout(() => setToast(null), 3400);
+  };
+  useEffect(() => {
+    if (readShowParam() === 'nudge' && t.plan === 'business') fireConnectToast();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const inner = <IntegrationsSettings plan={t.plan} initial={t.integration} onStartTrial={startTrial} onBack={goBack} onConnect={fireConnectToast} />;
 
   return (
     <>
@@ -188,6 +201,7 @@ export function IntegrationsApp() {
       ) : (
         <div style={{ height: '100vh' }}>{inner}</div>
       )}
+      {toast && <Toast>{toast}</Toast>}
 
       <TweaksPanel title="Tweaks">
         <TweakSection label="Review">

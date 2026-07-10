@@ -141,24 +141,28 @@ export const HG_HOOKS: HookEntry[] = [
   {
     tag: 'H8',
     title: 'Feature-usage nudge',
-    trigger: 'Mid-trial use of a Business-only feature: team meetings, sharing, AI actions, integrations.',
+    trigger: 'Mid-trial use of a Business feature. Team meetings is a persistent chip (its tab is the context); sharing, AI actions, and integrations fire as a toast right after you do the action.',
     kind: 'inline',
     states: ['Team meetings', 'Sharing', 'AI actions', 'Integrations'],
-    // Each state opens its own nudge in the live meetings surface (the chip
-    // carries the feature-specific copy).
+    // Team meetings = chip on the team tab. The other three fire as toasts in
+    // the context of the action (share a meeting / run an AI action / connect
+    // an integration).
     contexts: [
       { route: '/', tweaks: { trialActive: true }, show: 'nudge-teamMeetings' },
-      { route: '/', tweaks: { trialActive: true }, show: 'nudge-sharing' },
-      { route: '/', tweaks: { trialActive: true }, show: 'nudge-ai' },
-      { route: '/', tweaks: { trialActive: true }, show: 'nudge-integrations' },
+      { route: '/', tweaks: { trialActive: true }, show: 'toast-share' },
+      { route: '/', tweaks: { trialActive: true }, show: 'toast-ai' },
+      { route: '/integrations', tweaks: { plan: 'business' }, show: 'nudge' },
     ],
-    render: (s) => (
-      <FeatureNudgeChipV2Live
-        feature={['Team meetings', 'Sharing to a team', 'AI actions on shared meetings', 'Workspace integrations'][s]}
-        daysLeft={8}
-        onDismiss={NOOP}
-      />
-    ),
+    render: (s) => {
+      if (s === 0) return <FeatureNudgeChipV2Live feature="Team meetings" daysLeft={8} onDismiss={NOOP} />;
+      const label = ['', 'Sharing to a team', 'AI actions on shared meetings', 'Workspace integrations'][s];
+      return (
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#111', color: '#fff', padding: '10px 16px', borderRadius: 10, fontSize: 13, boxShadow: 'var(--shadow-v2-lg)' }}>
+          <span style={{ color: 'var(--green-300, #5CC88D)', fontWeight: 700 }}>✓</span>
+          {`${label} is a Grain Business feature: 8 days left in your trial.`}
+        </div>
+      );
+    },
   },
   {
     tag: 'H9',

@@ -403,7 +403,7 @@ export function TeammateNudgeV2Live({ name = 'Maya Chen', avatarSrc, daysLeft, o
         </div>
       </div>
       <p className="h9-v2__body">
-        {first}'s first meeting just landed. Every shared meeting builds one searchable, AI-ready memory for the whole team.
+        Every shared meeting builds one searchable, AI-ready memory for the whole team.
       </p>
       <div className="h9-v2__actions">
         <button className="btn-v2 btn-v2--ghost" onClick={onClose}>Not now</button>
@@ -579,7 +579,7 @@ export function ShareLinkModalV2Live({
         {/* TODO-copy: make view-only explicit */}
         <p className="sl-note">
           <Icon name="globe" size={13} />
-          <span>Anyone with the link can <strong>view</strong> this meeting — they can’t edit, comment, or add highlights. It’s free to share, and they can sign up on their own.</span>
+          <span>Anyone with the link can <strong>view</strong> this meeting — they can’t edit, comment, or add highlights.</span>
         </p>
 
         <div className="sl-divider" />
@@ -588,10 +588,10 @@ export function ShareLinkModalV2Live({
         <div className="sl-collab">
           <div className="sl-collab__text">
             {/* TODO-copy */}
-            <div className="sl-collab__title">Want them to collaborate?</div>
-            <div className="sl-collab__desc">Invite them into your workspace to edit, comment, and build a shared meeting repository together.</div>
+            <div className="sl-collab__title">Invite your team</div>
+            <div className="sl-collab__desc">Every shared meeting builds one searchable, AI-ready memory for the whole team.</div>
           </div>
-          <button className="btn-v2 btn-v2--primary" onClick={onCollaborate}><Icon name="users" size={15} /> Invite to collaborate</button>
+          <button className="btn-v2 btn-v2--primary" onClick={onCollaborate}><Icon name="users" size={15} /> Invite</button>
         </div>
       </div>
     </Modal>
@@ -629,9 +629,12 @@ export function InviteUpsellModalV2Live({
     <Modal open={open} onClose={onClose} bare>
       <div className="iu-modal">
         <div className="modal-v2 card-v2 iu-modal__card">
-          <div className="iu-modal__head">
-            {/* TODO-copy */}
-            <span className="iu-modal__title">{isOver ? `Invite to ${workspace}` : 'Invite a teammate to collaborate'}</span>
+          <div className="iu-modal__head iu-modal__head--stack">
+            <div>
+              {/* TODO-copy */}
+              {!isOver && <div className="iu-modal__eyebrow">Grain Business • Free for 14 days</div>}
+              <span className="iu-modal__title">{isOver ? `Invite to ${workspace}` : 'Start a Business trial & invite your team'}</span>
+            </div>
             <button className="iu-modal__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
           </div>
           <label className="iu-field">
@@ -643,9 +646,9 @@ export function InviteUpsellModalV2Live({
               onChange={(e) => setEmail(e.target.value)}
             />
           </label>
-          {/* TODO-copy: what inviting grants (collaborate + repository + future meetings) */}
+          {/* TODO-copy: what inviting grants */}
           <p className="iu-grant">
-            Teammates you invite can edit, comment, and collaborate — and every shared meeting builds your team’s searchable repository.
+            Your team can edit, comment, and search the entire organization’s AI-ready memory.
           </p>
           {external && (
             /* State D — external recipient. Same trial hook for now. TODO-copy */
@@ -663,19 +666,18 @@ export function InviteUpsellModalV2Live({
             </button>
           </div>
         </div>
-        <div className="card-v2 iu-upsell">
-          <div className="iu-upsell__body">
-            {/* TODO-copy */}
-            <div className="iu-upsell__title">Grain for Teams</div>
-            <p className="iu-upsell__desc">Every teammate’s meetings feed one shared, searchable repository — organized by team.</p>
-            <div className="iu-upsell__actions">
-              <button className="btn-v2 btn-v2--secondary" onClick={onLearnMore}>Learn more</button>
-            </div>
-          </div>
-          <div className="iu-upsell__preview" aria-hidden="true">
-            <div className="iu-upsell__tabs"><span>My meetings</span><span className="is-on">My team: Sales</span></div>
-            <div className="iu-upsell__prow"><span className="iu-upsell__dot"><Icon name="video" size={11} /></span> Acme Co. Renewal</div>
-            <div className="iu-upsell__prow"><span className="iu-upsell__dot"><Icon name="video" size={11} /></span> Weekly sync — Product</div>
+        <div className="card-v2 iu-upsell iu-upsell--biz">
+          {/* TODO-copy */}
+          <div className="iu-upsell__title">Try Grain Business</div>
+          <p className="iu-upsell__desc">Every shared meeting builds one searchable, AI-ready memory for the whole team.</p>
+          <ul className="iu-vlist">
+            <li><span className="h45-v2__vicon"><Icon name="infinity" size={16} /></span> No 45-minute recording cap</li>
+            <li><span className="h45-v2__vicon"><Icon name="history" size={16} /></span> Unlimited meeting history</li>
+            <li><span className="h45-v2__vicon"><Icon name="users" size={16} /></span> A shared library your whole team can search</li>
+            <li><span className="h45-v2__vicon"><Icon name="plug" size={16} /></span> Integrations &amp; API: HubSpot, Salesforce, Slack</li>
+          </ul>
+          <div className="iu-upsell__actions">
+            <button className="btn-v2 btn-v2--secondary" onClick={onLearnMore}>Learn more</button>
           </div>
         </div>
       </div>
