@@ -273,7 +273,7 @@ export function PlansModalV2Live({ open, currentPlan = 'free', onClose, onUpgrad
                     <button
                       className={`btn-v2 btn-v2--full ${p.popular ? 'btn-v2--primary' : 'btn-v2--secondary'}`}
                       onClick={() => onUpgrade?.(p.id as 'starter' | 'business')}
-                    >Upgrade</button>
+                    >{p.popular ? <><Icon name="gem" size={14} /> Upgrade</> : 'Upgrade'}</button>
                   )}
                 </div>
                 {p.moreLabel && <div className="plans-v2__more">{p.moreLabel}</div>}
