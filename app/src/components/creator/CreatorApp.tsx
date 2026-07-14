@@ -10,7 +10,7 @@ import mayaPhoto from '../../assets/maya.jpg';
 import {
   RecordingLimitModalV2Live, HistoryLockBannerV2Live, LockedMeetingModalV2Live,
   TrialExpiredInterstitialV2Live, TrialEndedCardV2Live, TrialWidgetV2Live, TeammateNudgeV2Live, TrialCountdownV2Live,
-  InviteUpsellModalV2Live, ShareLinkModalV2Live, PlansModalV2Live,
+  InviteUpsellModalV2Live, ShareLinkModalV2Live, BusinessShareModalV2Live, PlansModalV2Live,
 } from '../hooksV2/HooksV2Live';
 import {
   ClaudeMeetingBanner, ClaudeHandoff, StartTrialPromo, TrialBentoStep, ExistingOrgStep, RequestSentStep,
@@ -67,6 +67,7 @@ export function CreatorApp({
   const [historyDismissed, setHistoryDismissed] = useState(false); // H2
   const [lockedMeeting, setLockedMeeting] = useState<Meeting | null>(null); // H3
   const [shareLink, setShareLink] = useState(false); // State A — view-only link modal
+  const [bizShare, setBizShare] = useState(false); // Business-tier share (org active / paying)
   const [inviteForm, setInviteForm] = useState(false); // States B/C/D/E — invite-to-collaborate modal
   const [pendingInviteEmail, setPendingInviteEmail] = useState<string | null>(null); // carried into org-creation invite step
   const [expiryDismissed, setExpiryDismissed] = useState(false); // H7 interstitial
@@ -102,6 +103,7 @@ export function CreatorApp({
     else if (show === 'locked') setLockedMeeting({ title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' } as Meeting);
     else if (show === 'trialPopup') setTrialPopupDay(trialDays);
     else if (show === 'plans') setPlansOpen(true);
+    else if (show === 'bizShare') setBizShare(true);
     // H8 contextual nudges fire as toasts, triggered by the action itself.
     else if (show === 'toast-share') onFeatureUse('share');
     else if (show === 'toast-ai') onFeatureUse('ai');
@@ -237,7 +239,7 @@ export function CreatorApp({
         onOrgAdmin={orgActive ? onOrgAdmin : orgInactive ? openReactivate : start}
         onUpgrade={openReactivate}
         onStartTrial={start}
-        onInvite={orgActive ? undefined : () => setInviteForm(true)}
+        onInvite={orgActive ? () => setBizShare(true) : () => setInviteForm(true)}
         onIntegrations={onIntegrations}
         onNew={orgExists ? undefined : (id) => setRecordLimit(id === 'upload' ? 'upload' : 'record')}
         promoCard={orgInactive
@@ -261,6 +263,7 @@ export function CreatorApp({
             businessTrialDays={orgActive ? trialDays : null}
             nudgeFeature={nudgeFeature}
             onFeatureUse={orgActive ? onFeatureUse : undefined}
+            onShareAttempt={orgActive ? () => setBizShare(true) : undefined}
             onUpgrade={openReactivate}
           />
         ) : (
@@ -346,6 +349,11 @@ export function CreatorApp({
         open={shareLink}
         onClose={() => setShareLink(false)}
         onCollaborate={() => { setShareLink(false); setInviteForm(true); }}
+      />
+      <BusinessShareModalV2Live
+        open={bizShare}
+        onClose={() => setBizShare(false)}
+        onShare={() => { setBizShare(false); setToast({ msg: 'Shared with 1 person', icon: 'check' }); setTimeout(() => setToast(null), 2200); }}
       />
       <InviteUpsellModalV2Live
         open={inviteForm}

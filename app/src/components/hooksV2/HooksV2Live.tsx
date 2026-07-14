@@ -741,3 +741,60 @@ export function InviteUpsellModalV2Live({
     </Modal>
   );
 }
+
+// ── Business-tier share (org active / trial active / paying) ─────────────────
+// A Business user isn't gated — sharing a meeting just adds recipients + an
+// optional message. Members can view+edit; non-members get a view link.
+// All copy is TODO-copy (pending Jeff).
+interface BusinessShareModalV2LiveProps {
+  open: boolean;
+  meetingTitle?: string;
+  seedEmails?: string[];
+  onClose?: () => void;    // "Back"
+  onShare?: () => void;
+}
+export function BusinessShareModalV2Live({
+  open, meetingTitle = 'Alex/Jeff New Model Review', seedEmails = ['alex.volta+1@grain.com'],
+  onClose, onShare,
+}: BusinessShareModalV2LiveProps) {
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [emails, setEmails] = useState<string[]>(seedEmails);
+  const [draft, setDraft] = useState('');
+  const [message, setMessage] = useState('I recorded a meeting using Grain and shared access with you. Please take a look at the meeting summary and action items.');
+  const draftVal = draft.trim().toLowerCase();
+  const addEmail = () => { if (emailRe.test(draftVal) && !emails.includes(draftVal)) setEmails((l) => [...l, draftVal]); setDraft(''); };
+  return (
+    <Modal open={open} onClose={onClose} bare>
+      <div className="bsh-modal modal-v2 card-v2">
+        <div className="bsh__head">
+          <span className="bsh__title">Share “{meetingTitle}”</span>
+          <button className="iu-modal__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
+        </div>
+        <div className="iu-chips bsh__recipients">
+          {emails.map((e) => (
+            <span className="bsh-chip" key={e}>
+              <span className="bsh-chip__av">{e[0].toUpperCase()}</span>
+              {e}
+              <button className="iu-chip__x" aria-label={`Remove ${e}`} onClick={() => setEmails((l) => l.filter((x) => x !== e))}><Icon name="close" size={11} /></button>
+            </span>
+          ))}
+          <input
+            className="iu-chips__input"
+            placeholder={emails.length ? 'Add another…' : 'Add people by email'}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ',') && emailRe.test(draftVal)) { e.preventDefault(); addEmail(); } }}
+            onBlur={addEmail}
+          />
+        </div>
+        {/* TODO-copy */}
+        <p className="bsh__sub">Members with access can view and edit the recording and highlights.<br />Non-members will receive a link to the recording.</p>
+        <textarea className="bsh__msg" value={message} onChange={(e) => setMessage(e.target.value)} rows={3} />
+        <div className="bsh__foot">
+          <button className="btn-v2 btn-v2--secondary" onClick={onClose}>Back</button>
+          <button className="btn-v2 btn-v2--primary" onClick={onShare}><Icon name="share2" size={15} /> Share</button>
+        </div>
+      </div>
+    </Modal>
+  );
+}

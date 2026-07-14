@@ -19,6 +19,7 @@ import {
   LockedRecordingCardV2Live,
   InviteUpsellModalV2Live,
   ShareLinkModalV2Live,
+  BusinessShareModalV2Live,
 } from '../components/hooksV2/HooksV2Live';
 
 const NOOP = () => {};
@@ -74,6 +75,13 @@ export const HG_HOOKS: HookEntry[] = [
     trigger: 'State A — clicking Share. A free, ungated public view-only link; collaboration is the paid unlock, handed off to the invite flow.',
     kind: 'modal',
     render: () => <ShareLinkModalV2Live open onClose={NOOP} onCollaborate={NOOP} />,
+  },
+  {
+    tag: 'Share',
+    title: 'Share with a message (Business)',
+    trigger: 'Org active / trial active / paying Business user — sharing isn’t gated. Add recipients + a message; members view & edit, non-members get a link.',
+    kind: 'modal',
+    render: () => <BusinessShareModalV2Live open onClose={NOOP} onShare={NOOP} />,
   },
   {
     tag: 'H6',
@@ -275,6 +283,7 @@ const VIEW_CONTEXT: Record<string, HookEntry['context']> = {
   'History approaching 30-day lock': { route: '/' },
   'Locked meeting (past 30 days)': { route: '/', show: 'locked' },
   'Share link (view-only)': { route: '/', show: 'share' },
+  'Share with a message (Business)': { route: '/', tweaks: { trialActive: true }, show: 'bizShare' },
   'Invite to collaborate': { route: '/', show: 'inviteForm', tweaks: { paidOrgOnDomain: false, emptyDomain: false } },
   'Feature / integration upgrade gate': { route: '/integrations', tweaks: { plan: 'free' } },
   'Plans / pricing modal': { route: '/', show: 'plans' },

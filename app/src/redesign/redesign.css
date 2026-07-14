@@ -291,6 +291,19 @@ body { overflow: auto !important; }
 .iu-chip__x:hover { opacity: 1; }
 .iu-chips__input { flex: 1; min-width: 130px; border: 0; outline: none; background: transparent; font: 400 14px var(--font-sans); color: var(--fg-1); height: 26px; }
 .iu-chips__input::placeholder { color: var(--fg-5); }
+
+/* Business-tier share modal (share with a message; no trial gate) */
+.bsh-modal { width: 600px; max-width: 94vw; padding: 24px 26px 0; position: relative; }
+.bsh__head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-right: 30px; }
+.bsh__title { font: 700 18px/1.3 var(--font-sans); color: var(--fg-1); flex: 1; }
+.bsh__recipients { margin-bottom: 14px; }
+.bsh__recipients.iu-chips { border-color: var(--border); }
+.bsh-chip { display: inline-flex; align-items: center; gap: 8px; background: var(--bg-alt); color: var(--fg-1); font: 500 13px var(--font-sans); padding: 4px 6px 4px 4px; border-radius: 9999px; }
+.bsh-chip__av { width: 22px; height: 22px; border-radius: 9999px; background: var(--fg-4); color: #fff; font: 600 10px/1 var(--font-sans); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.bsh__sub { font-size: 12.5px; line-height: 1.55; color: var(--fg-5); margin: 0 0 18px; }
+.bsh__msg { width: 100%; box-sizing: border-box; min-height: 96px; resize: vertical; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--r-card); font: 400 14px/1.5 var(--font-sans); color: var(--fg-1); outline: none; margin-bottom: 20px; }
+.bsh__msg:focus { border-color: var(--fg-3); }
+.bsh__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--border); margin: 0 -26px; padding: 16px 26px; }
 .iu-field__select { display: flex; align-items: center; justify-content: space-between; height: 38px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--r-btn); font: 400 14px var(--font-sans); color: var(--fg-1); }
 .iu-field__select--muted { color: var(--fg-5); }
 .iu-modal__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 6px; }
