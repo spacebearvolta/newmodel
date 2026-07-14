@@ -49,7 +49,7 @@ button glyphs in the prototype — flag if you think a glyph should change.
 
 ## H1 · Recording length wall
 **Where:** Gallery card *"Recording length wall"*. View in prototype → **`/live`** (Recording, inline box on the live transcript) · **`/?show=upload`** (Upload, modal).
-**Surface:** Recording = inline mint-green box below the live transcript (centered on web). Upload = modal.
+**Surface:** Recording = inline **amber** cut-off box below the live transcript (centered on web); the web capture bar also turns amber at the cap. Upload = modal.
 
 ### State: Recording
 | Field | Current copy | Proposed |
@@ -189,6 +189,26 @@ button glyphs in the prototype — flag if you think a glyph should change.
 
 ---
 
+## Menu · Meeting-row 3-dots menu
+**Where:** Hover any meeting row → click the ⋮ kebab. Present in every user state.
+**Surface:** Dropdown menu. Items: Copy link, Share, Add to playlist, Open in Claude, Open in ChatGPT, Copy transcript for AI, Download transcript for AI, Download transcript, Delete meeting.
+
+| Field | Current copy | Proposed |
+|---|---|---|
+| Copy-link toast (all users) | `[check]` Recording link copied | |
+| Free-user upsell row (title) | Try Grain Business | |
+| Free-user upsell row (subcopy) | 14 day trial | |
+| Share (routes to modal) | Share | |
+
+**Rules**
+- Trigger: _Clicking the ⋮ on a meeting row._
+- "Copy link" fires the toast for **every** user (link sharing is never gated).
+- "Share" opens the state-aware modal: view-only Share for free, Business share for active workspace.
+- For **free users**, only Copy link + Share are active; all other items are inactive, and the green "Try Grain Business / 14 day trial" upsell row appears above "Open in Claude". Delete meeting stays active.
+- Dismissable? _Click outside to close._
+
+---
+
 ## H5b · Invite to collaborate
 **Where:** Gallery card *"Invite to collaborate"*. View in prototype → **`/?show=inviteForm`**.
 **Surface:** Modal. Shown to **free** users clicking Invite (trial is provisioned before the invite). States: In-domain / External / Trial over. _(TODO-copy in code.)_
@@ -306,6 +326,31 @@ button glyphs in the prototype — flag if you think a glyph should change.
 ---
 
 # 4 · Trial lifecycle
+
+## Trial · Start-trial value prop
+**Where:** Gallery card *"Start-trial value prop"*. View in prototype → **`/?show=trial&app=1`**.
+**Surface:** Modal — the marketing screen shown from "Start trial" CTAs and the "Learn more" link on any upgrade gate.
+
+| Field | Current copy | Proposed |
+|---|---|---|
+| Preheader | Grain Business | |
+| Header | Try free for 14 days | |
+| Subcopy | Turn your whole team's meetings into one searchable, AI-ready memory | |
+| Value 1 | `[infinity]` No 45-minute cap — Record and upload meetings of any length. | |
+| Value 2 | `[history]` Unlimited history — Every meeting stays yours, forever. | |
+| Value 3 | `[users]` One shared library — Your whole team can search every call. | |
+| Value 4 | `[plug]` Integrations & API — HubSpot, Salesforce, Slack, MCP, and more. | |
+| Works-with label | WORKS WITH (+ HubSpot / Salesforce / Slack / Zapier logos) | |
+| Primary CTA | `[users]` Start trial | |
+| Secondary CTA | Use Grain by myself | |
+| Microcopy | No credit card required | |
+
+**Rules**
+- Trigger: _"Start trial" CTAs and the "Learn more" link on any upgrade gate._
+- Dismissable? _Yes — X and "Use Grain by myself"._
+- Reappears? _Opens on demand._
+
+---
 
 ## Trial · Trial countdown widget
 **Where:** Gallery card *"Trial countdown widget"*. View in prototype → **`/`** (trial active).
