@@ -217,8 +217,8 @@ body { overflow: auto !important; }
    corner (same restraint as the teammate nudge), white everywhere else. */
 .plans-v2__col--popular {
   border-color: var(--green-500); box-shadow: 0 0 0 1px var(--green-500);
-  /* Uploaded brand gradient, subtle, anchored in the bottom-right corner. */
-  background: url('../assets/gradient-brand.png') no-repeat 150% 118% / 135% auto, #fff;
+  /* Same mint radial as the teammate nudge (.h9-v2), anchored bottom-right. */
+  background: radial-gradient(115% 115% at 100% 100%, #E6F3F2 0%, #F3FAF7 42%, #FFFFFF 72%);
 }
 .plans-v2__badge { position: absolute; top: 16px; right: 16px; background: var(--green-50); color: var(--green-700); font: 600 11px/1 var(--font-sans); padding: 4px 8px; border-radius: var(--r-full); }
 .plans-v2__name { font: 700 16px/1.2 var(--font-sans); color: var(--fg-1); }

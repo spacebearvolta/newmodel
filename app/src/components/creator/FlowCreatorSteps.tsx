@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { Icon } from '../primitives/Icon';
 import { Avatar } from '../primitives/Avatar';
 import claudeIcon from '../../assets/claude-icon.png';
+import hubspotLogo from '../../assets/HUBS.png';
+import salesforceLogo from '../../assets/330px-Salesforce.com_logo.svg.webp';
+import slackLogo from '../../assets/500px-Slack_icon_2019.svg.webp';
+import zapierLogo from '../../assets/clipart709042.png';
 import type { Peer } from '../../data/meetings';
 
 // ── Post-first-meeting Claude / MCP connector ──────────────────────────────
@@ -73,11 +77,10 @@ const TB_VALUES = [
   { icon: 'plug', title: 'Integrations & API', desc: 'HubSpot, Salesforce, Slack, MCP, and more.' },
 ];
 const TB_LOGOS = [
-  { name: 'HubSpot', color: '#FF7A59', initial: 'H' },
-  { name: 'Salesforce', color: '#00A1E0', initial: 'S' },
-  { name: 'Slack', color: '#4A154B', initial: 'S' },
-  { name: 'Zoom', color: '#2D8CFF', initial: 'Z' },
-  { name: 'Zapier', color: '#FF4F00', initial: 'Z' },
+  { name: 'HubSpot', src: hubspotLogo },
+  { name: 'Salesforce', src: salesforceLogo },
+  { name: 'Slack', src: slackLogo },
+  { name: 'Zapier', src: zapierLogo },
 ];
 export function TrialBentoStep({ onStart, onSelf, onClose }: { onStart?: () => void; onSelf?: () => void; onClose?: () => void }) {
   return (
@@ -105,7 +108,7 @@ export function TrialBentoStep({ onStart, onSelf, onClose }: { onStart?: () => v
           <div className="tb2__works-label">Works with</div>
           <div className="tb2__logos">
             {TB_LOGOS.map((l) => (
-              <span key={l.name} className="tb2__logo" style={{ background: l.color }} title={l.name}>{l.initial}</span>
+              <img key={l.name} className="tb2__logo" src={l.src} alt={l.name} title={l.name} />
             ))}
           </div>
         </div>
