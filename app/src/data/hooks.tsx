@@ -5,7 +5,6 @@ import {
   RecordingLimitModalV2Live,
   HistoryLockBannerV2Live,
   LockedMeetingModalV2Live,
-  TeamValueModalV2Live,
   UpgradeGateCardV2Live,
   PlansModalV2Live,
   TrialExpiredInterstitialV2Live,
@@ -68,18 +67,6 @@ export const HG_HOOKS: HookEntry[] = [
     trigger: 'A free user opens a meeting older than the 30-day free history window.',
     kind: 'modal',
     render: () => <LockedMeetingModalV2Live meeting={MEETING} onClose={NOOP} onStartTrial={NOOP} />,
-  },
-  {
-    tag: 'H4 · H5',
-    title: 'Invite / Share value modal (superseded)',
-    trigger: 'SUPERSEDED by the Share-link + Invite-to-collaborate modals below. Kept for reference — this gated sharing, which the new account model deliberately does not.',
-    kind: 'modal',
-    states: ['Invite · free', 'Share · free', 'Invite · trial over', 'Share · trial over'],
-    render: (s) => {
-      const trigger = s % 2 === 1 ? 'share' : 'invite';
-      const state = s >= 2 ? 'trial-over' : 'free';
-      return <TeamValueModalV2Live trigger={trigger} state={state} onClose={NOOP} onStartTrial={NOOP} />;
-    },
   },
   {
     tag: 'Share',

@@ -189,11 +189,13 @@ export function CreatorApp({
   };
 
   // Once the workspace is provisioned and we reach the invite step, pre-select
-  // the teammate the user set out to invite (a domain peer gets checked; a
-  // non-peer address rides in via CreatorInviteStep's initialEmails chip).
+  // the teammate(s) the user set out to invite (domain peers get checked; other
+  // addresses ride in via CreatorInviteStep's initialEmails chips).
+  const pendingInviteList = pendingInviteEmail ? pendingInviteEmail.split(',').map((e) => e.trim()).filter(Boolean) : [];
   useEffect(() => {
-    if (step === 'invite' && pendingInviteEmail && invitePeers.some((p) => p.email === pendingInviteEmail)) {
-      setSelectedInvites((prev) => new Set(prev).add(pendingInviteEmail));
+    if (step === 'invite' && pendingInviteList.length) {
+      const peers = pendingInviteList.filter((e) => invitePeers.some((p) => p.email === e));
+      if (peers.length) setSelectedInvites((prev) => { const next = new Set(prev); peers.forEach((e) => next.add(e)); return next; });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
@@ -203,7 +205,7 @@ export function CreatorApp({
     const FEATURE_ICONS: Record<string, string> = { share: 'share2', ai: 'sparkles', integration: 'plug' };
     const label = FEATURE_LABELS[f] || 'This';
     setToast({ msg: `${label} is a Grain Business feature: ${trialDays} ${trialDays === 1 ? 'day' : 'days'} left in your trial.`, icon: FEATURE_ICONS[f] || 'sparkles' });
-    setTimeout(() => setToast(null), 3400);
+    setTimeout(() => setToast(null), 6800);
   };
 
   useEffect(() => {
@@ -303,7 +305,7 @@ export function CreatorApp({
             orgName={orgName}
             peers={invitePeers}
             selected={selectedInvites}
-            initialEmails={pendingInviteEmail ? [pendingInviteEmail] : []}
+            initialEmails={pendingInviteList}
             onToggle={toggleInvite}
             onSelectAll={() => setSelectedInvites(new Set(invitePeers.map((p) => p.email)))}
             onClear={() => setSelectedInvites(new Set())}

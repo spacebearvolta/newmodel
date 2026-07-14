@@ -114,6 +114,9 @@ export function AppShell() {
 
       <HookGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} />
 
+      {/* Hide the Tweaks panel while the gallery overlay is open so it doesn't
+          cover the gallery's next/prev arrows. */}
+      {!galleryOpen && (
       <TweaksPanel title="Tweaks">
         <TweakSection label="Review">
           <TweakButton label="▶ Hook gallery" onClick={() => setGalleryOpen(true)} />
@@ -181,6 +184,7 @@ export function AppShell() {
           <TweakToggle label="Mac chrome" value={t.wrapInMacChrome} onChange={(v) => setT('wrapInMacChrome', v)} />
         </TweakSection>
       </TweaksPanel>
+      )}
     </>
   );
 }

@@ -364,7 +364,7 @@ const FEATURE_ICON_V2: Record<string, string> = {
   'Workspace integrations': 'plug',
 };
 interface FeatureNudgeChipV2LiveProps { feature: string; daysLeft?: number | null; onDismiss?: () => void }
-export function FeatureNudgeChipV2Live({ feature, daysLeft, onDismiss }: FeatureNudgeChipV2LiveProps) {
+export function FeatureNudgeChipV2Live({ feature, daysLeft }: FeatureNudgeChipV2LiveProps) {
   return (
     <div className="h8-v2">
       <span className="h8-v2__icon"><Icon name={FEATURE_ICON_V2[feature] ?? 'users'} size={14} /></span>
@@ -372,7 +372,6 @@ export function FeatureNudgeChipV2Live({ feature, daysLeft, onDismiss }: Feature
         <strong>{feature}</strong> is a Grain Business feature
         {daysLeft != null ? ` · ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left in your trial` : ''}
       </span>
-      <button className="h8-v2__close" aria-label="Dismiss" onClick={onDismiss}><Icon name="close" size={12} /></button>
     </div>
   );
 }
@@ -582,6 +581,8 @@ export function ShareLinkModalV2Live({
           <span className="sl-modal__title">Share “{meetingTitle}”</span>
           <button className="iu-modal__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
         </div>
+        {/* TODO-copy: keep the view-only distinction explicit */}
+        <p className="sl-sub">Anyone with the link can view this meeting — they can’t edit, comment, or add highlights.</p>
 
         {/* People with access — collapsed by default (progressive disclosure) */}
         <button className="sl-pwa__toggle" aria-expanded={peopleOpen} onClick={() => setPeopleOpen((o) => !o)}>
@@ -668,10 +669,20 @@ export function InviteUpsellModalV2Live({
   open, workspace = 'your workspace', state = 'free', userDomain = 'acme.com', seedEmail = '',
   onClose, onPrimary, onViewLink,
 }: InviteUpsellModalV2LiveProps) {
-  const [email, setEmail] = useState(seedEmail);
-  const trimmed = email.trim().toLowerCase();
-  const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
-  const external = hasEmail && !trimmed.endsWith('@' + userDomain);
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [emails, setEmails] = useState<string[]>(seedEmail ? [seedEmail] : []);
+  const [draft, setDraft] = useState('');
+  const draftVal = draft.trim().toLowerCase();
+  const draftValid = emailRe.test(draftVal);
+  const addEmail = () => {
+    if (draftValid && !emails.includes(draftVal)) setEmails((list) => [...list, draftVal]);
+    setDraft('');
+  };
+  const removeEmail = (v: string) => setEmails((list) => list.filter((e) => e !== v));
+  // Count the in-progress draft too, so notes/CTA reflect what will be sent.
+  const allEmails = draftValid && !emails.includes(draftVal) ? [...emails, draftVal] : emails;
+  const hasEmail = allEmails.length > 0;
+  const external = allEmails.some((e) => !e.endsWith('@' + userDomain));
   const isOver = state === 'trial-over';
   const cta = isOver ? 'Upgrade & invite' : 'Start trial & invite';
   return (
@@ -686,31 +697,42 @@ export function InviteUpsellModalV2Live({
             </div>
             <button className="iu-modal__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
           </div>
-          <label className="iu-field">
+          <div className="iu-field">
             <span className="iu-field__label">Email</span>
-            <input
-              className="iu-field__input"
-              placeholder="Enter a teammate’s email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </label>
+            {/* Multi-add: type an email, press Enter to add another. */}
+            <div className="iu-chips">
+              {emails.map((e) => (
+                <span className="iu-chip" key={e}>
+                  {e}
+                  <button className="iu-chip__x" aria-label={`Remove ${e}`} onClick={() => removeEmail(e)}><Icon name="close" size={11} /></button>
+                </span>
+              ))}
+              <input
+                className="iu-chips__input"
+                placeholder={emails.length ? 'Add another…' : 'Enter a teammate’s email'}
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ',') && draftValid) { e.preventDefault(); addEmail(); } }}
+                onBlur={addEmail}
+              />
+            </div>
+          </div>
           {/* TODO-copy: what inviting grants */}
           <p className="iu-grant">
             Your team can edit, comment, and search the entire organization’s AI-ready memory.
           </p>
           {external && (
             /* State D — external recipient. Same trial hook for now. TODO-copy */
-            <p className="iu-domnote"><Icon name="info" size={13} /> <span>Outside {userDomain} — they’ll join as an independent user.</span></p>
+            <p className="iu-domnote"><Icon name="info" size={13} /> <span>Someone outside {userDomain} — they’ll join as an independent user.</span></p>
           )}
           {hasEmail && !isOver && (
             /* Sequencing: trial (workspace) is provisioned first, then the invite. TODO-copy */
-            <p className="iu-seqnote"><Icon name="info" size={13} /> <span>Starting your trial creates your workspace — then {trimmed}’s invite goes out.</span></p>
+            <p className="iu-seqnote"><Icon name="info" size={13} /> <span>Starting your trial creates your workspace — then your invite goes out.</span></p>
           )}
           <div className="iu-modal__foot">
             {/* State C — ungated view-only link alternative */}
             <button className="iu-viewlink" onClick={onViewLink}><Icon name="share2" size={14} /> Send a view-only link</button>
-            <button className={`btn-v2 ${isOver ? 'btn-v2--primary' : 'btn-v2--dark'}`} onClick={() => onPrimary?.(trimmed)}>
+            <button className={`btn-v2 ${isOver ? 'btn-v2--primary' : 'btn-v2--dark'}`} onClick={() => onPrimary?.(allEmails.join(','))}>
               <Icon name={isOver ? 'gem' : 'users'} size={14} /> {cta}
             </button>
           </div>

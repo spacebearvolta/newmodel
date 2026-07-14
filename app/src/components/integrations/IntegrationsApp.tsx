@@ -177,7 +177,7 @@ export function IntegrationsApp() {
   const [toast, setToast] = useState<string | null>(null);
   const fireConnectToast = () => {
     setToast('Workspace integrations are a Grain Business feature — full access during your trial.');
-    setTimeout(() => setToast(null), 3400);
+    setTimeout(() => setToast(null), 6800);
   };
   useEffect(() => {
     if (readShowParam() === 'nudge' && t.plan === 'business') fireConnectToast();
