@@ -1319,7 +1319,7 @@
 
 /* Toast */
 .toast {
-  position: fixed; right: 24px; bottom: 24px;
+  position: fixed; right: 24px; bottom: 40px;
   background: #fff; color: var(--fg-1);
   border: 1px solid var(--border-strong);
   padding: 11px 15px;

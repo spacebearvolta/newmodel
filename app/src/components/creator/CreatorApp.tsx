@@ -111,6 +111,9 @@ export function CreatorApp({
   // Deep-link: the H8 "Team meetings" nudge lands on the Team meetings tab
   // where its chip lives. (Sharing / AI / integrations nudge as toasts instead.)
   const nudgeFeature = readShowParam() === 'nudge-teamMeetings' ? 'Team meetings' : null;
+  // When reviewing a feature-usage toast, don't also pop the teammate nudge —
+  // the toast should be viewable on its own.
+  const viewingToast = readShowParam() === 'toast-share' || readShowParam() === 'toast-ai';
   const orgInitialView = nudgeFeature ? 'all' : 'mine';
 
   const persistOrg = (created: boolean, name?: string) => {
@@ -204,13 +207,13 @@ export function CreatorApp({
   };
 
   useEffect(() => {
-    if (!orgActive || teammateAuto || teammateDismissed) return undefined;
+    if (!orgActive || viewingToast || teammateAuto || teammateDismissed) return undefined;
     const id = setTimeout(() => setTeammateAuto(true), 2500);
     return () => clearTimeout(id);
-  }, [orgActive, teammateAuto, teammateDismissed]);
+  }, [orgActive, viewingToast, teammateAuto, teammateDismissed]);
   useEffect(() => { if (teammateNudge) setTeammateDismissed(false); }, [teammateNudge]);
 
-  const showTeammateNudge = orgActive && (teammateNudge || teammateAuto) && !teammateDismissed;
+  const showTeammateNudge = orgActive && (teammateNudge || teammateAuto) && !teammateDismissed && !viewingToast;
 
   const claudeBanner = showClaudeBanner && !claudeDismissed
     ? <ClaudeMeetingBanner onConnect={() => setClaudeHandoff(true)} onDismiss={() => setClaudeDismissed(true)} />
