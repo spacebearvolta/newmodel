@@ -554,11 +554,26 @@ interface ShareLinkModalV2LiveProps {
   onClose?: () => void;
   onCollaborate?: () => void; // hands off to the invite (start-trial) flow
 }
+// Mock "people with access" for the disclosure list.
+const SHARE_PEOPLE_V2 = [
+  { name: 'Jeff Whitlock', email: 'jeff.whitlock@grain.co', role: 'Recorder', color: '#3F3F46' },
+  { name: 'Alex Volta', email: 'alex.volta@grain.com', role: 'Editor', color: '#3F3F46' },
+  { name: 'Andrew Clarkson', email: 'andrew.clarkson@grain.com', role: 'Editor', color: '#6D28D9' },
+  { name: 'Brad Hodson', email: 'brad.hodson@grain.com', role: 'Editor', color: '#EA580C' },
+  { name: 'Chris Naismith', email: 'chris.naismith@grain.co', role: 'Editor', color: '#DC2626' },
+  { name: 'Jonny Andreola', email: 'jonny.andreola@grain.com', role: 'Editor', color: '#0EA5E9' },
+  { name: 'Ryan Johnson', email: 'ryan@grain.co', role: 'Recorder', color: '#CA8A04' },
+];
+const SHARE_SCOPES_V2 = ['Anyone with the link', 'All workspace members', 'Only people with access'];
 export function ShareLinkModalV2Live({
   open, meetingTitle = 'Product Coordination Meeting',
   link = 'https://grain.com/share/9f2c14b7-view', onClose, onCollaborate,
 }: ShareLinkModalV2LiveProps) {
   const [copied, setCopied] = useState(false);
+  const [peopleOpen, setPeopleOpen] = useState(false);
+  const [scope, setScope] = useState('All workspace members');
+  const [scopeOpen, setScopeOpen] = useState(false);
+  const initials = (n: string) => n.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
   return (
     <Modal open={open} onClose={onClose} bare>
       <div className="sl-modal modal-v2 card-v2">
@@ -568,19 +583,53 @@ export function ShareLinkModalV2Live({
           <button className="iu-modal__close" aria-label="Close" onClick={onClose}><Icon name="close" size={18} /></button>
         </div>
 
-        {/* Free, ungated view-only link */}
-        <div className="sl-linkrow">
-          <span className="sl-linkrow__icon"><Icon name="share2" size={15} /></span>
-          <input className="sl-linkrow__input" readOnly value={link} onFocus={(e) => e.currentTarget.select()} />
-          <button className="btn-v2 btn-v2--dark sl-linkrow__copy" onClick={() => setCopied(true)}>
-            {copied ? 'Copied' : 'Copy link'}
+        {/* People with access — collapsed by default (progressive disclosure) */}
+        <button className="sl-pwa__toggle" aria-expanded={peopleOpen} onClick={() => setPeopleOpen((o) => !o)}>
+          <span className="sl-pwa__label">People with access <span className="sl-pwa__count">· {SHARE_PEOPLE_V2.length}</span></span>
+          <Icon name="chevDown" size={16} className={peopleOpen ? 'sl-pwa__chev is-open' : 'sl-pwa__chev'} />
+        </button>
+        {peopleOpen && (
+          <div className="sl-pwa__list">
+            {SHARE_PEOPLE_V2.map((p) => (
+              <div className="sl-pwa__row" key={p.email}>
+                <span className="sl-pwa__avatar" style={{ background: p.color }}>{initials(p.name)}</span>
+                <span className="sl-pwa__text">
+                  <span className="sl-pwa__name">{p.name}</span>
+                  <span className="sl-pwa__email">{p.email}</span>
+                </span>
+                {p.role === 'Editor'
+                  ? <button className="sl-pwa__role sl-pwa__role--edit">Editor <Icon name="chevDown" size={14} /></button>
+                  : <span className="sl-pwa__role">{p.role}</span>}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Link scope + copy */}
+        <div className="sl-share">
+          <div className="sl-share__left">
+            <div className="sl-scope-wrap">
+              <button className="sl-scope" aria-haspopup="menu" aria-expanded={scopeOpen} onClick={() => setScopeOpen((o) => !o)}>
+                {scope} <Icon name="chevDown" size={15} />
+              </button>
+              {scopeOpen && (
+                <div className="sl-scope-menu" role="menu">
+                  {SHARE_SCOPES_V2.map((s) => (
+                    <button key={s} className="sl-scope-menu__item" role="menuitemradio" aria-checked={s === scope}
+                            onClick={() => { setScope(s); setScopeOpen(false); }}>
+                      <span>{s}</span>
+                      {s === scope && <Icon name="check" size={15} />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button className="sl-refresh" aria-label="Reset link" title="Reset link"><Icon name="refresh" size={15} /></button>
+          </div>
+          <button className="btn-v2 btn-v2--dark sl-copy" onClick={() => { setCopied(true); try { navigator.clipboard?.writeText(link); } catch { /* ignore */ } }}>
+            <Icon name="link" size={15} /> {copied ? 'Copied' : 'Copy link'}
           </button>
         </div>
-        {/* TODO-copy: make view-only explicit */}
-        <p className="sl-note">
-          <Icon name="globe" size={13} />
-          <span>Anyone with the link can <strong>view</strong> this meeting — they can’t edit, comment, or add highlights.</span>
-        </p>
 
         <div className="sl-divider" />
 
@@ -617,7 +666,7 @@ interface InviteUpsellModalV2LiveProps {
 }
 export function InviteUpsellModalV2Live({
   open, workspace = 'your workspace', state = 'free', userDomain = 'acme.com', seedEmail = '',
-  onClose, onPrimary, onViewLink, onLearnMore,
+  onClose, onPrimary, onViewLink,
 }: InviteUpsellModalV2LiveProps) {
   const [email, setEmail] = useState(seedEmail);
   const trimmed = email.trim().toLowerCase();
@@ -664,20 +713,6 @@ export function InviteUpsellModalV2Live({
             <button className={`btn-v2 ${isOver ? 'btn-v2--primary' : 'btn-v2--dark'}`} onClick={() => onPrimary?.(trimmed)}>
               <Icon name={isOver ? 'gem' : 'users'} size={14} /> {cta}
             </button>
-          </div>
-        </div>
-        <div className="card-v2 iu-upsell iu-upsell--biz">
-          {/* TODO-copy */}
-          <div className="iu-upsell__title">Try Grain Business</div>
-          <p className="iu-upsell__desc">Every shared meeting builds one searchable, AI-ready memory for the whole team.</p>
-          <ul className="iu-vlist">
-            <li><span className="h45-v2__vicon"><Icon name="infinity" size={16} /></span> No 45-minute recording cap</li>
-            <li><span className="h45-v2__vicon"><Icon name="history" size={16} /></span> Unlimited meeting history</li>
-            <li><span className="h45-v2__vicon"><Icon name="users" size={16} /></span> A shared library your whole team can search</li>
-            <li><span className="h45-v2__vicon"><Icon name="plug" size={16} /></span> Integrations &amp; API: HubSpot, Salesforce, Slack</li>
-          </ul>
-          <div className="iu-upsell__actions">
-            <button className="btn-v2 btn-v2--secondary" onClick={onLearnMore}>Learn more</button>
           </div>
         </div>
       </div>

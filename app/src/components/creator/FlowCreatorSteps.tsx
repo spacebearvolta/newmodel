@@ -64,40 +64,43 @@ export function StartTrialPromo({ orgCreated, onClick, onDismiss }: { orgCreated
   );
 }
 
-// ── Trial bento — shared entry point for "Start trial" outside first-run ──
+// ── Trial start — marketing screen for "Start trial" (absorbs the Business
+// value props that used to live in the invite modal's upsell card). ──
+const TB_VALUES = [
+  { icon: 'infinity', title: 'No 45-minute cap', desc: 'Record and upload meetings of any length.' },
+  { icon: 'history', title: 'Unlimited history', desc: 'Every meeting stays yours, forever.' },
+  { icon: 'users', title: 'One shared library', desc: 'Your whole team can search every call.' },
+  { icon: 'plug', title: 'Integrations & API', desc: 'HubSpot, Salesforce, Slack, MCP, and more.' },
+];
 export function TrialBentoStep({ onStart, onSelf, onClose }: { onStart?: () => void; onSelf?: () => void; onClose?: () => void }) {
   return (
     <>
-      <button className="modal__close trial-bento__close" aria-label="Close" onClick={onClose}><Icon name="close" /></button>
-      <div className="modal__body trial-bento">
-        <h2 className="trial-bento__title">Business plan is free for 14 days</h2>
-        <p className="trial-bento__sub">Power your organization's AI work with team meeting intelligence.</p>
-
-        <div className="ob-bento">
-          <div className="ob-cell ob-cell--wide ob-cell--hero">
-            <div className="ob-cell__title">Organization workspace</div>
-            <div className="ob-cell__desc">Make AI smarter with the full context of your team meetings.</div>
-            <div className="ob-cell__tag">Shared context</div>
-          </div>
-          <div className="ob-cell ob-cell--mini">
-            <div className="ob-cell__title"><Icon name="infinity" size={16} /> No meeting length cap</div>
-          </div>
-          <div className="ob-cell ob-cell--mini">
-            <div className="ob-cell__title"><Icon name="history" size={16} /> Unlimited history</div>
-          </div>
-          <div className="ob-cell ob-cell--mini">
-            <div className="ob-cell__title"><Icon name="terminal" size={16} /> Advanced MCP</div>
-          </div>
-          <div className="ob-cell ob-cell--wide">
-            <div className="ob-cell__title">Workspace integrations &amp; API</div>
-            <div className="ob-cell__desc">Integrate your meetings data with AI agents, CRMs, Slack, and more.</div>
-            <div className="ob-cell__tag">HubSpot · Salesforce · Slack · API</div>
-          </div>
+      <button className="modal__close tb2__close" aria-label="Close" onClick={onClose}><Icon name="close" /></button>
+      <div className="modal__body tb2">
+        <div className="tb2__hero">
+          {/* TODO-copy */}
+          <span className="tb2__eyebrow">Grain Business</span>
+          <h2 className="tb2__title">Free for 14 days</h2>
+          <p className="tb2__sub">Turn your whole team's meetings into one searchable, AI-ready memory.</p>
         </div>
+        <ul className="tb2__values">
+          {TB_VALUES.map((v) => (
+            <li key={v.title} className="tb2__value">
+              <span className="tb2__vicon"><Icon name={v.icon} size={18} /></span>
+              <span className="tb2__vtext">
+                <span className="tb2__vtitle">{v.title}</span>
+                <span className="tb2__vdesc">{v.desc}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <div className="tb2__logos">Works with HubSpot · Salesforce · Slack · Zapier · MCP · API</div>
       </div>
-      <div className="modal__foot trial-bento__foot">
-        <button className="btn-v2 btn-v2--dark btn-v2--lg trial-bento__cta" onClick={onStart}><Icon name="users" size={16} /> Start trial</button>
-        <button className="trial-bento__self" onClick={onSelf}>Use Grain by myself</button>
+      <div className="modal__foot tb2__foot">
+        <button className="btn-v2 btn-v2--dark btn-v2--lg tb2__cta" onClick={onStart}><Icon name="users" size={16} /> Start trial</button>
+        <button className="tb2__self" onClick={onSelf}>Use Grain by myself</button>
+        {/* TODO-copy */}
+        <p className="tb2__fine">No credit card required</p>
       </div>
     </>
   );
