@@ -93,9 +93,16 @@ export function LiveRecordApp() {
     <>
       <div className="lr-web">
         <div className={`lr-capbar${capped ? ' is-capped' : ''}`}>
-          <span className="lr-capbar__title"><Icon name="video" size={15} /> Capturing: Feedback on New Model Designs</span>
+          {capped ? (
+            <span className="lr-capbar__notice">
+              <Icon name="alert" size={14} /> 45-minute free recording limit reached
+              <button className="lr-capbar__cta" onClick={goStartTrial}>Start trial</button>
+            </span>
+          ) : (
+            <span className="lr-capbar__title"><Icon name="video" size={15} /> Capturing: Feedback on New Model Designs</span>
+          )}
           <span className="lr-capbar__actions">
-            <button className="lr-capbar__meet"><Icon name="video" size={13} /> Open Meet</button>
+            {!capped && <button className="lr-capbar__meet"><Icon name="video" size={13} /> Open Meet</button>}
             <button className="lr-capbar__stopbtn"><span className="lr-capbar__stopsq" /> Stop capturing</button>
           </span>
         </div>

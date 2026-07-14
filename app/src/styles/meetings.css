@@ -236,7 +236,21 @@ button.ms-cell--click:hover svg { color: var(--fg-1); }
 .ms-menu__item.is-danger { color: #C0392B; }
 .ms-menu__item.is-danger svg { color: #C0392B; }
 .ms-menu__item.is-danger:hover { background: #FDECEA; }
+.ms-menu__item.is-disabled { color: var(--fg-6); cursor: default; opacity: .55; }
+.ms-menu__item.is-disabled:hover { background: transparent; }
+.ms-menu__item.is-disabled svg { color: var(--fg-6); }
 .ms-menu__div { height: 1px; background: var(--border); margin: 5px 4px; }
+.ms-menu__promo {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 8px 9px; margin-bottom: 2px; border: 0; cursor: pointer;
+  border-radius: 8px; text-align: left;
+  background: var(--green-50); color: var(--green-700);
+  font: 600 12.5px/1 var(--font-sans);
+  transition: background var(--dur-fast);
+}
+.ms-menu__promo:hover { background: var(--green-100); }
+.ms-menu__promo svg { width: 15px; height: 15px; color: var(--green-700); flex-shrink: 0; }
+.ms-menu__promo-sep { opacity: .6; }
 
 /* Locked rows (expired workspace / 30-day history) */
 .ms-row.is-locked .ms-row__title { color: var(--fg-5); }

@@ -72,6 +72,13 @@ const TB_VALUES = [
   { icon: 'users', title: 'One shared library', desc: 'Your whole team can search every call.' },
   { icon: 'plug', title: 'Integrations & API', desc: 'HubSpot, Salesforce, Slack, MCP, and more.' },
 ];
+const TB_LOGOS = [
+  { name: 'HubSpot', color: '#FF7A59', initial: 'H' },
+  { name: 'Salesforce', color: '#00A1E0', initial: 'S' },
+  { name: 'Slack', color: '#4A154B', initial: 'S' },
+  { name: 'Zoom', color: '#2D8CFF', initial: 'Z' },
+  { name: 'Zapier', color: '#FF4F00', initial: 'Z' },
+];
 export function TrialBentoStep({ onStart, onSelf, onClose }: { onStart?: () => void; onSelf?: () => void; onClose?: () => void }) {
   return (
     <>
@@ -80,8 +87,8 @@ export function TrialBentoStep({ onStart, onSelf, onClose }: { onStart?: () => v
         <div className="tb2__hero">
           {/* TODO-copy */}
           <span className="tb2__eyebrow">Grain Business</span>
-          <h2 className="tb2__title">Free for 14 days</h2>
-          <p className="tb2__sub">Turn your whole team's meetings into one searchable, AI-ready memory.</p>
+          <h2 className="tb2__title">Try free for 14 days</h2>
+          <p className="tb2__sub">Turn your whole team's meetings into one searchable, AI-ready memory</p>
         </div>
         <ul className="tb2__values">
           {TB_VALUES.map((v) => (
@@ -94,7 +101,14 @@ export function TrialBentoStep({ onStart, onSelf, onClose }: { onStart?: () => v
             </li>
           ))}
         </ul>
-        <div className="tb2__logos">Works with HubSpot · Salesforce · Slack · Zapier · MCP · API</div>
+        <div className="tb2__works">
+          <div className="tb2__works-label">Works with</div>
+          <div className="tb2__logos">
+            {TB_LOGOS.map((l) => (
+              <span key={l.name} className="tb2__logo" style={{ background: l.color }} title={l.name}>{l.initial}</span>
+            ))}
+          </div>
+        </div>
       </div>
       <div className="modal__foot tb2__foot">
         <button className="btn-v2 btn-v2--dark btn-v2--lg tb2__cta" onClick={onStart}><Icon name="users" size={16} /> Start trial</button>

@@ -152,6 +152,8 @@ export function CreatorApp({
   };
   const startFromBento = () => setStep('name');
   const close = () => setStep(null);
+  // Copying a meeting link is never gated — fires for every user state.
+  const copyLinkToast = () => { setToast({ msg: 'Recording link copied', icon: 'check' }); setTimeout(() => setToast(null), 2200); };
 
   const finalizeCreate = () => {
     setStep('creating');
@@ -265,6 +267,7 @@ export function CreatorApp({
             nudgeFeature={nudgeFeature}
             onFeatureUse={orgActive ? onFeatureUse : undefined}
             onShareAttempt={orgActive ? () => setBizShare(true) : undefined}
+            onCopyLink={copyLinkToast}
             onUpgrade={openReactivate}
           />
         ) : (
@@ -279,6 +282,8 @@ export function CreatorApp({
             onRecordAttempt={() => { window.location.href = '/live'; }}
             onLockedClick={(m) => setLockedMeeting(m)}
             onShareAttempt={() => setShareLink(true)}
+            onCopyLink={copyLinkToast}
+            onTryBusiness={() => setStep('trial')}
           />
         )}
       </main>

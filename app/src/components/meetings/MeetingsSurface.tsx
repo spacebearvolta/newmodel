@@ -57,9 +57,11 @@ function MetaCells({ m, solo, tombstoneAccess, orgName }: { m: Meeting; solo?: b
 // "Share" routes to the state-aware share/invite modal via onShare.
 type RowMenuItem =
   | 'divider'
-  | { icon: string; label: string; kbd?: string; arrow?: boolean; danger?: boolean; onClick?: () => void };
-function MeetingRowMenu({ onShare, onClose, anchorRef }: {
-  onShare?: () => void; onClose: () => void; anchorRef: React.RefObject<HTMLElement | null>;
+  | 'promo'
+  | { icon: string; label: string; kbd?: string; arrow?: boolean; danger?: boolean; locked?: boolean; onClick?: () => void };
+function MeetingRowMenu({ gated, onShare, onCopyLink, onTryBusiness, onClose, anchorRef }: {
+  gated?: boolean; onShare?: () => void; onCopyLink?: () => void; onTryBusiness?: () => void;
+  onClose: () => void; anchorRef: React.RefObject<HTMLElement | null>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   useState(() => {
@@ -71,43 +73,55 @@ function MeetingRowMenu({ onShare, onClose, anchorRef }: {
     document.addEventListener('mousedown', onDown);
     return () => document.removeEventListener('mousedown', onDown);
   });
+  // Copy link + Share are always active; for free (gated) users every other
+  // action is inactive and a Try-Business upsell sits above "Open in Claude".
   const items: RowMenuItem[] = [
-    { icon: 'link', label: 'Copy link', kbd: '⌘⇧,' },
+    { icon: 'link', label: 'Copy link', kbd: '⌘⇧,', onClick: onCopyLink },
     { icon: 'share2', label: 'Share', onClick: onShare },
-    { icon: 'plus', label: 'Add to playlist', arrow: true },
+    { icon: 'plus', label: 'Add to playlist', arrow: true, locked: true },
     'divider',
-    { icon: 'sparkles', label: 'Open in Claude' },
-    { icon: 'messageSquare', label: 'Open in ChatGPT' },
+    ...(gated ? ['promo' as const] : []),
+    { icon: 'sparkles', label: 'Open in Claude', locked: true },
+    { icon: 'messageSquare', label: 'Open in ChatGPT', locked: true },
     'divider',
-    { icon: 'fileText', label: 'Copy transcript for AI', kbd: '⌘C' },
-    { icon: 'download', label: 'Download transcript for AI' },
-    { icon: 'download', label: 'Download transcript', arrow: true },
+    { icon: 'fileText', label: 'Copy transcript for AI', kbd: '⌘C', locked: true },
+    { icon: 'download', label: 'Download transcript for AI', locked: true },
+    { icon: 'download', label: 'Download transcript', arrow: true, locked: true },
     'divider',
-    { icon: 'trash', label: 'Delete meeting', kbd: '⌘⌫', danger: true },
+    { icon: 'trash', label: 'Delete meeting', kbd: '⌘⌫', danger: true, locked: true },
   ];
   return (
     <div className="ms-menu" ref={ref} onClick={(e) => e.stopPropagation()}>
-      {items.map((it, i) => (
-        it === 'divider' ? <div key={`d${i}`} className="ms-menu__div" /> : (
+      {items.map((it, i) => {
+        if (it === 'divider') return <div key={`d${i}`} className="ms-menu__div" />;
+        if (it === 'promo') return (
+          <button key="promo" className="ms-menu__promo" onClick={() => { onTryBusiness?.(); onClose(); }}>
+            <Icon name="gem" /> Try Grain Business <span className="ms-menu__promo-sep">•</span> 14 day trial
+          </button>
+        );
+        const disabled = gated && it.locked;
+        return (
           <button
             key={it.label}
-            className={`ms-menu__item ${it.danger ? 'is-danger' : ''}`}
-            onClick={() => { it.onClick?.(); onClose(); }}
+            className={`ms-menu__item ${it.danger ? 'is-danger' : ''} ${disabled ? 'is-disabled' : ''}`}
+            disabled={disabled}
+            onClick={disabled ? undefined : () => { it.onClick?.(); onClose(); }}
           >
             <Icon name={it.icon} />
             <span className="ms-menu__label">{it.label}</span>
             {it.kbd && <span className="ms-menu__kbd">{it.kbd}</span>}
             {it.arrow && <Icon name="chevRight" />}
           </button>
-        )
-      ))}
+        );
+      })}
     </div>
   );
 }
 
-function MeetingRowRich({ m, solo, locked, tombstoneAccess, orgName, lockReason, onUpgrade, showOwner, onShareAttempt }: {
+function MeetingRowRich({ m, solo, locked, tombstoneAccess, orgName, lockReason, onUpgrade, showOwner, onShareAttempt, gated, onCopyLink, onTryBusiness }: {
   m: Meeting; solo?: boolean; locked?: boolean; tombstoneAccess?: boolean; orgName?: string; lockReason?: string;
   onUpgrade?: () => void; showOwner?: boolean; onShareAttempt?: () => void;
+  gated?: boolean; onCopyLink?: () => void; onTryBusiness?: () => void;
 }) {
   const cls = `ms-row ${solo ? 'ms-row--solo' : ''} ${locked ? 'is-locked' : ''}`;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -140,8 +154,11 @@ function MeetingRowRich({ m, solo, locked, tombstoneAccess, orgName, lockReason,
             {menuOpen && (
               <MeetingRowMenu
                 anchorRef={kebabRef}
+                gated={gated}
                 onClose={() => setMenuOpen(false)}
                 onShare={onShareAttempt || onUpgrade}
+                onCopyLink={onCopyLink}
+                onTryBusiness={onTryBusiness}
               />
             )}
           </span>
@@ -342,6 +359,8 @@ export interface MeetingsSurfaceProps {
   onRecordAttempt?: () => void;
   onLockedClick?: (m: Meeting) => void;
   onShareAttempt?: () => void;
+  onCopyLink?: () => void;
+  onTryBusiness?: () => void;
   myMeetingsBanner?: React.ReactNode;
   businessTrialDays?: number | null;
   nudgeFeature?: string | null;
@@ -351,7 +370,7 @@ export interface MeetingsSurfaceProps {
 export function MeetingsSurface({
   mode = 'org', orgName = 'Acme', hasMeetings = true, firstMeetingOnly = false, initialView = 'mine',
   trialPill = null, banner = null, onUpgrade, onStartTrial, gate, onRecordAttempt, onLockedClick,
-  onShareAttempt, myMeetingsBanner, businessTrialDays, nudgeFeature, onFeatureUse,
+  onShareAttempt, onCopyLink, onTryBusiness, myMeetingsBanner, businessTrialDays, nudgeFeature, onFeatureUse,
 }: MeetingsSurfaceProps) {
   const solo = mode === 'solo';
   const expired = mode === 'expired';
@@ -457,6 +476,9 @@ export function MeetingsSurface({
                     onUpgrade={onUpgrade}
                     showOwner={!isMine}
                     onShareAttempt={onShareAttempt}
+                    gated={solo}
+                    onCopyLink={onCopyLink}
+                    onTryBusiness={onTryBusiness}
                   />
                 );
               })}
