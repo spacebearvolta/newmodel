@@ -48,7 +48,7 @@ function TrialEndedEmail({ orgName = 'Acme', graceDays = 30 }: { orgName?: strin
         <div className="em-icon em-icon--warm"><Icon name="clock" /></div>
         <h1 className="em-h1">Your Business trial has ended</h1>
         <p className="em-p">Hi Jeff,</p>
-        <p className="em-p">Your Grain Business trial for <strong>{orgName}</strong> has wrapped up. Good news, nothing's gone. Your organization's shared meetings are saved for the next <strong>{graceDays} days</strong>. Reactivate any time to switch your workspace back on and keep everything.</p>
+        <p className="em-p">Your Grain Business trial for <strong>{orgName}</strong> has wrapped up. Good news, nothing's gone. Your team's shared meetings are saved for the next <strong>{graceDays} days</strong>. Reactivate any time to switch your workspace back on and keep everything.</p>
         <div className="em-callout">
           <span className="em-callout__icon"><Icon name="shield" size={16} /></span>
           <div>

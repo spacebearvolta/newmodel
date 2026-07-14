@@ -30,7 +30,7 @@ export function RecordingLimitModalV2Live({ open, kind = 'record', onClose, onSt
           <ul className="h1-v2__values">
             <li><span className="mark-v2"><Icon name="infinity" size={13} /></span> No 45-minute recording cap</li>
             <li><span className="mark-v2"><Icon name="history" size={13} /></span> Unlimited meeting history</li>
-            <li><span className="mark-v2"><Icon name="users" size={13} /></span> Shared meeting data the whole organization can use to stay aligned</li>
+            <li><span className="mark-v2"><Icon name="users" size={13} /></span> Shared meeting data your whole team can use to stay aligned</li>
           </ul>
         </div>
         <div className="h1-v2__foot">
@@ -719,7 +719,7 @@ export function InviteUpsellModalV2Live({
           </div>
           {/* TODO-copy: what inviting grants */}
           <p className="iu-grant">
-            Your team can edit, comment, and search the entire organization’s AI-ready memory.
+            Your team can edit, comment, and search your whole team’s AI-ready memory.
           </p>
           {external && (
             /* State D — external recipient. Same trial hook for now. TODO-copy */

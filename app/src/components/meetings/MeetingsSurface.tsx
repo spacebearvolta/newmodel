@@ -224,7 +224,7 @@ export function ExpiredBar({ orgName, graceDays, onRestartTrial, onUpgrade, onTa
         {urgent ? (
           <><strong>{graceDays} {graceDays === 1 ? 'day' : 'days'} until {orgName}'s meeting history starts being deleted.</strong> Reactivate to keep everything your team recorded; meetings you recorded or joined stay yours.</>
         ) : (
-          <><strong>{orgName}'s Business trial has ended.</strong> All organization meetings are accessible for {graceDays != null ? graceDays : 30} days; meetings you recorded or joined stay fully yours. <a className="expired-bar__link" href="#" onClick={(e) => { e.preventDefault(); onTalkToSales?.(); }}>Talk to sales</a>.</>
+          <><strong>{orgName}'s Business trial has ended.</strong> All team meetings are accessible for {graceDays != null ? graceDays : 30} days; meetings you recorded or joined stay fully yours. <a className="expired-bar__link" href="#" onClick={(e) => { e.preventDefault(); onTalkToSales?.(); }}>Talk to sales</a>.</>
         )}
       </span>
       <span className="expired-bar__actions">
@@ -238,7 +238,7 @@ export function ExpiredBar({ orgName, graceDays, onRestartTrial, onUpgrade, onTa
 
 function SoloAllGate({ gate, onCta }: { gate?: { title?: string; desc?: string; cta?: string; note?: string | null }; onCta?: () => void }) {
   const title = gate?.title || 'See every meeting your team shares';
-  const desc = gate?.desc || "All meetings is your organization’s shared library. When teammates share a meeting to a team, it shows up here for the whole organization to search and revisit.";
+  const desc = gate?.desc || "All meetings is your team’s shared library. When teammates share a meeting to a team, it shows up here for the whole team to search and revisit.";
   const cta = gate?.cta || 'Start trial';
   const note = gate?.note !== undefined ? gate?.note : 'Included in Grain Business · free for 14 days';
   const widths = [[46, 28], [61, 34], [38, 22]];
