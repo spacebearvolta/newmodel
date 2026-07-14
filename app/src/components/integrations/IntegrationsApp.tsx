@@ -75,8 +75,8 @@ function IntgGlyph({ row, size = 18 }: { row?: NavRow; size?: number }) {
   return <Icon name={row.icon || 'wrench'} size={16} />;
 }
 
-function IntegrationsSettings({ plan, initial, onStartTrial, onBack, onConnect }: {
-  plan: 'free' | 'business'; initial: string; onStartTrial: () => void; onBack: () => void; onConnect?: () => void;
+function IntegrationsSettings({ plan, initial, onStartTrial, onLearnMore, onBack, onConnect }: {
+  plan: 'free' | 'business'; initial: string; onStartTrial: () => void; onLearnMore: () => void; onBack: () => void; onConnect?: () => void;
 }) {
   const [active, setActive] = useState(initial);
   useEffect(() => { setActive(initial); }, [initial]);
@@ -116,7 +116,7 @@ function IntegrationsSettings({ plan, initial, onStartTrial, onBack, onConnect }
       <UpgradeGateCardV2Live
         title={`Upgrade your plan to connect ${paidInfo.name}`}
         desc={paidInfo.desc}
-        onLearnMore={() => {}}
+        onLearnMore={onLearnMore}
         onUpgrade={onStartTrial}
       />
     );
@@ -170,6 +170,7 @@ export function IntegrationsApp() {
   const [t, setT] = useTweaks<Tweaks>({ plan: 'free', integration: 'hubspot', wrapInMacChrome: true });
 
   const startTrial = () => navigate('/');
+  const goToTrialValueProp = () => navigate('/?show=trial&app=1');
   const goBack = () => navigate('/');
 
   // H8 feature-usage nudge: connecting an integration during the trial fires a
@@ -184,7 +185,7 @@ export function IntegrationsApp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const inner = <IntegrationsSettings plan={t.plan} initial={t.integration} onStartTrial={startTrial} onBack={goBack} onConnect={fireConnectToast} />;
+  const inner = <IntegrationsSettings plan={t.plan} initial={t.integration} onStartTrial={startTrial} onLearnMore={goToTrialValueProp} onBack={goBack} onConnect={fireConnectToast} />;
 
   return (
     <>

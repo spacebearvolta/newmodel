@@ -21,6 +21,7 @@ import {
   ShareLinkModalV2Live,
   BusinessShareModalV2Live,
 } from '../components/hooksV2/HooksV2Live';
+import { CutoffNotice } from '../components/record/LiveRecordApp';
 
 const NOOP = () => {};
 const MEETING = { title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' };
@@ -45,16 +46,18 @@ export const HG_HOOKS: HookEntry[] = [
   {
     tag: 'H1',
     title: 'Recording length wall',
-    trigger: 'Recording variant fires live on the recording page at the 45-min cap; upload variant fires when a free user uploads a file over 45 min.',
-    kind: 'modal',
+    trigger: 'Recording variant shows an inline cut-off box below the live transcript at the 45-min cap; upload variant pops a modal when a free user uploads a file over 45 min.',
+    kind: 'inline',
     states: ['Recording', 'Upload'],
-    // Recording state lives on the live recording page (/live); upload state
-    // pops in place from the "New → upload" action.
+    // Recording state lives on the live recording page (/live) as an inline
+    // cut-off box; upload state pops a modal from the "New → upload" action.
     contexts: [
       { route: '/live' },
       { route: '/', show: 'upload' },
     ],
-    render: (s) => <RecordingLimitModalV2Live open kind={s === 1 ? 'upload' : 'record'} onClose={NOOP} onStartTrial={NOOP} />,
+    render: (s) => s === 1
+      ? <RecordingLimitModalV2Live open kind="upload" onClose={NOOP} onStartTrial={NOOP} />
+      : <div style={{ maxWidth: 480, margin: '0 auto' }}><CutoffNotice onStartTrial={NOOP} /></div>,
   },
   {
     tag: 'H2',

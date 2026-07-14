@@ -1650,10 +1650,12 @@
 .lr-line__who { display: flex; align-items: center; gap: 8px; font: 600 13.5px var(--font-sans); color: var(--fg-1); margin-bottom: 6px; }
 .lr-line__av { width: 22px; height: 22px; border-radius: 9999px; background: var(--fg-4); color: #fff; font: 600 10px/1 var(--font-sans); display: flex; align-items: center; justify-content: center; }
 .lr-line__text { font-size: 15px; line-height: 1.55; color: var(--fg-2); margin: 0; }
-.lr-cutoff { margin-top: 8px; padding: 24px; border: 1px dashed var(--border-strong); border-radius: var(--r-card); background: var(--bg-alt); text-align: center; }
+.lr-cutoff { margin-top: 8px; padding: 24px; border: 1px solid var(--green-100); border-radius: var(--r-card); background: var(--green-50); text-align: center; }
 .lr-cutoff__title { font: 600 15px var(--font-sans); color: var(--fg-1); margin-bottom: 6px; }
 .lr-cutoff__desc { font-size: 13px; line-height: 1.5; color: var(--fg-4); margin: 0 auto 16px; max-width: 400px; }
 .lr-cutoff__note { font-size: 12px; color: var(--fg-5); margin-top: 10px; }
+/* Web: center the cut-off box below the transcript */
+.lr-web .lr-cutoff { max-width: 480px; margin-left: auto; margin-right: auto; }
 
 /* Desktop-app chrome */
 .lr-desktop { display: flex; flex-direction: column; height: 100vh; background: #fff; }

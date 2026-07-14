@@ -53,11 +53,65 @@ function MetaCells({ m, solo, tombstoneAccess, orgName }: { m: Meeting; solo?: b
   );
 }
 
+// The 3-dots row menu — mirrors the meeting kebab in the real Grain app.
+// "Share" routes to the state-aware share/invite modal via onShare.
+type RowMenuItem =
+  | 'divider'
+  | { icon: string; label: string; kbd?: string; arrow?: boolean; danger?: boolean; onClick?: () => void };
+function MeetingRowMenu({ onShare, onClose, anchorRef }: {
+  onShare?: () => void; onClose: () => void; anchorRef: React.RefObject<HTMLElement | null>;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  useState(() => {
+    const onDown = (e: MouseEvent) => {
+      const inMenu = ref.current && ref.current.contains(e.target as Node);
+      const inAnchor = anchorRef.current && anchorRef.current.contains(e.target as Node);
+      if (!inMenu && !inAnchor) onClose();
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  });
+  const items: RowMenuItem[] = [
+    { icon: 'link', label: 'Copy link', kbd: '⌘⇧,' },
+    { icon: 'share2', label: 'Share', onClick: onShare },
+    { icon: 'plus', label: 'Add to playlist', arrow: true },
+    'divider',
+    { icon: 'sparkles', label: 'Open in Claude' },
+    { icon: 'messageSquare', label: 'Open in ChatGPT' },
+    'divider',
+    { icon: 'fileText', label: 'Copy transcript for AI', kbd: '⌘C' },
+    { icon: 'download', label: 'Download transcript for AI' },
+    { icon: 'download', label: 'Download transcript', arrow: true },
+    'divider',
+    { icon: 'trash', label: 'Delete meeting', kbd: '⌘⌫', danger: true },
+  ];
+  return (
+    <div className="ms-menu" ref={ref} onClick={(e) => e.stopPropagation()}>
+      {items.map((it, i) => (
+        it === 'divider' ? <div key={`d${i}`} className="ms-menu__div" /> : (
+          <button
+            key={it.label}
+            className={`ms-menu__item ${it.danger ? 'is-danger' : ''}`}
+            onClick={() => { it.onClick?.(); onClose(); }}
+          >
+            <Icon name={it.icon} />
+            <span className="ms-menu__label">{it.label}</span>
+            {it.kbd && <span className="ms-menu__kbd">{it.kbd}</span>}
+            {it.arrow && <Icon name="chevRight" />}
+          </button>
+        )
+      ))}
+    </div>
+  );
+}
+
 function MeetingRowRich({ m, solo, locked, tombstoneAccess, orgName, lockReason, onUpgrade, showOwner, onShareAttempt }: {
   m: Meeting; solo?: boolean; locked?: boolean; tombstoneAccess?: boolean; orgName?: string; lockReason?: string;
   onUpgrade?: () => void; showOwner?: boolean; onShareAttempt?: () => void;
 }) {
   const cls = `ms-row ${solo ? 'ms-row--solo' : ''} ${locked ? 'is-locked' : ''}`;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const kebabRef = useRef<HTMLButtonElement>(null);
   return (
     <div className={cls} title={locked ? lockReason : undefined}>
       <Thumb kind={m.thumb} locked={locked} />
@@ -80,9 +134,17 @@ function MeetingRowRich({ m, solo, locked, tombstoneAccess, orgName, lockReason,
             <Icon name="upgradeCircle" /> Upgrade
           </button>
         ) : (
-          <button className="ms-row__kebab" aria-label={solo && onShareAttempt ? 'Share' : 'More'}
-                  title={solo && onShareAttempt ? 'Share with a teammate' : undefined}
-                  onClick={solo && onShareAttempt ? onShareAttempt : undefined}><Icon name="ellipsisV" /></button>
+          <span className="ms-row__kebabwrap">
+            <button ref={kebabRef} className="ms-row__kebab" aria-label="More" aria-haspopup="menu" aria-expanded={menuOpen}
+                    onClick={() => setMenuOpen((o) => !o)}><Icon name="ellipsisV" /></button>
+            {menuOpen && (
+              <MeetingRowMenu
+                anchorRef={kebabRef}
+                onClose={() => setMenuOpen(false)}
+                onShare={onShareAttempt || onUpgrade}
+              />
+            )}
+          </span>
         )}
       </span>
     </div>
@@ -157,11 +219,9 @@ function AccessPopover({ expired, orgName, onUpgrade, onClose, anchorRef, onFeat
   );
 }
 
-const JOIN_VARIANTS = ['A', 'B', 'C', 'D'];
-function UpNextRow({ m, solo, expired, orgName, onUpgrade, onRecordAttempt, onFeatureUse, joinVariant = 0, onCycleJoin }: {
+function UpNextRow({ m, solo, expired, orgName, onUpgrade, onRecordAttempt, onFeatureUse }: {
   m: Meeting; solo?: boolean; expired?: boolean; orgName?: string; onUpgrade?: () => void;
   onRecordAttempt?: () => void; onFeatureUse?: (f: string) => void;
-  joinVariant?: number; onCycleJoin?: () => void;
 }) {
   const [accessOpen, setAccessOpen] = useState(false);
   const anchorRef = useRef<HTMLSpanElement>(null);
@@ -199,9 +259,9 @@ function UpNextRow({ m, solo, expired, orgName, onUpgrade, onRecordAttempt, onFe
       <span className="ms-cell ms-cell--people"><Icon name="users" /><span>{m.people}</span></span>
       <span className="ms-row__action">
         <button
-          className={`ms-join ms-join--v${JOIN_VARIANTS[joinVariant]}`}
-          title={`Join button style ${JOIN_VARIANTS[joinVariant]} — click to cycle A/B/C/D`}
-          onClick={onCycleJoin || (solo && onRecordAttempt ? onRecordAttempt : undefined)}
+          className="ms-join"
+          title="Join meeting"
+          onClick={solo && onRecordAttempt ? onRecordAttempt : undefined}
         >
           <Icon name="video" />
           <span className="ms-join__sep" />
@@ -299,7 +359,6 @@ export function MeetingsSurface({
   const [filter, setFilter] = useState('');
   const [showAll, setShowAll] = useState(false);
   const [teamChipDismissed, setTeamChipDismissed] = useState(false);
-  const [joinVariant, setJoinVariant] = useState(0); // decision aid: cycle up-next join-button styles
 
   const upNext = showAll ? [...MS_UP_NEXT, ...MS_UP_NEXT_MORE] : MS_UP_NEXT;
   const isMine = view === 'mine';
@@ -356,12 +415,10 @@ export function MeetingsSurface({
         <div className="ms-upnext">
           <div className="ms-upnext__label">
             <Icon name="clock" /> Up next
-            <span className="ms-join-cap">join button style {JOIN_VARIANTS[joinVariant]} · click the join button to cycle</span>
           </div>
           <div className="ms-list">
             {upNext.map((m) => (
-              <UpNextRow key={m.id} m={m} solo={solo} expired={expired} orgName={orgName} onUpgrade={onUpgrade} onRecordAttempt={onRecordAttempt} onFeatureUse={onFeatureUse}
-                joinVariant={joinVariant} onCycleJoin={() => setJoinVariant((v) => (v + 1) % JOIN_VARIANTS.length)} />
+              <UpNextRow key={m.id} m={m} solo={solo} expired={expired} orgName={orgName} onUpgrade={onUpgrade} onRecordAttempt={onRecordAttempt} onFeatureUse={onFeatureUse} />
             ))}
           </div>
           <button className={`ms-showall ${showAll ? 'is-open' : ''}`} onClick={() => setShowAll(!showAll)}>

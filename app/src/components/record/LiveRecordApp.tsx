@@ -1,11 +1,10 @@
 // LiveRecordApp.tsx — the LIVE meeting-recording surface (web + desktop-app
 // chrome). A free user recording past the 45-minute cap is notified here:
-// on web the recording-limit modal (H1 record variant) pops and the transcript
-// shows a cut-off notice; on desktop the green capture bar carries the notice.
+// both web and desktop show an inline cut-off notice below the transcript
+// (centered on web); desktop additionally carries the notice in the green bar.
 import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../shell/Sidebar';
 import { Icon } from '../primitives/Icon';
-import { RecordingLimitModalV2Live } from '../hooksV2/HooksV2Live';
 import { TweaksPanel, TweakSection, TweakButton, TweakRadio, useTweaks } from '../tweaks/TweaksPanel';
 import { USER } from '../../data/meetings';
 
@@ -16,7 +15,7 @@ const TRANSCRIPT = [
 ];
 
 // The transcript-cutoff CTA shown inline when a free recording hits the cap.
-function CutoffNotice({ onStartTrial }: { onStartTrial?: () => void }) {
+export function CutoffNotice({ onStartTrial }: { onStartTrial?: () => void }) {
   return (
     <div className="lr-cutoff">
       <div className="lr-cutoff__title">Recording stopped at the 45-minute free limit</div>
@@ -105,8 +104,6 @@ export function LiveRecordApp() {
           <LiveSurface capped={capped} onStartTrial={goStartTrial} />
         </div>
       </div>
-      {/* Web: hitting the cap pops the recording-limit modal (H1 record variant) */}
-      <RecordingLimitModalV2Live open={capped} kind="record" onClose={() => setT('state', 'recording')} onStartTrial={goStartTrial} />
       <LiveTweaks t={t} setT={setT} />
     </>
   );

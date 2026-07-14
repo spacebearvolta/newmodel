@@ -79,8 +79,9 @@ body { overflow: auto !important; }
    instead of a neutral-gray alert; bolder lead sentence. */
 .h2-v2 {
   display: flex; align-items: center; gap: 14px;
-  padding: 14px 16px; border-radius: var(--r-card);
-  background: #fff; border: 1px solid var(--border);
+  padding: 14px 16px; border-radius: 12px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 .h2-v2__icon { border: 0; background: transparent; color: var(--fg-4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .h2-v2__text { flex: 1; min-width: 0; }

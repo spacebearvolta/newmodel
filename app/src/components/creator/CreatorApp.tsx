@@ -97,6 +97,7 @@ export function CreatorApp({
     const show = readShowParam();
     if (!show) return;
     if (show === 'invite' || show === 'inviteForm') setInviteForm(true);
+    else if (show === 'trial') setStep('trial');
     else if (show === 'share') setShareLink(true);
     else if (show === 'record') setRecordLimit('record');
     else if (show === 'upload') setRecordLimit('upload');
