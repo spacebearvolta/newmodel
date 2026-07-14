@@ -55,7 +55,7 @@
 
 /* ── Up next card ────────────────────────────────────────────── */
 .ms-upnext {
-  background: var(--bg-card);
+  background: #FAFAFA;
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 18px 20px 8px;
