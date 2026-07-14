@@ -104,6 +104,7 @@ export function CreatorApp({
     else if (show === 'locked') setLockedMeeting({ title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' } as Meeting);
     else if (show === 'trialPopup') setTrialPopupDay(trialDays);
     else if (show === 'plans') setPlansOpen(true);
+    else if (show === 'upgrade') setUpgradeOpen(true);
     else if (show === 'bizShare') setBizShare(true);
     // H8 contextual nudges fire as toasts, triggered by the action itself.
     else if (show === 'toast-share') onFeatureUse('share');

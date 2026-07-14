@@ -1379,7 +1379,8 @@
 }
 .up-plan.is-highlight {
   border: 1.5px solid var(--green-500); box-shadow: 0 10px 34px rgba(22,163,95,.12);
-  background: linear-gradient(180deg, var(--green-50) 0%, #fff 60%);
+  /* Same mint radial as the teammate nudge — densest in the bottom-right corner. */
+  background: radial-gradient(115% 115% at 100% 100%, #E6F3F2 0%, #F3FAF7 42%, #FFFFFF 72%);
 }
 .up-plan__badge {
   position: absolute; top: 14px; right: 16px;
