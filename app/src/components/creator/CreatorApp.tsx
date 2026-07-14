@@ -241,7 +241,7 @@ export function CreatorApp({
         onStartTrial={start}
         onInvite={orgActive ? () => setBizShare(true) : () => setInviteForm(true)}
         onIntegrations={onIntegrations}
-        onNew={orgExists ? undefined : (id) => setRecordLimit(id === 'upload' ? 'upload' : 'record')}
+        onNew={orgExists ? undefined : (id) => { if (id === 'upload') setRecordLimit('upload'); else window.location.href = '/live'; }}
         promoCard={orgInactive
           ? <TrialEndedCardV2Live orgName={orgName} graceDays={graceDays} onUpgrade={openReactivate} onTalkToSales={talkToSales} />
           : orgActive
@@ -275,7 +275,7 @@ export function CreatorApp({
             myMeetingsBanner={historyBanner || claudeBanner}
             onStartTrial={start}
             onUpgrade={() => setUpgradeOpen(true)}
-            onRecordAttempt={() => setRecordLimit('record')}
+            onRecordAttempt={() => { window.location.href = '/live'; }}
             onLockedClick={(m) => setLockedMeeting(m)}
             onShareAttempt={() => setShareLink(true)}
           />

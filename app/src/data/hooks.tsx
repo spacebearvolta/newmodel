@@ -45,9 +45,15 @@ export const HG_HOOKS: HookEntry[] = [
   {
     tag: 'H1',
     title: 'Recording length wall',
-    trigger: 'A free user starts a recording (or uploads a file) longer than 45 minutes.',
+    trigger: 'Recording variant fires live on the recording page at the 45-min cap; upload variant fires when a free user uploads a file over 45 min.',
     kind: 'modal',
     states: ['Recording', 'Upload'],
+    // Recording state lives on the live recording page (/live); upload state
+    // pops in place from the "New → upload" action.
+    contexts: [
+      { route: '/live' },
+      { route: '/', show: 'upload' },
+    ],
     render: (s) => <RecordingLimitModalV2Live open kind={s === 1 ? 'upload' : 'record'} onClose={NOOP} onStartTrial={NOOP} />,
   },
   {
@@ -279,7 +285,6 @@ export const HG_HOOKS: HookEntry[] = [
 // "View in prototype" targets, keyed by hook title. Only hooks with a real
 // in-context home get a link; the rest stay gallery-only (see handoff notes).
 const VIEW_CONTEXT: Record<string, HookEntry['context']> = {
-  'Recording length wall': { route: '/', show: 'record' },
   'History approaching 30-day lock': { route: '/' },
   'Locked meeting (past 30 days)': { route: '/', show: 'locked' },
   'Share link (view-only)': { route: '/', show: 'share' },

@@ -7,6 +7,7 @@ import { OrgAdminApp } from './components/orgadmin/OrgAdminApp';
 import { HookGalleryRoute } from './routes/HookGalleryRoute';
 import { EmailMocksRoute } from './routes/EmailMocksRoute';
 import { RecordApp } from './components/record/RecordApp';
+import { LiveRecordApp } from './components/record/LiveRecordApp';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/integrations" element={<IntegrationsApp />} />
         <Route path="/org-admin" element={<OrgAdminApp />} />
         <Route path="/record" element={<RecordApp />} />
+        <Route path="/live" element={<LiveRecordApp />} />
         <Route path="/hook-gallery" element={<HookGalleryRoute />} />
         <Route path="/trial-emails" element={<EmailMocksRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
