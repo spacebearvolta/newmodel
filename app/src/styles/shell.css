@@ -584,11 +584,13 @@
    Mirrors the onboarding ObTrial bento, laid out inside a modal so the
    "Start trial" entry points outside first-run setup open the same screen. */
 /* Trial-start marketing screen (tb2) — gradient hero + value props. */
-.modal__body.tb2 {
-  padding: 40px 32px 6px;
-  /* Subtle brand gradient anchored in the bottom-right corner (matches the
-     Business pricing tier). */
-  background: radial-gradient(120% 120% at 100% 100%, #E6F3F2 0%, #F3FAF7 40%, #FFFFFF 70%);
+.modal__body.tb2 { padding: 40px 32px 6px; background: transparent; }
+/* Brand gradient spans the whole modal card so it flows uninterrupted into the
+   bottom-right corner (no divider between body and foot boxing it in). */
+.modal:has(.modal__body.tb2) {
+  background:
+    url('../assets/gradient-brand.png') no-repeat 165% 135% / 70% auto,
+    #fff;
 }
 .tb2__close { position: absolute; top: 18px; right: 18px; z-index: 2; }
 .tb2__hero {
@@ -620,15 +622,17 @@
 .tb2__vtitle { font: 600 14px/1.25 var(--font-sans); color: var(--fg-1); }
 .tb2__vdesc { font-size: 12.5px; line-height: 1.4; color: var(--fg-5); }
 .tb2__works { text-align: center; padding-top: 4px; }
-.tb2__works-label { font: 500 11.5px/1 var(--font-sans); letter-spacing: .04em; text-transform: uppercase; color: var(--fg-5); margin-bottom: 12px; }
-.tb2__logos { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.tb2__works-label { font: 500 11.5px/1 var(--font-sans); letter-spacing: .04em; text-transform: uppercase; color: var(--fg-5); margin-bottom: 14px; }
+.tb2__logos { display: flex; align-items: center; justify-content: center; gap: 22px; }
 .tb2__logo {
   width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
   display: inline-flex; align-items: center; justify-content: center;
   color: #fff; font: 700 15px/1 var(--font-sans);
   box-shadow: 0 1px 2px rgba(0,0,0,.10);
 }
-.tb2__foot { display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 18px 32px 26px; background: transparent; border-top: 0; }
+/* Higher specificity than .modal__foot (which appears later in this file) so
+   the divider line above the CTA is actually removed. */
+.modal__foot.tb2__foot { display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 18px 32px 26px; background: transparent; border-top: 0; }
 .tb2__cta { width: 100%; max-width: 380px; justify-content: center; height: 50px; font-size: 15px; }
 .tb2__self { background: none; border: 0; cursor: pointer; font: 500 13.5px var(--font-sans); color: var(--fg-4); padding: 2px 8px; border-radius: 6px; }
 .tb2__self:hover { color: var(--fg-1); text-decoration: underline; }

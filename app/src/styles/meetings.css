@@ -245,12 +245,13 @@ button.ms-cell--click:hover svg { color: var(--fg-1); }
   padding: 8px 9px; margin-bottom: 2px; border: 0; cursor: pointer;
   border-radius: 8px; text-align: left;
   background: var(--green-50); color: var(--green-700);
-  font: 600 12.5px/1 var(--font-sans);
   transition: background var(--dur-fast);
 }
 .ms-menu__promo:hover { background: var(--green-100); }
 .ms-menu__promo svg { width: 15px; height: 15px; color: var(--green-700); flex-shrink: 0; }
-.ms-menu__promo-sep { opacity: .6; }
+.ms-menu__promo-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ms-menu__promo-title { font: 600 12.5px/1.15 var(--font-sans); color: var(--green-700); }
+.ms-menu__promo-sub { font: 500 11px/1 var(--font-sans); color: var(--fg-5); }
 
 /* Locked rows (expired workspace / 30-day history) */
 .ms-row.is-locked .ms-row__title { color: var(--fg-5); }

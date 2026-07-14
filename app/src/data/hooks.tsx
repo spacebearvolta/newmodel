@@ -22,6 +22,7 @@ import {
   BusinessShareModalV2Live,
 } from '../components/hooksV2/HooksV2Live';
 import { CutoffNotice } from '../components/record/LiveRecordApp';
+import { TrialBentoStep } from '../components/creator/FlowCreatorSteps';
 
 const NOOP = () => {};
 const MEETING = { title: 'Q2 planning offsite — day 1', date: 'Recorded May 8' };
@@ -121,6 +122,17 @@ export const HG_HOOKS: HookEntry[] = [
     trigger: 'Opened from any “Upgrade your plan” / “see plans” entry point.',
     kind: 'modal',
     render: () => <PlansModalV2Live open currentPlan="free" onClose={NOOP} onUpgrade={NOOP} onBookDemo={NOOP} />,
+  },
+  {
+    tag: 'Trial',
+    title: 'Start-trial value prop',
+    trigger: 'The marketing screen shown when a free user starts a trial — from "Start trial" CTAs and the "Learn more" link on any upgrade gate.',
+    kind: 'modal',
+    render: () => (
+      <div className="modal modal--lg" style={{ position: 'relative' }}>
+        <TrialBentoStep onStart={NOOP} onSelf={NOOP} onClose={NOOP} />
+      </div>
+    ),
   },
   {
     tag: 'H7',
@@ -295,6 +307,7 @@ const VIEW_CONTEXT: Record<string, HookEntry['context']> = {
   'Invite to collaborate': { route: '/', show: 'inviteForm', tweaks: { paidOrgOnDomain: false, emptyDomain: false } },
   'Feature / integration upgrade gate': { route: '/integrations', tweaks: { plan: 'free' } },
   'Plans / pricing modal': { route: '/', show: 'plans' },
+  'Start-trial value prop': { route: '/', show: 'trial' },
   'Trial expired: interstitial': { route: '/', tweaks: { trialOver: true } },
   'Trial-ended widget (grace countdown)': { route: '/', tweaks: { trialOver: true } },
   'Teammate engagement nudge': { route: '/', tweaks: { teammateNudge: true } },

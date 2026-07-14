@@ -215,7 +215,11 @@ body { overflow: auto !important; }
    the recommended one. */
 /* Business (Popular) tier — very subtle brand wash pooled in the bottom-right
    corner (same restraint as the teammate nudge), white everywhere else. */
-.plans-v2__col--popular { border-color: var(--green-500); background: radial-gradient(115% 115% at 100% 100%, #E6F3F2 0%, #F3FAF7 42%, #FFFFFF 72%); box-shadow: 0 0 0 1px var(--green-500); }
+.plans-v2__col--popular {
+  border-color: var(--green-500); box-shadow: 0 0 0 1px var(--green-500);
+  /* Uploaded brand gradient, subtle, anchored in the bottom-right corner. */
+  background: url('../assets/gradient-brand.png') no-repeat 150% 118% / 135% auto, #fff;
+}
 .plans-v2__badge { position: absolute; top: 16px; right: 16px; background: var(--green-50); color: var(--green-700); font: 600 11px/1 var(--font-sans); padding: 4px 8px; border-radius: var(--r-full); }
 .plans-v2__name { font: 700 16px/1.2 var(--font-sans); color: var(--fg-1); }
 .plans-v2__tag { font-size: 12.5px; color: var(--fg-5); margin: 4px 0 16px; min-height: 34px; line-height: 1.4; }

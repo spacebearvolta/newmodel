@@ -88,7 +88,7 @@ function MeetingRowMenu({ gated, onShare, onCopyLink, onTryBusiness, onClose, an
     { icon: 'download', label: 'Download transcript for AI', locked: true },
     { icon: 'download', label: 'Download transcript', arrow: true, locked: true },
     'divider',
-    { icon: 'trash', label: 'Delete meeting', kbd: '⌘⌫', danger: true, locked: true },
+    { icon: 'trash', label: 'Delete meeting', kbd: '⌘⌫', danger: true },
   ];
   return (
     <div className="ms-menu" ref={ref} onClick={(e) => e.stopPropagation()}>
@@ -96,7 +96,11 @@ function MeetingRowMenu({ gated, onShare, onCopyLink, onTryBusiness, onClose, an
         if (it === 'divider') return <div key={`d${i}`} className="ms-menu__div" />;
         if (it === 'promo') return (
           <button key="promo" className="ms-menu__promo" onClick={() => { onTryBusiness?.(); onClose(); }}>
-            <Icon name="gem" /> Try Grain Business <span className="ms-menu__promo-sep">•</span> 14 day trial
+            <Icon name="gem" />
+            <span className="ms-menu__promo-text">
+              <span className="ms-menu__promo-title">Try Grain Business</span>
+              <span className="ms-menu__promo-sub">14 day trial</span>
+            </span>
           </button>
         );
         const disabled = gated && it.locked;
