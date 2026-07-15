@@ -1,0 +1,13 @@
+# Netlify config for the Grain prototype (Vite + React SPA in /app).
+# Connect this repo in Netlify with these settings pre-filled from here.
+[build]
+  base = "app"
+  command = "npm run build"
+  publish = "dist"
+
+# Client-side routing: serve index.html for any path so deep links like
+# /live, /hook-gallery, /integrations, /settings work on direct load & refresh.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
