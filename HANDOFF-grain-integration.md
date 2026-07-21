@@ -11,6 +11,42 @@ Do the integration on a **new branch in the Grain repo** (see §7).
 
 ---
 
+## 0. Design-system authority (READ FIRST — this overrides everything below)
+
+**The Grain app's own `design.md` and its real button/component styles are the single source
+of truth. Where the prototype and Grain's design system disagree, Grain wins — always.**
+
+This prototype was built with its **own throwaway styling** to move fast. Those styles must
+**not** survive the port. Concretely:
+
+- **Do not carry over the prototype's button classes.** They are prototype-local and have no
+  standing in Grain: `btn-v2`, `btn-v2--dark`, `btn-v2--primary`, `btn-v2--secondary`,
+  `btn-v2--ghost`, `btn-v2--warn`, `btn-v2--lg`, `btn-v2--full`; `gr-btn` and its `--primary /
+  --dark / --outline / --ghost / --sm / --md / --lg`; `up-plan__btn--*`; `ms-join`, `ms-unlock`,
+  etc. **Replace every one** with Grain's canonical button component/variants as defined in
+  `design.md`. Same for inputs, chips, cards, modals, toasts, and tokens.
+- **Reconcile tokens to Grain's.** The prototype's `styles/tokens.css` (colors, radii, shadows,
+  spacing) is a stand-in. Map each usage to Grain's real design tokens; delete the prototype
+  tokens. Don't ship the prototype's ad-hoc hex values.
+- **Preserve intent, not implementation.** What must survive is the *semantic role* of each
+  control, not its prototype CSS:
+  - "Start trial" = the **dark / team-icon** primary action.
+  - "Upgrade" = the **green / gem-icon** primary action.
+  - Secondary/dismiss actions stay secondary ("Maybe later", "Back", "Use Grain by myself").
+  Express those roles through Grain's real button variants + Grain's icon set — not the
+  prototype's `users`/`gem` hand-drawn Lucide icons or `btn-v2--dark`.
+
+**When something doesn't map cleanly, STOP and ask — don't invent a one-off.**
+If a hook's layout, a button variant, an icon, a state color, or a gradient treatment has no
+clean equivalent in Grain's design system, do **not** hand-roll a bespoke style to force it in.
+Instead, call it out to the user and present **2–3 options that each stay within `design.md`'s
+rules**, with a recommendation and the trade-offs. Let the user choose. Examples of likely
+mismatches to flag: the amber recording-cap treatment, the bottom-right brand gradient on
+Business tiers, the "Works with" logo bank, the row-menu upsell row, and any CTA where
+Grain's button system has no dark/gem equivalent.
+
+---
+
 ## 1. What this prototype is
 
 A self-contained Vite/React/TS SPA that demonstrates a new account/pricing model for Grain
@@ -164,11 +200,14 @@ never ships to production.
 ## 7. Integration plan (concrete steps)
 
 1. **New branch in the Grain repo** off the default branch, e.g. `feat/trial-upsell-hooks`.
-2. **Port the hook components.** Bring over `HooksV2Live.tsx`, `UpgradeModal.tsx`,
-   `TrialBentoStep`/gate pieces from `FlowCreatorSteps.tsx`, and `HookGallery.tsx`. Rehome
-   their styles (`redesign/redesign.css`, `styles/meetings.css`, relevant parts of
-   `styles/shell.css`) and reconcile design tokens with Grain's real tokens (`styles/tokens.css`
-   here → Grain's system). Replace the hand-rolled `Icon` with Grain's icon set.
+2. **Port the hook components — re-skinned to Grain's design system (§0).** Bring over the
+   *structure and behavior* of `HooksV2Live.tsx`, `UpgradeModal.tsx`, `TrialBentoStep`/gate
+   pieces from `FlowCreatorSteps.tsx`, and `HookGallery.tsx` — but rebuild every button, input,
+   chip, card, and modal with Grain's canonical components per `design.md`. **Do not** copy the
+   prototype's `btn-v2*` / `gr-btn*` / `up-plan__btn*` classes or its `styles/tokens.css`;
+   map them to Grain's real button variants and tokens. Replace the hand-rolled `Icon` with
+   Grain's icon set. Anything that won't map cleanly → flag it and offer options (§0), don't
+   hand-roll.
 3. **Add the DemoState context + seed** (§6). Reshape `data/meetings.ts` into Grain's real
    entity types. Wire MSW (or the store seeder).
 4. **Gate the hooks on tier.** Recreate the derivations from §2 and the trigger wiring from §3
@@ -206,6 +245,9 @@ COPY-PASS-TEMPLATE.md                           # canonical copy for all hooks/s
 
 ## 8. Open decisions for the Grain team
 
+- **Design-system authority (§0):** Grain's `design.md` + button styles win. Flag every place
+  the prototype doesn't map cleanly and bring the user options that follow `design.md` — never
+  a bespoke one-off.
 - **Which data layer** does Grain use → picks MSW vs. store-seeder (§6).
 - **Reappearance / dismissal cadence** for H2, H8 toasts, H9, trial popup — flagged as TBD in
   `COPY-PASS-TEMPLATE.md` rules; confirm before wiring persistence.
