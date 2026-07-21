@@ -36,6 +36,57 @@ This prototype was built with its **own throwaway styling** to move fast. Those 
   Express those roles through Grain's real button variants + Grain's icon set — not the
   prototype's `users`/`gem` hand-drawn Lucide icons or `btn-v2--dark`.
 
+### Grain's current Button system (verify in Storybook before porting)
+
+**Visual source of truth:** the Grain button Storybook — project `grain-button-styles`
+(`https://app.netlify.com/projects/grain-button-styles/overview`). Confirm every mapping below
+against it. Also work from the **proposed `clients/DESIGN.md` updates** (§6 Button, §7 usage)
+with rationale in `developer-docs/button-design-md-change-proposal.md` on that branch.
+
+`Button` (`src/components/ui/button.tsx`) variants — **naming rule: no prefix = neutral,
+`brand-` = brand (green):**
+
+`default` · `secondary` · `outline` · `ghost` · `destructive` · `brand` · `brand-secondary` ·
+`brand-outline` · `brand-ghost` · `brand-link` · `link`
+
+Intent of the brand-tier variants:
+- `brand` — primary brand action (solid green).
+- `brand-secondary` — secondary brand action (tonal green).
+- `brand-outline` — tertiary brand action; green outline, black label; reads as interactive next
+  to a primary (e.g. in modals).
+- `brand-ghost` — low-emphasis brand action, borderless.
+- `brand-link` — inline brand navigation styled as text.
+
+Hover/press: hover = one step up the scale, pressed = another (`brand`: 600→700→800; tonal
+variants via opacity `/10`→`/15`→`/20`). Neutral variants aren't retrofitted yet.
+
+**When to use brand-tier (updated §7 — the old "green = recording only" rule is removed):**
+brand variants are appropriate for (a) recording-related CTAs, (b) marketing/conversion moments
+that need brand personality, and (c) clickability signals where black doesn't read as
+interactive (e.g. `brand-link`). Most trial/upsell hooks here are conversion moments → brand-tier
+is in-scope; choose the emphasis level (`brand` / `brand-secondary` / `brand-outline` /
+`brand-ghost` / `brand-link`) by the action's role in its surface.
+
+### Prototype → Grain Button map (starting point — confirm in Storybook)
+
+| Prototype class / control | Role in prototype | Grain `Button` variant |
+|---|---|---|
+| `btn-v2--primary`, `gr-btn--primary`, `up-plan__btn--primary` (green **Upgrade**, gem) | primary brand CTA | `brand` |
+| `btn-v2--dark`, `gr-btn--dark` (**Start trial**, black, team icon) | primary CTA | **decide:** `default` (neutral black, keeps trial ≠ upgrade contrast) **or** `brand` if you want it green. **Flag to user.** |
+| `btn-v2--secondary`, `up-plan__btn--neutral` | secondary/tonal | `secondary` (or `brand-secondary` if it's a brand action) |
+| `gr-btn--outline` | tertiary outline | `outline` (or `brand-outline` next to a brand primary) |
+| `btn-v2--ghost`, `gr-btn--ghost`, `.tb2__self` ("Use Grain by myself") | low-emphasis dismiss | `ghost` |
+| `.gate-v2__link` ("Learn more" → trial value prop), inline "Grain Business" link (H2) | inline brand nav | `brand-link` |
+| `ms-join` (green-50 bg / green-700 icon join button) | tonal green control | `brand-secondary` |
+| `ms-unlock` (Upgrade on locked rows) | tertiary brand affordance | `brand-outline` |
+| `up-plan__btn--disabled` ("Current plan") | disabled current state | `<Button disabled>` (`secondary`/`outline`) |
+| `btn-v2--warn` (urgent trial widget CTA, amber) | urgent primary | **no amber variant exists — flag.** Options: `brand` + convey urgency via surrounding UI, or `destructive` if truly a warning. |
+| `btn-v2--lg` / `btn-v2--full` / `gr-btn--sm/md/lg` | size / full-width | Grain `size` prop + width utility, **not** a variant |
+
+The one real semantics call is **Start trial (black) vs Upgrade (green)** — in the prototype they're
+deliberately different so users can tell "start a trial" from "pay now". Grain's expanded §7 allows
+either to be brand. Surface this to the user with the two options above rather than picking silently.
+
 **When something doesn't map cleanly, STOP and ask — don't invent a one-off.**
 If a hook's layout, a button variant, an icon, a state color, or a gradient treatment has no
 clean equivalent in Grain's design system, do **not** hand-roll a bespoke style to force it in.
